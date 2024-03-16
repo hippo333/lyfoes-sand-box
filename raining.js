@@ -48,20 +48,24 @@ function getHigestBall(){
 
 function raining(){
 	//console.log("its raining men");
+	
 	let emptyBtl = emptyBotle();
 	
+	//if we can't rain nowere 
 	if (emptyBtl == null){
 		return null
 	}
+	// bll is the color the most present on the top zone
 	let bll = getHigestBall();
 	//console.log("bll",bll);
 	if(bll ==0){
 		return "finito"
 	}
-	
+	//get all bll in top of botle
 	let lstMovableBall = columns.filter(
 		mvBll => mvBll[mvBll.length -1 ] ==bll
 	)
+	//do the move
 	for(btl in lstMovableBall){
 		move(columns.indexOf(lstMovableBall[btl]),emptyBtl);
 	}
