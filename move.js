@@ -2,18 +2,7 @@ var Column = require('./column');
 var columns = require('./level');
 var [bigBall,lstBigBall] = require('./bigBall');
 
-
-
 function move(from,to){
-	if (Array.isArray(from)){
-		to = from[1];
-		from =from[0];
-	}
-	
-	if (to == undefined || from =="raining :"){
-		//console.log("gnegne");
-		return
-	}	
 	
 	let colFrom = columns[from];
 	let colTo = columns[to];
@@ -53,4 +42,41 @@ function move(from,to){
 	bigBall(from);
 	bigBall(to);
 }
-module.exports = move;
+
+
+function doTheMove([source,target]){
+	let doFrom;
+	let doTo;
+	
+	console.log("move source, target",source,target)
+	
+	//rain
+	if (source == "raining :"){
+		let lstSrc = target[0];
+		doTo = target[1];
+		
+		//do each move on rain
+		for(bll in lstSrc){
+			move(lstSrc[bll],doTo);
+		}
+	
+	
+	/*
+		console.log("move the array");
+		doTo = source[1];
+		doFrom =source[0];*/
+	}else{
+		doFrom = source;
+		doTo = target;
+		
+		move(source,target);
+	}
+	
+	if (source == undefined){
+		//console.log("gnegne");
+		return
+	}
+
+
+}
+module.exports = doTheMove;

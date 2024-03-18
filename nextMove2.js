@@ -94,7 +94,7 @@ function internMove(){
 	
 	}
 
-	//rain if fail
+	//if fail do rain
 	if (out.length == 0){
 		let theRain = raining();
 		
@@ -103,7 +103,8 @@ function internMove(){
 			return "finito";
 		}else {
 			//console.log("the rain",theRain);
-			return [["raining :",lstColor[theRain]]];
+			//the first element is raining
+			return [["raining :",theRain]];
 		}
 	}
 	//console.log("out",out);

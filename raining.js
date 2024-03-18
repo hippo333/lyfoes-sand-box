@@ -62,14 +62,22 @@ function raining(){
 		return "finito"
 	}
 	//get all bll in top of botle
-	let lstMovableBall = columns.filter(
+	let lstMovableCol = columns.filter(
 		mvBll => mvBll[mvBll.length -1 ] ==bll
 	)
-	//do the move
+	let lstMovableBall= [];
+	for (col in lstMovableCol){
+		lstMovableBall.push(columns.indexOf(lstMovableCol[col]));
+	}
+	
+	console.log("rain output",lstMovableBall,emptyBtl);
+	return [lstMovableBall,emptyBtl]
+	
+	/*//do the move
 	for(btl in lstMovableBall){
 		move(columns.indexOf(lstMovableBall[btl]),emptyBtl);
 	}
-	return bll
+	return bll*/
 }
 
 module.exports = raining;

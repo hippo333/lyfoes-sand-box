@@ -24,6 +24,7 @@ for(let mvtMax = 4*(columns.length -2);mvtMax>0;mvtMax--){
 		console.log(columns);
 		console.log("lst of move posible",theMove);
 		
+		
 		move(theMove[0]);
 		
 		//clock
