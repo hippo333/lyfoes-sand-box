@@ -3,6 +3,7 @@ var columns = require('./level');
 
 var lstBigBall =[];
 for (btl in columns){
+	//bigball column_color
 	lstBigBall.push([0,0])
 }
 

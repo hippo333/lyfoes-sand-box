@@ -43,40 +43,4 @@ function move(from,to){
 	bigBall(to);
 }
 
-
-function doTheMove([source,target]){
-	let doFrom;
-	let doTo;
-	
-	console.log("move source, target",source,target)
-	
-	//rain
-	if (source == "raining :"){
-		let lstSrc = target[0];
-		doTo = target[1];
-		
-		//do each move on rain
-		for(bll in lstSrc){
-			move(lstSrc[bll],doTo);
-		}
-	
-	
-	/*
-		console.log("move the array");
-		doTo = source[1];
-		doFrom =source[0];*/
-	}else{
-		doFrom = source;
-		doTo = target;
-		
-		move(source,target);
-	}
-	
-	if (source == undefined){
-		//console.log("gnegne");
-		return
-	}
-
-
-}
-module.exports = doTheMove;
+module.exports = move;
