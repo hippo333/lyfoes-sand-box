@@ -11,11 +11,12 @@ function bigBall(botle){
 	let theColumn = columns[botle];
 	let lastBall = theColumn[theColumn.length -1];
 	
+	/* for the botle who contain one ball
 	if (theColumn.length == 1){
-		console.log("bigBall 1",botle)
+		console.log("the botle :",botle,"contain 1")
 		lstBigBall[botle] = [1,0];
 		return		
-	}
+	}*/
 	if(lastBall == undefined){
 		//console.log("bigBall 0",botle)
 		lstBigBall[botle] = [0,0];
@@ -28,7 +29,11 @@ function bigBall(botle){
 				lstBigBall[botle][0] = theColumn.length;
 				//console.log("monochrome");
 				//the color
-				if(theColumn.length >=3){
+				let theRealColor = lstBigBall.findIndex(
+					rc=> rc[1]==lastBall 
+				);
+				//if no other monochrome column exist 
+				if(theRealColor == -1){
 					lstBigBall[botle][1] = lastBall;
 					//console.log("now ",botle,"is on color mode");
 				}

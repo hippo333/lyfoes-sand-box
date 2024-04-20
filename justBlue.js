@@ -4,7 +4,7 @@ var move = require('./move');
 var [bigBall,lstBigBall] = require('./bigBall');
 
 console.log(columns);
-console.log(lstBigBall);
+//console.log("big ball",lstBigBall);
 
 
 //show all col who contain a
@@ -64,6 +64,34 @@ function Target(a){
 	return target
 }
 
+//the highest blue
+function highestBlue(blue){
+	// position , nb of ball over the blue
+	let higestBl = [0,5];
+	let allBlue = [];
+	let existBlue;
+	let above;
+
+	for(col in columns){
+		if(lstBigBall[col][1] == 0){
+			existBlue = columns[col].lastIndexOf(blue);
+			if(existBlue == undefined){continue}
+			
+			above = (columns[col].length-1)-existBlue;
+			
+			console.log(columns[col]);
+			if(above <= higestBl[1]){
+				higestBl = [col,above];
+				console.log("the column :",col,"as the higest ",blue,"ball");
+			}
+			allBlue.push(col);
+		}
+	}
+	console.log("list of column with ",blue,"ball");
+	console.log(allBlue);
+}
+
+
 
 
 //raining
@@ -100,12 +128,9 @@ function raining(a){
 			move(thePbCol,target2);
 		}
 	}
-	
-	
-	
-	
-	console.log("// raining :",a);
-}
+	console.log("\n// raining :",a);
+}//over raining
+
 raining(5);
 console.log(columns);/*
 raining(2);
@@ -113,14 +138,15 @@ console.log(columns);*/
 raining(5);
 console.log(columns);
 raining(5);
+highestBlue(5);
 console.log(columns);
-raining(2);
+/*raining(2);
 console.log(columns);
 raining(2);
 console.log(columns);
 raining(2);
 console.log(columns);
 raining(7);
-console.log(columns);
+console.log(columns);*/
 
 
