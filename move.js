@@ -6,7 +6,8 @@ function move(from,to){
 	
 	let colFrom = columns[from];
 	let colTo = columns[to];
-	//console.log("from,to",from,to,colFrom,colTo);
+	
+	//console.log("index from,to",from,to,"content from to",colFrom,colTo);
 	let ballFrom = colFrom[colFrom.length -1];
 	let ballTo = colTo[colTo.length -1];
 	
