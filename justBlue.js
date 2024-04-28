@@ -3,9 +3,6 @@ var columns = require('./level');
 var move = require('./move');
 var [bigBall,lstBigBall] = require('./bigBall');
 
-console.log(columns);
-//console.log("big ball",lstBigBall);
-
 
 //get the ball above the column
 function topBall(col){
@@ -15,8 +12,8 @@ function topBall(col){
 }
 
 //get what column can recive the ball
-function Target(red,mode,cll){//cll bug
-	let target =[];
+function Target(blue,mode,cll){
+	let target =[];	// the mixed column who can recive the ball
 	let theColor =-1;
 	let emptyBotle =-1;
 	
@@ -26,70 +23,55 @@ function Target(red,mode,cll){//cll bug
 	}
 	
 	for(col in columns){
-		if(lstBigBall[col][1]==red){
-			theColor= col;
-		}else if(col ==cll){continue}
-		else if(columns[col].length <4){
+		if(col ==cll){continue}
 		
-			if(topBall(col) ==red && 4-columns[col].length >=bgBll){
+		else if(lstBigBall[col][1]==blue){
+			theColor= col;
+		}else if(columns[col].length <4){
+		
+			if(topBall(col) ==blue && 4-columns[col].length >=bgBll){
 				target.push(col);
 			}else if(columns[col].length ==0){
 				emptyBotle = col;
 			}
 		}
+	}	
+	let priority = [target[0],theColor,emptyBotle];	//default for free mode
+	if(mode == "rain"){
+		priority = [theColor,emptyBotle,target[0]];
 	}
-	switch(mode){
-		case "rain":
-			if(theColor != -1){
-				console.log("the color",red,"the column",theColor);
-				return theColor
-			}else if(emptyBotle != -1){
-					lstBigBall[emptyBotle][1] = red;
-				return emptyBotle
-			}else {
-				console.log("i can't get Target on rain");
-				//get a way to move it
-			}
-		
-		break;
-		case "free":
-			if(target.length != 0){
-				return target[0]
-			}else if(theColor != -1){
-				return theColor
-			}else if(emptyBotle != -1){
-				return emptyBotle
-			}else {
-				console.log("i can't get Target on free");
-			}
-		break;
+	for(element in priority){
+		if(priority[element] ==-1 ){continue}
+		if(priority[element]==undefined){continue}	//for the target
+		if(priority[element]==emptyBotle){
+			lstBigBall[emptyBotle][1] = blue;	//update the colors list
+		}
+		return priority[element]
 	}
+	console.log("i can't get taret in",mode);	//if it fail
 }
 
-//all column who contain a blue ball
-//the highest blue
+//all column who contain a blue ball and the one with the lowest ball above
 function highestBlue(blue,colB){
-	// position , nb of ball over the blue
 	//colB is the source and we search a target
-	let higestBl = [0,5];
+	let higestBl = [0,5]; //column , above
 	let allBlue = [];
-	let existBlue;
-	let above;
+	let hiestBlue;	//the highest ball on the column
+	let above;		//ball above the blue
 	
 	for(col in columns){
 		if(col == colB){continue}
+		
 		if(lstBigBall[col][1] == 0){
-			existBlue = columns[col].lastIndexOf(blue);
-			if(existBlue == -1){continue}
-				//console.log("the column",col,"contain Blue",existBlue);
-			//how many ball above the ball		
-			above = (columns[col].length-1)-existBlue;
+			hiestBlue = columns[col].lastIndexOf(blue);
+			if(hiestBlue == -1){continue}	
+			
+			above = (columns[col].length-1)-hiestBlue;
 			if (colB != null && above < lstBigBall[colB][0]){continue}
 			
 			//console.log(columns[col]);
 			if(above <= higestBl[1]){
 				higestBl = [col,above];
-				//console.log("the column",col,"contain higest Blue");
 			}
 			allBlue.push(col);
 		}
@@ -97,24 +79,21 @@ function highestBlue(blue,colB){
 	return [allBlue,higestBl[0]]
 }
 //move the ball above the blue one
-function freeBlue(blue,colBlue,otherTarget,loopKiler){
-	if(loopKiler > 10){return}
-	//console.log("colblue the column with a ball above the blue is",colBlue);
-	let nastyBall = topBall(colBlue);
-	let target = Target(nastyBall,"free",colBlue);
+function freeBlue(colBlue){
+	//the ball above the blue
+	let secondBall = topBall(colBlue);
+	let target = Target(secondBall,"free",colBlue);
 	
+	//if the ball above can't get a target search to make it
 	if (target == null){
 		//for the ball above get a target
-		let highestWay = highestBlue(nastyBall,colBlue)[1];
-		console.log(colBlue,"is blocked,",highestWay,"can help");
+		let secondCol = highestBlue(secondBall,colBlue)[1];
 		//get the other column
-		let nastyTarget = Target(topBall(highestWay),"free",highestWay);
-		console.log("nasty target",nastyTarget);
-		move(highestWay,nastyTarget);
+		let thirdCol = Target(topBall(secondCol),"free",secondCol);
+		move(secondCol,thirdCol);
 		return
 	}	
-	
-	
+		
 	//first try with color
 	if (target != -1){
 		//console.log("free blue");
@@ -128,45 +107,48 @@ function freeBlue(blue,colBlue,otherTarget,loopKiler){
 
 
 //raining
-function raining(green,target){
-	console.log("\n// raining :",green);
-	let lstColBlue= highestBlue(green)[0];
-	//console.log("lst blue",lstColBlue);
+function raining(blue,target){
+	console.log("\n// raining :",blue);
+	let lstColBlue= highestBlue(blue)[0];
 	
 	if (target == null){
-		console.log("i didn't get the target for ",green);
-		return null
+		console.log("i didn't get the target for ",blue);
+		return "fail target"
 	}
 	
 	let theCol;
 	let itWork = false;
+					//move all ball who can go to the color
 	for(way in lstColBlue){
 		theCol = lstColBlue[way];
-		if (topBall(theCol) == green){
+		
+		if (topBall(theCol) == blue){
 			console.log("it work",theCol,target);
 			move(theCol,target);
 			itWork = true;
 		}
 	}
 	if (!itWork){
-		console.log("the col ",highestBlue(green)[1],"as the blue ball");
-		freeBlue(green,highestBlue(green)[1],target,1);
+		return "it !work"
 	}
-	return 0
 }//over raining
 
-function cycle(yellow){
-	let colTarget = Target(yellow,"rain");
+function cycle(blue){
+	let colTarget = Target(blue,"rain");
 	let rain =raining(5,colTarget);
 	
-	if (rain == null){
-		console.log("we can't rain",yellow);
+	if (rain == "fail target"){
+		console.log("we can't rain",blue);
 		
+	}if(rain =="it !work"){
+		console.log("the col ",highestBlue(blue)[1],"as the blue ball");
+		freeBlue(highestBlue(blue)[1]);		
 	}
 
 
 }
 
+console.log(columns);
 cycle(5);
 console.log(columns);
 cycle(5);
@@ -177,5 +159,4 @@ cycle(5);
 console.log(columns);/*
 raining(5);
 console.log(columns);*/
-
 
