@@ -11,13 +11,19 @@ function bigBall(botle){
 	let theColumn = columns[botle];
 	let lastBall = theColumn[theColumn.length -1];
 	
-	/* for the botle who contain one ball
+	// for the botle who contain one ball
 	if (theColumn.length == 1){
-		console.log("the botle :",botle,"contain 1")
+		let theRealColor = lstBigBall.findIndex(
+			rc=> rc[1]==lastBall 
+		);
 		lstBigBall[botle] = [1,0];
+		
+		if(theRealColor == -1){
+			lstBigBall[botle][1] = lastBall;			
+		}
 		return		
-	}*/
-	if(lastBall == undefined){
+	}
+	if(theColumn.length == 0){
 		//console.log("bigBall 0",botle)
 		lstBigBall[botle] = [0,0];
 		return
@@ -45,6 +51,7 @@ function bigBall(botle){
 			}
 		}else{
 			lstBigBall[botle][0] = theColumn.length -bll -1;
+			//console.log("calcul of bigball bottle",botle,"big ball",lstBigBall[botle][0]);
 			return
 		}
 	}

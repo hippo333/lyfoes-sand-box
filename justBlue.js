@@ -43,9 +43,6 @@ function Target(blue,mode,cll){
 	for(element in priority){
 		if(priority[element] ==-1 ){continue}
 		if(priority[element]==undefined){continue}	//for the target
-		if(priority[element]==emptyBotle){
-			lstBigBall[emptyBotle][1] = blue;	//update the colors list
-		}
 		return priority[element]
 	}
 	console.log("i can't get taret in",mode);	//if it fail
@@ -90,6 +87,7 @@ function freeBlue(colBlue){
 		let secondCol = highestBlue(secondBall,colBlue)[1];
 		//get the other column
 		let thirdCol = Target(topBall(secondCol),"free",secondCol);
+		
 		move(secondCol,thirdCol);
 		return
 	}	
@@ -102,7 +100,6 @@ function freeBlue(colBlue){
 		console.log("je le mait ou le ",b,"enfet?");
 		return		
 	}
-
 }
 
 
@@ -111,7 +108,7 @@ function raining(blue,target){
 	console.log("\n// raining :",blue);
 	let lstColBlue= highestBlue(blue)[0];
 	
-	if (target == null){
+	if (target == null || target == undefined){
 		console.log("i didn't get the target for ",blue);
 		return "fail target"
 	}
@@ -123,7 +120,7 @@ function raining(blue,target){
 		theCol = lstColBlue[way];
 		
 		if (topBall(theCol) == blue){
-			console.log("it work",theCol,target);
+			console.log("rain",theCol,target);
 			move(theCol,target);
 			itWork = true;
 		}
@@ -141,11 +138,8 @@ function cycle(blue){
 		console.log("we can't rain",blue);
 		
 	}if(rain =="it !work"){
-		console.log("the col ",highestBlue(blue)[1],"as the blue ball");
 		freeBlue(highestBlue(blue)[1]);		
 	}
-
-
 }
 
 console.log(columns);
@@ -156,7 +150,17 @@ console.log(columns);
 cycle(5);
 console.log(columns);
 cycle(5);
-console.log(columns);/*
-raining(5);
-console.log(columns);*/
+console.log(columns);
+cycle(5);
+console.log(columns);
+cycle(5);
+console.log(columns);
+cycle(5);
+console.log(columns);
+cycle(5);
+console.log(columns);
+cycle(5);
+console.log(columns);
+cycle(2);
+console.log(columns);
 
