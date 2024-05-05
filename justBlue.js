@@ -13,6 +13,7 @@ function topBall(col){
 
 //get what column can recive the ball
 function Target(blue,mode,cll){
+	//console.log("	//target",blue,mode,cll);//keep it
 	let target =[];	// the mixed column who can recive the ball
 	let theColor =-1;
 	let emptyBotle =-1;
@@ -26,6 +27,10 @@ function Target(blue,mode,cll){
 		if(col ==cll){continue}
 		
 		else if(lstBigBall[col][1]==blue){
+			if(lstBigBall[col][0]==4){
+				//console.log("the target is complet, col",col,columns[col]);
+				return
+			}
 			theColor= col;
 		}else if(columns[col].length <4){
 		
@@ -50,6 +55,7 @@ function Target(blue,mode,cll){
 
 //all column who contain a blue ball and the one with the lowest ball above
 function highestBlue(blue,colB){
+	//console.log("	//highestBlue",blue,colB);//keep it
 	//colB is the source and we search a target
 	let higestBl = [0,5]; //column , above
 	let allBlue = [];
@@ -77,6 +83,7 @@ function highestBlue(blue,colB){
 }
 //move the ball above the blue one
 function freeBlue(colBlue){
+	//console.log("	//freeBlue",colBlue);// keep it
 	//the ball above the blue
 	let secondBall = topBall(colBlue);
 	let target = Target(secondBall,"free",colBlue);
@@ -105,7 +112,7 @@ function freeBlue(colBlue){
 
 //raining
 function raining(blue,target){
-	console.log("\n// raining :",blue);
+	//console.log("	// raining :",blue);//keep it
 	let lstColBlue= highestBlue(blue)[0];
 	
 	if (target == null || target == undefined){
@@ -120,7 +127,7 @@ function raining(blue,target){
 		theCol = lstColBlue[way];
 		
 		if (topBall(theCol) == blue){
-			console.log("rain",theCol,target);
+			//console.log("rain",theCol,target);
 			move(theCol,target);
 			itWork = true;
 		}
@@ -131,21 +138,32 @@ function raining(blue,target){
 }//over raining
 
 
-function cycle(blue){
-	let colTarget = Target(blue,"rain");
-	if(colTarget==undefined){return}
+function cycle(blue,loopKiller){
+	console.log("\n//cycle",blue);//keep it
+	if(blue == undefined){return}
+	if(loopKiller > 5){return}
+	if(loopKiller == undefined){loopKiller =1;}
 	
-	if(lstBigBall[colTarget][0] == 4){
+	let colTarget = Target(blue,"rain");
+	//console.log("col target",colTarget);
+	
+	if(colTarget==undefined || lstBigBall[colTarget][0] == 4){
+		//console.log("blue is complet",blue);
 		let randomOtherColumn = lstBigBall.findIndex(
 			otherCol => otherCol[0] >1
-			&& otherCol[0] <4			
+			&& otherCol[0] <4	
+			&&  topBall(lstBigBall.indexOf(otherCol)) != blue		
 		);
+		if(randomOtherColumn ==-1){
+			console.log("the game is over");
+			return
+		}
 		
+		//console.log("the column is in game",randomOtherColumn);
 		let otherBall = topBall(randomOtherColumn);
-		console.log("the column is in game",randomOtherColumn);
-		console.log("the top ball of it ",otherBall);
-		blue = otherBall;
-		colTarget = Target(blue,"rain");
+		//console.log("the top ball of it ",otherBall);
+		cycle(otherBall,loopKiller+1);
+		return
 	}
 	
 	let rain =raining(blue,colTarget);
@@ -154,10 +172,24 @@ function cycle(blue){
 		console.log("we can't rain",blue);
 		
 	}if(rain =="it !work"){
+		console.log("free blue");
+		//console.log("highest blue",highestBlue(blue)[1]);
 		freeBlue(highestBlue(blue)[1]);		
 	}
 }
 
+console.log(columns);
+cycle(5);
+console.log(columns);
+cycle(5);
+console.log(columns);
+cycle(5);
+console.log(columns);
+cycle(5);
+console.log(columns);
+cycle(5);
+console.log(columns);
+cycle(5);
 console.log(columns);
 cycle(5);
 console.log(columns);
