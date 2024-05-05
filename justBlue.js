@@ -134,11 +134,21 @@ function raining(blue,target){
 function cycle(blue){
 	let colTarget = Target(blue,"rain");
 	if(colTarget==undefined){return}
+	
 	if(lstBigBall[colTarget][0] == 4){
-		return
+		let randomOtherColumn = lstBigBall.findIndex(
+			otherCol => otherCol[0] >1
+			&& otherCol[0] <4			
+		);
+		
+		let otherBall = topBall(randomOtherColumn);
+		console.log("the column is in game",randomOtherColumn);
+		console.log("the top ball of it ",otherBall);
+		blue = otherBall;
+		colTarget = Target(blue,"rain");
 	}
 	
-	let rain =raining(5,colTarget);
+	let rain =raining(blue,colTarget);
 	
 	if (rain == "fail target"){
 		console.log("we can't rain",blue);
@@ -167,6 +177,6 @@ cycle(5);
 console.log(columns);
 cycle(5);
 console.log(columns);
-cycle(2);
+cycle(5);
 console.log(columns);
 
