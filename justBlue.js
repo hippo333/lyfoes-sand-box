@@ -130,8 +130,14 @@ function raining(blue,target){
 	}
 }//over raining
 
+
 function cycle(blue){
 	let colTarget = Target(blue,"rain");
+	if(colTarget==undefined){return}
+	if(lstBigBall[colTarget][0] == 4){
+		return
+	}
+	
 	let rain =raining(5,colTarget);
 	
 	if (rain == "fail target"){
