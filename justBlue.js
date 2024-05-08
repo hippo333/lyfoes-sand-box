@@ -151,8 +151,7 @@ function cycle(blue,loopKiller){
 			&&  topBall(lstBigBall.indexOf(otherCol)) != blue		
 		);
 		if(randomOtherColumn ==-1){
-			console.log("the game is over");
-			return
+			return "the game is over"
 		}
 		
 		let otherBall = topBall(randomOtherColumn);
@@ -172,36 +171,10 @@ function cycle(blue,loopKiller){
 }
 
 console.log(columns);
-cycle(5);
-console.log(columns);
-cycle(5);
-console.log(columns);
-cycle(5);
-console.log(columns);
-cycle(5);
-console.log(columns);
-cycle(5);
-console.log(columns);
-cycle(5);
-console.log(columns);
-cycle(5);
-console.log(columns);
-cycle(5);
-console.log(columns);
-cycle(5);
-console.log(columns);
-cycle(5);
-console.log(columns);
-cycle(5);
-console.log(columns);
-cycle(5);
-console.log(columns);
-cycle(5);
-console.log(columns);
-cycle(5);
-console.log(columns);
-cycle(5);
-console.log(columns);
-cycle(5);
-console.log(columns);
+let theCycle = cycle(5,0);
+for(let bip=0;bip <20;bip++){
+	theCycle = cycle(5,0);
+	if(theCycle == "the game is over"){return}
+	console.log(bip,columns);
+}
 
