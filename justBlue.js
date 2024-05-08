@@ -12,11 +12,13 @@ function topBall(col){
 }
 
 //get what column can recive the ball
-function Target(blue,mode,cll){
+function Target(blue,mode,cll,blackList){
 	//console.log("	//target",blue,mode,cll);//keep it
 	let target =[];	// the mixed column who can recive the ball
 	let theColor =-1;
 	let emptyBotle =-1;
+	if(blackList == undefined){blackList =[]}
+	//else{console.log("blacklist",blackList)};
 	
 	let bgBll;
 	if(cll!= null){
@@ -26,7 +28,7 @@ function Target(blue,mode,cll){
 	for(col in columns){
 		if(col ==cll){continue}
 		
-		else if(lstBigBall[col][1]==blue){
+		if(lstBigBall[col][1]==blue){
 			if(lstBigBall[col][0]==4){
 				return "already finished";
 			}
@@ -34,6 +36,7 @@ function Target(blue,mode,cll){
 		}else if(columns[col].length <4){
 		
 			if(topBall(col) ==blue && 4-columns[col].length >=bgBll){
+			//	if(blackList.indexOf(col) == -1){continue}
 				target.push(col);
 			}else if(columns[col].length ==0){
 				emptyBotle = col;
@@ -50,20 +53,23 @@ function Target(blue,mode,cll){
 		return priority[element]
 	}
 	console.log("i can't get taret in",mode);	//if it fail
+	console.log("cll",cll);
 	return "its blocked"
 }
 
 //all column who contain a blue ball and the one with the lowest ball above
-function highestBlue(blue,colB){
+function highestBlue(blue,colB,blackList){
 	//console.log("	//highestBlue",blue,colB);//keep it
 	//colB is the source and we search a target
 	let higestBl = [0,5]; //column , above
 	let allBlue = [];
 	let hiestBlue;	//the highest ball on the column
 	let above;		//ball above the blue
+	if(blackList == undefined){blackList = []}
 	
 	for(col in columns){
 		if(col == colB){continue}
+		if(blackList.indexOf(col) !=-1){continue}
 		
 		if(lstBigBall[col][1] == 0){
 			hiestBlue = columns[col].lastIndexOf(blue);
@@ -82,21 +88,23 @@ function highestBlue(blue,colB){
 	return [allBlue,higestBl[0]]
 }
 //move the ball above the blue one
-function freeBlue(colBlue){
+function freeBlue(colBlue,history){
 	//console.log("	//freeBlue",colBlue);// keep it
-	//the ball above the blue
+	if(history == undefined){history=[]}
+	if(history.length > 5){return}	
+	
 	let secondBall = topBall(colBlue);
-	let target = Target(secondBall,"free",colBlue);
+	let target = Target(secondBall,"free",colBlue,history);
 	
 	//if the ball above can't get a target search to make it
 	if (target =="its blocked"){
 		//for the ball above get a target
-		let secondCol = highestBlue(secondBall,colBlue)[1];
-		//get the other column
-		let thirdCol = Target(topBall(secondCol),"free",secondCol);
-		
-		move(secondCol,thirdCol);
+		let secondCol = highestBlue(secondBall,colBlue,history)[1];
+
+		history.push(secondCol);
+		freeBlue(secondCol,history);
 		return
+		
 	}	
 		
 	//first try with color
@@ -148,12 +156,11 @@ function cycle(blue,loopKiller){
 		let randomOtherColumn = lstBigBall.findIndex(
 			otherCol => otherCol[0] >1
 			&& otherCol[0] <4	
-			&&  topBall(lstBigBall.indexOf(otherCol)) != blue		
+			&&  topBall(lstBigBall.indexOf(otherCol)) != blue
 		);
 		if(randomOtherColumn ==-1){
 			return "the game is over"
 		}
-		
 		let otherBall = topBall(randomOtherColumn);
 		cycle(otherBall,loopKiller+1);
 		return
