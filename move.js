@@ -7,7 +7,9 @@ function move(from,to){
 	let colFrom = columns[from];
 	let colTo = columns[to];
 	
-	//console.log("index from,to",from,to,"content from to",colFrom,colTo);
+	if(typeof(from)!="number"){console.log("move/ from",from)}
+	if(typeof(to)!="number"){console.log("move/ to",to)}
+	
 	let ballFrom = colFrom[colFrom.length -1];
 	let ballTo = colTo[colTo.length -1];
 	
