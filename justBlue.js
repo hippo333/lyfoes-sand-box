@@ -28,8 +28,7 @@ function Target(blue,mode,cll){
 		
 		else if(lstBigBall[col][1]==blue){
 			if(lstBigBall[col][0]==4){
-				//console.log("the target is complet, col",col,columns[col]);
-				return
+				return "already finished";
 			}
 			theColor= col;
 		}else if(columns[col].length <4){
@@ -51,6 +50,7 @@ function Target(blue,mode,cll){
 		return priority[element]
 	}
 	console.log("i can't get taret in",mode);	//if it fail
+	return "its blocked"
 }
 
 //all column who contain a blue ball and the one with the lowest ball above
@@ -89,7 +89,7 @@ function freeBlue(colBlue){
 	let target = Target(secondBall,"free",colBlue);
 	
 	//if the ball above can't get a target search to make it
-	if (target == null){
+	if (target =="its blocked"){
 		//for the ball above get a target
 		let secondCol = highestBlue(secondBall,colBlue)[1];
 		//get the other column
@@ -101,7 +101,6 @@ function freeBlue(colBlue){
 		
 	//first try with color
 	if (target != -1){
-		//console.log("free blue");
 		move(colBlue,target);
 	}else{
 		console.log("je le mait ou le ",b,"enfet?");
@@ -116,7 +115,6 @@ function raining(blue,target){
 	let lstColBlue= highestBlue(blue)[0];
 	
 	if (target == null || target == undefined){
-		console.log("i didn't get the target for ",blue);
 		return "fail target"
 	}
 	
@@ -145,10 +143,8 @@ function cycle(blue,loopKiller){
 	if(loopKiller == undefined){loopKiller =1;}
 	
 	let colTarget = Target(blue,"rain");
-	//console.log("col target",colTarget);
 	
-	if(colTarget==undefined || lstBigBall[colTarget][0] == 4){
-		//console.log("blue is complet",blue);
+	if(colTarget=="already finished" || colTarget == "its blocked"){
 		let randomOtherColumn = lstBigBall.findIndex(
 			otherCol => otherCol[0] >1
 			&& otherCol[0] <4	
@@ -159,9 +155,7 @@ function cycle(blue,loopKiller){
 			return
 		}
 		
-		//console.log("the column is in game",randomOtherColumn);
 		let otherBall = topBall(randomOtherColumn);
-		//console.log("the top ball of it ",otherBall);
 		cycle(otherBall,loopKiller+1);
 		return
 	}
@@ -172,8 +166,7 @@ function cycle(blue,loopKiller){
 		console.log("we can't rain",blue);
 		
 	}if(rain =="it !work"){
-		console.log("free blue");
-		//console.log("highest blue",highestBlue(blue)[1]);
+		//console.log("free blue",blue);
 		freeBlue(highestBlue(blue)[1]);		
 	}
 }
