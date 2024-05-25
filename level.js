@@ -16,7 +16,7 @@ const PINK = 11
 const CYAN = 12;
 const ORANGE = 13;
 
-var level = 2.1;
+var level = 3.2;
 var columns;
 
 var numLst = [];
@@ -129,6 +129,48 @@ var columns = [
 	new Column([GREEN, RED, BLUE, GREEN]),
 	new Column([BRIGHTPINK, GREEN, BLUE, YELLOW]),
 	new Column([YELLOW, RED, BLUE, YELLOW]),
+	new Column([]),
+	new Column([]),
+];
+break;
+
+case 3.1:
+var columns = [
+	new Column([GREEN, GREEN, BRIGHTPINK, RED]),
+	new Column([LIGHTBLUE, LIGHTBLUE, GREEN, WHITE]),
+	new Column([BLUE, YELLOW, YELLOW, WHITE]),
+	new Column([BRIGHTPINK, RED, LIGHTBLUE, GREEN]),
+	new Column([LIGHTBLUE, WHITE, RED, WHITE]),
+	new Column([BLUE, BRIGHTPINK, BLUE, YELLOW]),
+	new Column([YELLOW, BLUE, BRIGHTPINK, RED]),
+	new Column([]),
+	new Column([]),
+];
+break;
+
+case 3.2:
+var columns = [
+	new Column([RED, LIGHTBLUE, LIGHTBLUE, BRIGHTPINK]),
+	new Column([RED, YELLOW, RED, WHITE]),
+	new Column([BLUE, LIGHTBLUE, RED, BLUE]),
+	new Column([GREEN, YELLOW, YELLOW, BLUE]),
+	new Column([WHITE, BRIGHTPINK, BLUE, WHITE]),
+	new Column([WHITE, GREEN, LIGHTBLUE, BRIGHTPINK]),
+	new Column([GREEN, BRIGHTPINK, YELLOW, GREEN]),
+	new Column([]),
+	new Column([]),
+];
+break;
+
+case 3.3:
+var columns = [
+	new Column([RED, LIGHTBLUE, LIGHTBLUE, BRIGHTPINK]),
+	new Column([RED, YELLOW, RED, WHITE]),
+	new Column([BLUE, LIGHTBLUE, RED, BLUE]),
+	new Column([GREEN, YELLOW, YELLOW, BLUE]),
+	new Column([WHITE, BRIGHTPINK, BLUE, WHITE]),
+	new Column([WHITE, GREEN, LIGHTBLUE, BRIGHTPINK]),
+	new Column([GREEN, BRIGHTPINK, YELLOW, GREEN]),
 	new Column([]),
 	new Column([]),
 ];
