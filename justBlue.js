@@ -147,19 +147,19 @@ function raining(blue,target){
 
 function clean(col){
 	console.log("  // clean the col: ",col);
+	//keep only big ball or ball alone
 	if(lstBigBall[col][1] ==0 && lstBigBall[col][0] !=1){return}
 	
-	let ball = columns[col][0];//if we ave only bigball
-	console.log("ball",ball);
+	let ball = columns[col][0];
 	
 	let theTarget = Target(ball,"clean",col);
 	console.log("target",theTarget);
 	
-	if(theTarget =="it's blocked"){
+	if(theTarget =="its blocked"){
 		console.log("we can't clean:",columns[col]);
 	}else{
-		move(col,theTarget)
 		console.log("move:",col,theTarget);
+		move(col,theTarget)
 	}
 	
 	
