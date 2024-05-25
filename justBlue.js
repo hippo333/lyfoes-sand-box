@@ -1,6 +1,6 @@
 var Column = require('./column');
 var columns = require('./level');
-var move = require('./move');
+var [move,lstOfMove] = require('./move');
 var [bigBall,lstBigBall] = require('./bigBall');
 
 
@@ -46,6 +46,8 @@ function Target(blue,mode,cll,blackList){
 	let priority = [target[0],theColor,emptyBotle];	//default for free mode
 	if(mode == "rain"){
 		priority = [theColor,emptyBotle,target[0]];
+	}else if( mode == "clean"){
+		priority = [theColor,target[0]];	
 	}
 	for(element in priority){
 		if(priority[element] ==-1 ){continue}
@@ -143,6 +145,30 @@ function raining(blue,target){
 	}
 }//over raining
 
+function clean(col){
+	console.log("  // clean the col: ",col);
+	if(lstBigBall[col][1] ==0 && lstBigBall[col][0] !=1){return}
+	
+	let ball = columns[col][0];//if we ave only bigball
+	console.log("ball",ball);
+	
+	let theTarget = Target(ball,"clean",col);
+	console.log("target",theTarget);
+	
+	if(theTarget =="it's blocked"){
+		console.log("we can't clean:",columns[col]);
+	}else{
+		move(col,theTarget)
+		console.log("move:",col,theTarget);
+	}
+	
+	
+}
+
+
+
+
+
 
 function cycle(blue,loopKiller){
 	console.log("\n//cycle",blue);//keep it
@@ -174,6 +200,10 @@ function cycle(blue,loopKiller){
 	}if(rain =="it !work"){
 		//console.log("free blue",blue);
 		freeBlue(highestBlue(blue)[1]);		
+	}else{//if it work clean the set
+		let colFrom =lstOfMove[lstOfMove.length -1][0];
+		console.log("clean");
+		clean(colFrom);
 	}
 }
 
@@ -181,7 +211,10 @@ console.log(columns);
 let theCycle = cycle(5,0);
 for(let bip=0;bip <20;bip++){
 	theCycle = cycle(5,0);
-	if(theCycle == "the game is over"){return}
+	if(theCycle == "the game is over"){
+		console.log("lst of move",lstOfMove);
+		return
+	}
 	console.log(bip,columns);
 }
 

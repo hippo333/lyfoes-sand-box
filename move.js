@@ -1,6 +1,7 @@
 var Column = require('./column');
 var columns = require('./level');
 var [bigBall,lstBigBall] = require('./bigBall');
+var lstOfMove = [];
 
 function move(from,to){
 	
@@ -42,6 +43,7 @@ function move(from,to){
 	}
 	bigBall(from);
 	bigBall(to);
+	lstOfMove.push([from,to]);
 }
 
-module.exports = move;
+module.exports = [move, lstOfMove];
