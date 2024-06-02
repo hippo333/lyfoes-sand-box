@@ -13,7 +13,7 @@ function topBall(col){
 
 //get what column can recive the ball
 function Target(blue,mode,cll,blackList){
-	//console.log("	//target",blue,mode,cll);//keep it
+	//console.log("		//target",blue,mode,cll);//keep it
 	let target =[];	// the mixed column who can recive the ball
 	let theColor =-1;
 	let emptyBotle =-1;
@@ -55,13 +55,12 @@ function Target(blue,mode,cll,blackList){
 		return priority[element]
 	}
 	console.log("i can't get taret in",mode);	//if it fail
-	console.log("cll",cll);
 	return "its blocked"
 }
 
 //all column who contain a blue ball and the one with the lowest ball above
 function highestBlue(blue,colB,blackList){
-	//console.log("	//highestBlue",blue,colB);//keep it
+	//console.log("		//highestBlue",blue,colB);//keep it
 	//colB is the source and we search a target
 	let higestBl = [0,5]; //column , above
 	let allBlue = [];
@@ -80,7 +79,7 @@ function highestBlue(blue,colB,blackList){
 			above = (columns[col].length-1)-hiestBlue;
 			if (colB != null && above < lstBigBall[colB][0]){continue}
 			
-			//console.log(columns[col]);
+			//console.log(		  columns[col]);
 			if(above <= higestBl[1]){
 				higestBl = [col,above];
 			}
@@ -91,7 +90,7 @@ function highestBlue(blue,colB,blackList){
 }
 //move the ball above the blue one
 function freeBlue(colBlue,history){
-	//console.log("	//freeBlue",colBlue);// keep it
+	//console.log("	  //freeBlue",colBlue);// keep it
 	if(history == undefined){history=[]}
 	if(history.length > 5){return}	
 	
@@ -113,7 +112,7 @@ function freeBlue(colBlue,history){
 	if (target != -1){
 		move(colBlue,target);
 	}else{
-		console.log("je le mait ou le ",b,"enfet?");
+		console.log("		  je le mait ou le ",b,"enfet?");
 		return		
 	}
 }
@@ -121,7 +120,7 @@ function freeBlue(colBlue,history){
 
 //raining
 function raining(blue,target){
-	console.log("  // raining: color target",blue, target);//keep it
+	//console.log("	// raining: color target",blue, target);//keep it
 	let lstColBlue= highestBlue(blue)[0];
 	
 	if (target == null || target == undefined){
@@ -134,7 +133,7 @@ function raining(blue,target){
 		theCol = lstColBlue[way];
 		
 		if (topBall(theCol) == blue){
-			console.log("rain",theCol,target);
+			//console.log("rain",theCol,target);
 			move(theCol,target);
 			itWork = true;
 		}
@@ -145,7 +144,7 @@ function raining(blue,target){
 }//over raining
 
 function doRain(){
-	console.log("  //do rain");
+	//console.log("	//do rain");
 	let blue ;
 	for(col in columns){
 		//console.log("big ball",lstBigBall[col]);
@@ -154,7 +153,7 @@ function doRain(){
 		if(lstBigBall[col][0] == 0){continue;}
 		
 		else{
-			//console.log("do rain",col);
+			//console.log("	  do rain",col);
 			blue = topBall(col);
 			let rain = raining(blue,col);
 			
@@ -163,7 +162,7 @@ function doRain(){
 				freeBlue(highestBlue(blue)[1]);		
 			}else{//if it work clean the set
 				let colFrom =lstOfMove[lstOfMove.length -1][0];
-				console.log("clean");
+				//console.log("	  clean");
 				clean(colFrom);
 			}		
 		}
@@ -171,7 +170,7 @@ function doRain(){
 }
 
 function internMove(){
-	console.log("  //interne move");
+	//console.log("	//interne move");
 	
 	for(coll in columns){
 		if(lstBigBall[coll][1] != 0){continue;}//if ist not a color
@@ -198,7 +197,7 @@ function internMove(){
 			if(theCol == coll){continue;}
 			if(topBall(theCol) == blue){
 				if((lstBigBall[theCol] + columns[coll].length) > 4){continue}
-				console.log("from ",theCol,"to",coll,"color",blue);
+				console.log("	  from ",theCol,"to",coll,"color",blue);
 				move(theCol,coll);
 			}
 			
@@ -210,19 +209,19 @@ function internMove(){
 }
 
 function clean(col){
-	console.log("  // clean the col: ",col);
+	//console.log("	// clean the col: ",col);
 	//keep only big ball or ball alone
 	if(lstBigBall[col][1] ==0 && lstBigBall[col][0] !=1){return}
 	
 	let ball = columns[col][0];
 	
 	let theTarget = Target(ball,"clean",col);
-	console.log("target",theTarget);
+	//console.log("	  target",theTarget);
 	
 	if(theTarget =="its blocked"){
-		console.log("we can't clean:",columns[col]);
+		console.log("	  we can't clean:",columns[col]);
 	}else{
-		console.log("move:",col,theTarget);
+		//console.log("	  move:",col,theTarget);
 		move(col,theTarget)
 	}
 	
@@ -235,6 +234,12 @@ function cycle(blue,loopKiller){
 	if(blue == undefined){return}
 	if(loopKiller > 5){return}
 	if(loopKiller == undefined){loopKiller =1;}
+		
+	
+	doRain();
+	//if yes return
+	internMove();
+	//if yes return
 	
 	let colTarget = Target(blue,"rain");
 	
@@ -252,20 +257,17 @@ function cycle(blue,loopKiller){
 		return
 	}
 	
-	doRain();
-	internMove();
-	
 	let rain =raining(blue,colTarget);
 	
 	if (rain == "fail target"){
-		console.log("we can't rain",blue);
+		console.log("  we can't rain",blue);
 		
 	}if(rain =="it !work"){
-		//console.log("free blue",blue);
+		//console.log("  free blue",blue);
 		freeBlue(highestBlue(blue)[1]);		
 	}else{//if it work clean the set
 		let colFrom =lstOfMove[lstOfMove.length -1][0];
-		console.log("clean");
+		//console.log("  clean");
 		clean(colFrom);
 	}
 }
