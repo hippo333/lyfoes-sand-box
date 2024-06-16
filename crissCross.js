@@ -61,33 +61,35 @@ function highestBlue(blue,colB,blackList){
 
 function getTwin(lstTwin){
 	//console.log("	//get twin",lstTwin);
-	if(lstTwin.length > columns.length){//loop killer
+	if(lstTwin.length > columns.length){
 		console.log("dafuck dude what can i do ");
 		return
-	}
+	}//loop killer
 	
 	let outPut =[];
+	let lstOfCol =[];	//all col include in calcul (anti double)
 	let lastCol = lstTwin[lstTwin.length -1];//last col of the list
-	let sdBall = secondBall(lastCol);
+	let sdBall = secondBall(lastCol);		//second ball of the botle
 	
 	if(sdBall == null){//if the column contain only one ball
 		return [lstTwin]
-	}
+	}//it end with a new empty botle
 	
-	let highestBl = highestBlue(sdBall,lastCol)[0];
+	let allBlue = highestBlue(sdBall,lastCol)[0];
 		
-	let thisTry;
-	let alreadyThere;
-	let thisCoppy = [] //coppy of lstTwin 
+	let thisTry;		//curent element of the loop
+	let alreadyThere;	//short cut of intern loop
+	let thisCoppy = []	//coppy of lstTwin 
 	
-	for(way in highestBl){
-		thisTry = highestBl[way];
+	for(way in allBlue){
+		thisTry = allBlue[way];
 		thisCoppy = lstTwin
 		if(topBall(thisTry) != sdBall){continue}
+		lstOfCol.push(thisTry);
 		
 		alreadyThere =lstTwin.indexOf(thisTry);//if we loop on the list
 		
-		if(alreadyThere != -1){//if we loop on the list of move
+		if(alreadyThere != -1){//if we loop on the list of move short cut
 			thisCoppy.slice(alreadyThere);
 			outPut.push(thisCoppy);
 			
@@ -95,23 +97,38 @@ function getTwin(lstTwin){
 			thisCoppy.push(thisTry);
 			let nextStep =getTwin(thisCoppy);
 			
-			if(nextStep.length != 0){
-				outPut.push(thisCoppy);
+			if(nextStep != null){		//if the next recursive loop work
+				outPut.push(thisCoppy);	//return it for the previous
+				lstOfCol = lstOfCol.concat(nextStep[1]);
+				//console.log("this line is strange",thisCoppy);
 			} 
-		}
+		}//dafuck
 	}
-	return outPut
+	
+	if(outPut != lstTwin){
+		//console.log("lst of col",lstOfCol);
+		return [outPut,lstOfCol]//succes end
+	}else{
+		return null	//fail end
+	}
 }//get twin
 
-let thisWay = [];
-let sdBall;
-let highestBl;
-let lstOfCrissCross = [];
+let thisWay = [];			//local try
+let lstOfCrissCross = [];	//global try
+
+let alreadyTry =['1'];	//global anti double
+let newTry =[];		//local  anti double
 
 for( way in columns){
-	if(columns[way].length == 0){continue}
-	thisWay = getTwin([way]);
-	console.log("i want it that way",thisWay);
+	if(columns[way].length == 0){continue}		//empty botle
+	if(alreadyTry.indexOf(way) != -1){continue}	//already try this column
+	
+	[thisWay,newTry] = getTwin([way]);
+	console.log("\n i want it that way",thisWay);
+	console.log("all column include in calcul",newTry);
 	lstOfCrissCross = lstOfCrissCross.concat(thisWay);
+	
+	alreadyTry = alreadyTry.concat(newTry);
+	console.log("lst global",alreadyTry);
 }
-console.log(lstOfCrissCross);
+console.log("\n",lstOfCrissCross);
