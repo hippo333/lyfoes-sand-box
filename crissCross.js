@@ -84,8 +84,9 @@ function getTwin(lstTwin){
 	for(way in allBlue){
 		thisTry = allBlue[way];
 		thisCoppy = lstTwin
-		if(topBall(thisTry) != sdBall){continue}
-		lstOfCol.push(thisTry);
+		
+		if(topBall(thisTry) != sdBall || lstBigBall[thisTry][0] != 1){continue}
+		lstOfCol.push(thisTry);		
 		
 		alreadyThere =lstTwin.indexOf(thisTry);//if we loop on the list
 		
@@ -100,7 +101,7 @@ function getTwin(lstTwin){
 			if(nextStep != null){		//if the next recursive loop work
 				outPut.push(thisCoppy);	//return it for the previous
 				lstOfCol = lstOfCol.concat(nextStep[1]);
-				//console.log("this line is strange",thisCoppy);
+				console.log("this line is strange",thisCoppy);
 			} 
 		}//dafuck
 	}
@@ -116,7 +117,7 @@ function getTwin(lstTwin){
 let thisWay = [];			//local try
 let lstOfCrissCross = [];	//global try
 
-let alreadyTry =['1'];	//global anti double
+let alreadyTry =[];	//global anti double
 let newTry =[];		//local  anti double
 
 for( way in columns){
@@ -125,10 +126,10 @@ for( way in columns){
 	
 	[thisWay,newTry] = getTwin([way]);
 	console.log("\n i want it that way",thisWay);
-	console.log("all column include in calcul",newTry);
+	//console.log("all column include in calcul",newTry);
 	lstOfCrissCross = lstOfCrissCross.concat(thisWay);
 	
 	alreadyTry = alreadyTry.concat(newTry);
-	console.log("lst global",alreadyTry);
+	//console.log("lst global",alreadyTry);
 }
 console.log("\n",lstOfCrissCross);
