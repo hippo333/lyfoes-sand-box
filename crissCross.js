@@ -27,6 +27,17 @@ function secondBall(col){
 	return theBll
 }
 
+function aboveIt(col,blue){
+	let theCol = columns[col];
+	let highestBl = theCol.lastIndexOf(blue);
+	let above = (theCol.length-1)-highestBl;
+	
+	if(highestBl !=-1){
+		return above
+	}else {
+		return null
+	}
+}
 
 //all column who contain a blue ball and the one with the lowest ball above
 function highestBlue(blue,colB,blackList){
@@ -43,11 +54,9 @@ function highestBlue(blue,colB,blackList){
 		if(blackList.indexOf(col) !=-1){continue}
 		
 		if(lstBigBall[col][1] == 0){
-			hiestBlue = columns[col].lastIndexOf(blue);
-			if(hiestBlue == -1){continue}
+			above = aboveIt(col,blue);
 			
-			above = (columns[col].length-1)-hiestBlue;//how many ball above blue
-			//if (colB != null && above < lstBigBall[colB][0]){continue}
+			if(above == null){continue}// no blue in the col
 			
 			//console.log(		  columns[col]);
 			if(above <= higestBl[1]){
@@ -85,7 +94,9 @@ function getTwin(lstTwin){
 		thisTry = allBlue[way];
 		thisCoppy = lstTwin
 		
-		if(topBall(thisTry) != sdBall || lstBigBall[thisTry][0] != 1){continue}
+		if(topBall(thisTry) != sdBall){continue}
+		console.log("col color above ", thisTry, sdBall, aboveIt(thisTry,sdBall));
+		if(lstBigBall[thisTry][0] > aboveIt(lastCol,sdBall)){continue}//big ball
 		lstOfCol.push(thisTry);		
 		
 		alreadyThere =lstTwin.indexOf(thisTry);//if we loop on the list
