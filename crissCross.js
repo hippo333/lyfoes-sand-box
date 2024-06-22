@@ -69,13 +69,13 @@ function highestBlue(blue,colB,blackList){
 }
 
 function getTwin(lstTwin){
-	//console.log("	//get twin",lstTwin);
+	//console.log("\n	//get twin",lstTwin);
 	if(lstTwin.length > columns.length){
 		console.log("dafuck dude what can i do ");
 		return
 	}//loop killer
 	
-	let outPut =[];
+	let output =[];
 	let lstOfCol =[];	//all col include in calcul (anti double)
 	let lastCol = lstTwin[lstTwin.length -1];//last col of the list
 	let sdBall = secondBall(lastCol);		//second ball of the botle
@@ -92,41 +92,48 @@ function getTwin(lstTwin){
 	
 	for(way in allBlue){
 		thisTry = allBlue[way];
-		thisCoppy = lstTwin
+		thisCoppy = [...lstTwin];
 		
 		if(topBall(thisTry) != sdBall){continue}
-		console.log("col color above ", thisTry, sdBall, aboveIt(thisTry,sdBall));
+		//console.log("	  col color above ", thisTry, sdBall, aboveIt(thisTry,sdBall));
 		if(lstBigBall[thisTry][0] > aboveIt(lastCol,sdBall)){continue}//big ball
-		lstOfCol.push(thisTry);		
 		
+		lstOfCol.push(thisTry);		
 		alreadyThere =lstTwin.indexOf(thisTry);//if we loop on the list
 		
 		if(alreadyThere != -1){//if we loop on the list of move short cut
-			thisCoppy.slice(alreadyThere);
-			outPut.push(thisCoppy);
+			//console.log("	  the loop is closed at col",thisTry);
+			//console.log("	  its the value of the list",alreadyThere,thisCoppy);
+			thisCoppy = thisCoppy.slice(alreadyThere);
+			output.push(thisCoppy);
 			
 		}else{//do it recursively
 			thisCoppy.push(thisTry);
 			let nextStep =getTwin(thisCoppy);
 			
-			if(nextStep != null){		//if the next recursive loop work
-				outPut.push(thisCoppy);	//return it for the previous
-				lstOfCol = lstOfCol.concat(nextStep[1]);
-				console.log("this line is strange",thisCoppy);
+			if(nextStep[0] != null){		//if the next recursive loop work
+				output = output.concat(nextStep[0]);	//return it for the previous
 			} 
+			lstOfCol = lstOfCol.concat(nextStep[1]);
 		}//dafuck
 	}
-	
-	if(outPut != lstTwin){
-		//console.log("lst of col",lstOfCol);
-		return [outPut,lstOfCol]//succes end
+	if(output != lstTwin ){
+		if(output.length == 0){
+			//console.log("  output is null\n");
+			return [null,lstOfCol]
+		}
+		//console.log("	  lst of col",lstOfCol);
+		//console.log("	output",output,"\n");
+		return [output,lstOfCol]//succes end
 	}else{
-		return null	//fail end
+		console.log("	output same\n");
+		return [null,lstOfCol]	//fail end
 	}
 }//get twin
 
 let thisWay = [];			//local try
 let lstOfCrissCross = [];	//global try
+let a = null;
 
 let alreadyTry =[];	//global anti double
 let newTry =[];		//local  anti double
@@ -135,7 +142,9 @@ for( way in columns){
 	if(columns[way].length == 0){continue}		//empty botle
 	if(alreadyTry.indexOf(way) != -1){continue}	//already try this column
 	
-	[thisWay,newTry] = getTwin([way]);
+	a = getTwin([way]);
+	if(a[0] == null){continue}
+	[thisWay,newTry] = a;
 	console.log("\n i want it that way",thisWay);
 	//console.log("all column include in calcul",newTry);
 	lstOfCrissCross = lstOfCrissCross.concat(thisWay);
