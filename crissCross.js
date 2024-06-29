@@ -2,6 +2,7 @@ var Column = require('./column');
 var columns = require('./level');
 var [move,lstOfMove] = require('./move');
 var [bigBall,lstBigBall] = require('./bigBall');
+var startTime = new Date().getTime();
 
 console.log(columns);
 
@@ -13,18 +14,32 @@ function topBall(col){
 }
 
 function secondBall(col){
-	//console.log("	  //secondeBall col",col);
-	if(typeof(col) == "object" ){
-		col = columns.indexOf(col);
-	}
+	//console.log("\n	    //secondeBall col",col);
+	
 	let theCll = columns[col];
 	let bgBll = lstBigBall[col][0];
+	
 	
 	if(bgBll == theCll.length){return null}
 	
 	let theBll = theCll[theCll.length - bgBll-1];
+	let highSdBll =theCll.length - bgBll;
 	
-	return theBll
+	for(bll = 1 ;bll<highSdBll;bll++){
+		
+		if(theCll[theCll.length - bgBll-1- bll] ==theBll){continue;}
+		
+		else{
+		return [theBll,bll]}//the ball , the bigball
+	}
+	return [theBll,highSdBll]//if the second ball touch the bottom
+}
+
+function getColor(blue){
+	let out = lstBigBall.findIndex(
+		out => out[1] == blue	
+	);
+	return out
 }
 
 function aboveIt(col,blue){
@@ -70,19 +85,30 @@ function highestBlue(blue,colB,blackList){
 
 function getTwin(lstTwin){
 	//console.log("\n	//get twin",lstTwin);
-	if(lstTwin.length > columns.length){
-		console.log("dafuck dude what can i do ");
-		return
-	}//loop killer
+	
+	if(lstTwin.length > columns.length){return}//loop killer
 	
 	let output =[];
 	let lstOfCol =[];	//all col include in calcul (anti double)
 	let lastCol = lstTwin[lstTwin.length -1];//last col of the list
-	let sdBall = secondBall(lastCol);		//second ball of the botle
 	
-	if(sdBall == null){//if the column contain only one ball
-		return [lstTwin]
-	}//it end with a new empty botle
+	let secondBll = secondBall(lastCol);		//second ball of the botle
+	if(secondBll == null){return [lstTwin,[]]}//it end with a new empty botle
+	let [sdBall,sdBigBall] = secondBll;
+	
+	
+	let theColor = getColor(sdBall);//if the second ball can go to color	
+	if(theColor != -1){
+		lstTwin.push([lastCol,theColor]);//take out the second ball
+		
+		let thirdLevel = columns[lastCol].length; //the level of third ball
+		thirdLevel =- lstBigBall[lastCol][0] -sdBigBall-1;
+		
+		if(thirdLevel <0){return [lstTwin,[]]}//it end with a new empty botle
+		else{
+			sdBall = columns[lastCol][thirdLevel];//third ball
+		}
+	}
 	
 	let allBlue = highestBlue(sdBall,lastCol)[0];
 		
@@ -92,48 +118,35 @@ function getTwin(lstTwin){
 	
 	for(way in allBlue){
 		thisTry = allBlue[way];
-		thisCoppy = [...lstTwin];
+		thisCoppy = [...lstTwin];//clone
 		
-		if(topBall(thisTry) != sdBall){continue}
-		//console.log("	  col color above ", thisTry, sdBall, aboveIt(thisTry,sdBall));
+		if(topBall(thisTry) != sdBall){continue}//the ball is'nt on top
+		
 		if(lstBigBall[thisTry][0] > aboveIt(lastCol,sdBall)){continue}//big ball
 		
 		lstOfCol.push(thisTry);		
 		alreadyThere =lstTwin.indexOf(thisTry);//if we loop on the list
 		
 		if(alreadyThere != -1){//if we loop on the list of move short cut
-			//console.log("	  the loop is closed at col",thisTry);
-			//console.log("	  its the value of the list",alreadyThere,thisCoppy);
-			thisCoppy = thisCoppy.slice(alreadyThere);
+			thisCoppy = thisCoppy.slice(alreadyThere);//cut the col befor the loop
 			output.push(thisCoppy);
 			
 		}else{//do it recursively
 			thisCoppy.push(thisTry);
-			let nextStep =getTwin(thisCoppy);
+			let nextStep = getTwin(thisCoppy);//do it 
 			
-			if(nextStep[0] != null){		//if the next recursive loop work
+			if(nextStep[0].length != 0){		//if the next recursive loop work
 				output = output.concat(nextStep[0]);	//return it for the previous
 			} 
-			lstOfCol = lstOfCol.concat(nextStep[1]);
-		}//dafuck
-	}
-	if(output != lstTwin ){
-		if(output.length == 0){
-			//console.log("  output is null\n");
-			return [null,lstOfCol]
+			lstOfCol = lstOfCol.concat(nextStep[1]);//add the col from the recursive
 		}
-		//console.log("	  lst of col",lstOfCol);
-		//console.log("	output",output,"\n");
-		return [output,lstOfCol]//succes end
-	}else{
-		console.log("	output same\n");
-		return [null,lstOfCol]	//fail end
-	}
+	}return [output,lstOfCol]
 }//get twin
+
 
 let thisWay = [];			//local try
 let lstOfCrissCross = [];	//global try
-let a = null;
+let a = [];
 
 let alreadyTry =[];	//global anti double
 let newTry =[];		//local  anti double
@@ -141,9 +154,10 @@ let newTry =[];		//local  anti double
 for( way in columns){
 	if(columns[way].length == 0){continue}		//empty botle
 	if(alreadyTry.indexOf(way) != -1){continue}	//already try this column
+	if(lstBigBall[way][1] != 0){continue}		//its a color
 	
 	a = getTwin([way]);
-	if(a[0] == null){continue}
+	if(a[0].length == 0){continue}
 	[thisWay,newTry] = a;
 	console.log("\n i want it that way",thisWay);
 	//console.log("all column include in calcul",newTry);
@@ -153,3 +167,7 @@ for( way in columns){
 	//console.log("lst global",alreadyTry);
 }
 console.log("\n",lstOfCrissCross);
+
+var end = new Date().getTime();
+var time = end - startTime;
+console.log("calcul in",time/1000,"s");
