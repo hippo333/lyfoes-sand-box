@@ -32,7 +32,7 @@ function secondBall(col){
 		else{
 		return [theBll,bll]}//the ball , the bigball
 	}
-	return [theBll,highSdBll]//if the second ball touch the bottom
+	return [theBll,highSdBll,0]//if the second ball touch the bottom
 }
 
 function getColor(blue){
@@ -40,6 +40,14 @@ function getColor(blue){
 		out => out[1] == blue	
 	);
 	return out
+}
+
+function emptyBotle(){
+	btl = lstBigBall.findIndex(
+		btl => btl[0] ==0
+		&& btl[1] == 0
+	);
+	return btl
 }
 
 function aboveIt(col,blue){
@@ -83,6 +91,28 @@ function highestBlue(blue,colB,blackList){
 	return [allBlue,higestBl[0]]
 }
 
+function ifColor(lstTwin, col, color){
+	//console.log("	//ifColor lstTwin Col Color",lstTwin, col, color)
+
+	let theCol = columns[col];
+	let firstColor = theCol.lastIndexOf(color);
+	let theColor;	
+	let theBall;
+	
+	for(ball= firstColor;ball >=0;ball--){
+		theBall = theCol[ball];
+		theColor = getColor(theBall);
+		
+		if (theColor != -1){
+			lstTwin.push([col, theColor]);//take out the second ball
+		}else{
+			return [lstTwin, theCol[ball]]
+		}
+	}
+	return [lstTwin, "finish"]
+
+}
+
 function getTwin(lstTwin){
 	//console.log("\n	//get twin",lstTwin);
 	
@@ -92,21 +122,26 @@ function getTwin(lstTwin){
 	let lstOfCol =[];	//all col include in calcul (anti double)
 	let lastCol = lstTwin[lstTwin.length -1];//last col of the list
 	
+	
 	let secondBll = secondBall(lastCol);		//second ball of the botle
 	if(secondBll == null){return [lstTwin,[]]}//it end with a new empty botle
 	let [sdBall,sdBigBall] = secondBll;
 	
 	
-	let theColor = getColor(sdBall);//if the second ball can go to color	
-	if(theColor != -1){
-		lstTwin.push([lastCol,theColor]);//take out the second ball
+	let afterClr = ifColor(lstTwin, lastCol, sdBall);
+	if(afterClr != undefined){
+		//console.log("afterClr",afterClr);
+		[lstTwin, secondBll] = afterClr;
 		
-		let thirdLevel = columns[lastCol].length; //the level of third ball
-		thirdLevel =- lstBigBall[lastCol][0] -sdBigBall-1;
-		
-		if(thirdLevel <0){return [lstTwin,[]]}//it end with a new empty botle
-		else{
-			sdBall = columns[lastCol][thirdLevel];//third ball
+		//console.log("		secondBll",secondBll);
+		if(secondBll == "finish"){
+			let firstBall = lstTwin[1];
+			let goToEmpty = [firstBall,lstTwin[0]];	//clean the first move
+			
+			lstTwin = lstTwin.slice(2);		//remove old begin
+			lstTwin = [goToEmpty].concat(lstTwin);	//insert new at begin
+			
+			return [lstTwin,[]]
 		}
 	}
 	
@@ -147,6 +182,8 @@ function getTwin(lstTwin){
 let thisWay = [];			//local try
 let lstOfCrissCross = [];	//global try
 let a = [];
+let emptyBtl = emptyBotle();	//nececary for the first move
+
 
 let alreadyTry =[];	//global anti double
 let newTry =[];		//local  anti double
@@ -156,11 +193,12 @@ for( way in columns){
 	if(alreadyTry.indexOf(way) != -1){continue}	//already try this column
 	if(lstBigBall[way][1] != 0){continue}		//its a color
 	
-	a = getTwin([way]);
+	a = getTwin([emptyBtl,way]);
 	if(a[0].length == 0){continue}
 	[thisWay,newTry] = a;
 	console.log("\n i want it that way",thisWay);
 	//console.log("all column include in calcul",newTry);
+	
 	lstOfCrissCross = lstOfCrissCross.concat(thisWay);
 	
 	alreadyTry = alreadyTry.concat(newTry);
