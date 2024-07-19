@@ -39,7 +39,11 @@ function getColor(blue){
 	let out = lstBigBall.findIndex(
 		out => out[1] == blue	
 	);
-	return out
+	if(btl != -1){
+		return out
+	}else{
+		return null
+	}
 }
 
 function emptyBotle(){
@@ -47,7 +51,11 @@ function emptyBotle(){
 		btl => btl[0] ==0
 		&& btl[1] == 0
 	);
-	return btl
+	if(btl != -1){
+		return btl
+	}else{
+		return null
+	}
 }
 
 function aboveIt(col,blue){
@@ -59,6 +67,29 @@ function aboveIt(col,blue){
 		return above
 	}else {
 		return null
+	}
+}
+
+function Target(col){	//place for move the ball above col
+	//console.log("			//target for",col);
+	let theCol = columns[col];
+	let theBall = theCol[theCol.length -1];
+	
+	if(theBall == undefined){
+		console.log("can't find the ball above",col,theCol);
+	}
+	let theColor = getColor(theBall);
+	if(theColor != null){
+		//console.log("i get a color for",theBall,theColor,columns[theColor]);
+		return theColor
+	}else{
+		//console.log("i can't get a color for",col,theBall);	
+		let emptyBtl = emptyBotle();
+		if (emptyBtl != null){
+			return emptyBtl
+		}else{
+			return null
+		}
 	}
 }
 
@@ -183,6 +214,7 @@ let thisWay = [];			//local try
 let lstOfCrissCross = [];	//global try
 let a = [];
 let emptyBtl = emptyBotle();	//nececary for the first move
+let target ;					//same with color
 
 
 let alreadyTry =[];	//global anti double
@@ -192,8 +224,9 @@ for( way in columns){
 	if(columns[way].length == 0){continue}		//empty botle
 	if(alreadyTry.indexOf(way) != -1){continue}	//already try this column
 	if(lstBigBall[way][1] != 0){continue}		//its a color
+	target = Target(way);
 	
-	a = getTwin([emptyBtl,way]);
+	a = getTwin([target,way]);
 	if(a[0].length == 0){continue}
 	[thisWay,newTry] = a;
 	console.log("\n i want it that way",thisWay);
