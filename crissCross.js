@@ -71,7 +71,7 @@ function aboveIt(col,blue){
 }
 
 function Target(col){	//place for move the ball above col
-	console.log("      //target for",col);
+	//console.log("      //target for col",col);
 	let theCol = columns[col];
 	let theBall = theCol[theCol.length -1];
 	
@@ -80,10 +80,10 @@ function Target(col){	//place for move the ball above col
 	}
 	let theColor = getColor(theBall);
 	if(theColor != null){
-		console.log("      i get a color for",theBall,theColor,columns[theColor]);
+		//console.log("      i get a color for",theBall,theColor,columns[theColor]);
 		return theColor
 	}else{
-		console.log("      i can't get a color for",col,theBall);	
+		//console.log("      i can't get a color for",col,theBall);	
 		let emptyBtl = emptyBotle();
 		if (emptyBtl != null){
 			return emptyBtl
@@ -124,7 +124,7 @@ function highestBlue(blue,colB,blackList){
 }
 
 function ifColor(lstTwin, col, color){	//if we can move the ball to a color
-	console.log("	//ifColor lstTwin Col Color",lstTwin, col, color)
+	//console.log("	//ifColor lstTwin Col Color",lstTwin, col, color)
 
 	let theCol = columns[col];
 	let firstColor = theCol.lastIndexOf(color);
@@ -146,7 +146,7 @@ function ifColor(lstTwin, col, color){	//if we can move the ball to a color
 }
 
 function getTwin(lstTwin){
-	console.log("\n  //get twin",lstTwin);
+	//console.log("\n  //get twin",lstTwin);
 	
 	if(lstTwin.length > columns.length){return}//loop killer
 	
@@ -162,11 +162,11 @@ function getTwin(lstTwin){
 	
 	let afterClr = ifColor(lstTwin, lastCol, sdBall);
 	if(afterClr != undefined){
-		console.log("  afterClr",afterClr);
-		[lstTwin, secondBll] = afterClr;
+		//console.log("  afterClr",afterClr);
+		[lstTwin, sdBall] = afterClr;
 		
-		console.log("  secondBll",secondBll);
-		if(secondBll == "finish"){
+		//console.log("  sdBall",sdBall);
+		if(sdBall == "finish"){
 			let firstBall = lstTwin[1];
 			let goToEmpty = [firstBall,lstTwin[0]];	//clean the first move
 			
@@ -176,7 +176,6 @@ function getTwin(lstTwin){
 			return [lstTwin,[]]
 		}
 	}
-	
 	let allBlue = highestBlue(sdBall,lastCol)[0];
 		
 	let thisTry;		//curent element of the loop
@@ -186,6 +185,7 @@ function getTwin(lstTwin){
 	for(way in allBlue){
 		thisTry = allBlue[way];
 		thisCoppy = [...lstTwin];//clone
+		//console.log("  all blue element",way,thisTry);
 		
 		if(topBall(thisTry) != sdBall){continue}//the ball is'nt on top
 		
