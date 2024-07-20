@@ -14,7 +14,7 @@ function topBall(col){
 }
 
 function secondBall(col){
-	//console.log("\n	    //secondeBall col",col);
+	//console.log("\n      //secondeBall col",col);
 	
 	let theCll = columns[col];
 	let bgBll = lstBigBall[col][0];
@@ -39,7 +39,7 @@ function getColor(blue){
 	let out = lstBigBall.findIndex(
 		out => out[1] == blue	
 	);
-	if(btl != -1){
+	if(out != -1){
 		return out
 	}else{
 		return null
@@ -71,23 +71,24 @@ function aboveIt(col,blue){
 }
 
 function Target(col){	//place for move the ball above col
-	//console.log("			//target for",col);
+	console.log("      //target for",col);
 	let theCol = columns[col];
 	let theBall = theCol[theCol.length -1];
 	
 	if(theBall == undefined){
-		console.log("can't find the ball above",col,theCol);
+		console.log("      can't find the ball above",col,theCol);
 	}
 	let theColor = getColor(theBall);
 	if(theColor != null){
-		//console.log("i get a color for",theBall,theColor,columns[theColor]);
+		console.log("      i get a color for",theBall,theColor,columns[theColor]);
 		return theColor
 	}else{
-		//console.log("i can't get a color for",col,theBall);	
+		console.log("      i can't get a color for",col,theBall);	
 		let emptyBtl = emptyBotle();
 		if (emptyBtl != null){
 			return emptyBtl
 		}else{
+			console.log("      no target for",col);
 			return null
 		}
 	}
@@ -95,7 +96,7 @@ function Target(col){	//place for move the ball above col
 
 //all column who contain a blue ball and the one with the lowest ball above
 function highestBlue(blue,colB,blackList){
-	//console.log("		//highestBlue",blue,colB);//keep it
+	//console.log("    //highestBlue",blue,colB);//keep it
 	//colB is the source and we search a target
 	let higestBl = [0,5]; //column , above
 	let allBlue = [];
@@ -122,8 +123,8 @@ function highestBlue(blue,colB,blackList){
 	return [allBlue,higestBl[0]]
 }
 
-function ifColor(lstTwin, col, color){
-	//console.log("	//ifColor lstTwin Col Color",lstTwin, col, color)
+function ifColor(lstTwin, col, color){	//if we can move the ball to a color
+	console.log("	//ifColor lstTwin Col Color",lstTwin, col, color)
 
 	let theCol = columns[col];
 	let firstColor = theCol.lastIndexOf(color);
@@ -134,7 +135,7 @@ function ifColor(lstTwin, col, color){
 		theBall = theCol[ball];
 		theColor = getColor(theBall);
 		
-		if (theColor != -1){
+		if (theColor != null){
 			lstTwin.push([col, theColor]);//take out the second ball
 		}else{
 			return [lstTwin, theCol[ball]]
@@ -145,7 +146,7 @@ function ifColor(lstTwin, col, color){
 }
 
 function getTwin(lstTwin){
-	//console.log("\n	//get twin",lstTwin);
+	console.log("\n  //get twin",lstTwin);
 	
 	if(lstTwin.length > columns.length){return}//loop killer
 	
@@ -161,10 +162,10 @@ function getTwin(lstTwin){
 	
 	let afterClr = ifColor(lstTwin, lastCol, sdBall);
 	if(afterClr != undefined){
-		//console.log("afterClr",afterClr);
+		console.log("  afterClr",afterClr);
 		[lstTwin, secondBll] = afterClr;
 		
-		//console.log("		secondBll",secondBll);
+		console.log("  secondBll",secondBll);
 		if(secondBll == "finish"){
 			let firstBall = lstTwin[1];
 			let goToEmpty = [firstBall,lstTwin[0]];	//clean the first move
