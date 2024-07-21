@@ -145,7 +145,7 @@ function ifColor(lstTwin, col, color){	//if we can move the ball to a color
 
 }
 
-function getTwin(lstTwin){
+function getTwin(lstTwin,alreadyTry){
 	//console.log("\n  //get twin",lstTwin);
 	
 	if(lstTwin.length > columns.length){return}//loop killer
@@ -155,9 +155,9 @@ function getTwin(lstTwin){
 	let lastCol = lstTwin[lstTwin.length -1];//last col of the list
 	
 	
-	let secondBll = secondBall(lastCol);		//second ball of the botle
-	if(secondBll == null){return [lstTwin,[]]}//it end with a new empty botle
-	let [sdBall,sdBigBall] = secondBll;
+	let bllBelow = secondBall(lastCol);		//second ball of the botle
+	if(bllBelow == null){return [lstTwin,[]]}//it end with a new empty botle
+	let [sdBall,sdBigBall] = bllBelow;
 	
 	
 	let afterClr = ifColor(lstTwin, lastCol, sdBall);
@@ -188,6 +188,7 @@ function getTwin(lstTwin){
 		//console.log("  all blue element",way,thisTry);
 		
 		if(topBall(thisTry) != sdBall){continue}//the ball is'nt on top
+		if(alreadyTry.indexOf(thisTry) != -1){continue}	//already try this column
 		
 		if(lstBigBall[thisTry][0] > aboveIt(lastCol,sdBall)){continue}//big ball
 		
@@ -200,7 +201,7 @@ function getTwin(lstTwin){
 			
 		}else{//do it recursively
 			thisCoppy.push(thisTry);
-			let nextStep = getTwin(thisCoppy);//do it 
+			let nextStep = getTwin(thisCoppy,alreadyTry);//do it 
 			
 			if(nextStep[0].length != 0){		//if the next recursive loop work
 				output = output.concat(nextStep[0]);	//return it for the previous
@@ -227,7 +228,7 @@ for( way in columns){
 	if(lstBigBall[way][1] != 0){continue}		//its a color
 	target = Target(way);
 	
-	a = getTwin([target,way]);
+	a = getTwin([target,way],alreadyTry);
 	if(a[0].length == 0){continue}
 	[thisWay,newTry] = a;
 	console.log("\n i want it that way",thisWay);
