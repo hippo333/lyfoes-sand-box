@@ -4,11 +4,15 @@ var [bigBall,lstBigBall] = require('./bigBall');
 var lstOfMove = [];
 
 function move(from,to){
+	//console.log("move: from:",from,"to:",to);	
+	
+	if(from ==-1 || to ==-1){
+		console.log("there are a probleme with the move",from,to);
+	}
 	
 	let colFrom = columns[from];
 	let colTo = columns[to];
 	
-	//console.log("move: from:",from,"to:",to);	
 	let ballFrom = colFrom[colFrom.length -1];
 	let ballTo = colTo[colTo.length -1];
 	

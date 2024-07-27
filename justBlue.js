@@ -166,10 +166,6 @@ function clean(col){
 }
 
 
-
-
-
-
 function cycle(blue,loopKiller){
 	console.log("\n//cycle",blue);//keep it
 	if(blue == undefined){return}

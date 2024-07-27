@@ -2,6 +2,7 @@ var Column = require('./column');
 var columns = require('./level');
 var [move,lstOfMove] = require('./move');
 var [bigBall,lstBigBall] = require('./bigBall');
+var doTheMove = require('./doTheMove');
 var startTime = new Date().getTime();
 
 console.log(columns);
@@ -196,7 +197,12 @@ function getTwin(lstTwin,alreadyTry){
 		alreadyThere =lstTwin.indexOf(thisTry);//if we loop on the list
 		
 		if(alreadyThere != -1){//if we loop on the list of move short cut
-			thisCoppy = thisCoppy.slice(alreadyThere);//cut the col befor the loop
+			let firstMove = [,thisCoppy[0]];
+			firstMove[0] = thisTry;
+			//console.log("  firstMove",firstMove);
+			thisCoppy = thisCoppy.slice(alreadyThere+1);//cut the col befor the loop
+			
+			thisCoppy = [firstMove].concat(thisCoppy);
 			output.push(thisCoppy);
 			
 		}else{//do it recursively
@@ -240,6 +246,10 @@ for( way in columns){
 	//console.log("lst global",alreadyTry);
 }
 console.log("\n",lstOfCrissCross);
+
+for (way in lstOfCrissCross){
+	doTheMove(lstOfCrissCross[way]);
+}
 
 var end = new Date().getTime();
 var time = end - startTime;

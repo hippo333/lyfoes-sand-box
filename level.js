@@ -16,7 +16,7 @@ const PINK = 11
 const CYAN = 12;
 const ORANGE = 13;
 
-var level = 1.1;
+var level = "tstcc2";
 var columns;
 
 var numLst = [];
@@ -29,29 +29,6 @@ function addInNumLst(color){
 		numLst.push([color,1,lstColor[color]])
 	}else{
 		target[1] ++;
-	}
-}
-
-
-function verify(){
-	let errList =[];
-	let nbList = [];
-	
-	
-	for (i in columns){
-		for (j in columns[i].contents){
-			addInNumLst(columns[i].contents[j]);
-		}
-	}
-	nbList = numLst.filter(
-		err => err[1] != 4
-	);
-	
-	if (errList.length != 0 || nbList.length !=0){
-		console.log("error in ",level)
-		console.log(errList);
-		console.log(nbList);
-		throw "error";
 	}
 }
 
@@ -74,6 +51,26 @@ var columns = [
 	new Column([BLUE, BLUE, YELLOW, YELLOW]),
 	new Column([YELLOW, YELLOW, RED, RED]),
 	new Column([]),
+	new Column([]),
+];
+break;
+
+case "tstcc3":
+var columns = [
+	new Column([RED, RED, BLUE, RED]),
+	new Column([BLUE, RED, YELLOW, BLUE]),
+	new Column([YELLOW, YELLOW, YELLOW]),
+	new Column([]),
+	new Column([]),
+];
+break;
+
+case "finish":
+var columns = [
+	new Column([RED, RED, RED]),
+	new Column([BLUE, BLUE, BLUE]),
+	new Column([YELLOW, YELLOW, YELLOW]),
+	new Column([YELLOW, BLUE]),
 	new Column([]),
 ];
 break;
@@ -297,6 +294,29 @@ var columns = [
 ];
 break;
 
+}
+
+
+function verify(){
+	let errList =[];
+	let nbList = [];
+	
+	
+	for (i in columns){
+		for (j in columns[i].contents){
+			addInNumLst(columns[i].contents[j]);
+		}
+	}
+	nbList = numLst.filter(
+		err => err[1] != 4
+	);
+	
+	if (errList.length != 0 || nbList.length !=0){
+		console.log("error in ",level)
+		console.log(errList);
+		console.log(nbList);
+		throw "error";
+	}
 }
 
 //verify();
