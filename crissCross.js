@@ -146,6 +146,25 @@ function ifColor(lstTwin, col, color){	//if we can move the ball to a color
 
 }
 
+function doAllMove(lstCrissCross){
+	for(way in lstCrissCross){
+		doTheMove(lstCrissCross[way]);
+	}
+}
+
+function isFinish(){
+	console.log("is finish ?");
+	for(col in lstBigBall){
+		if(lstBigBall[col][0] != 0 && lstBigBall[col][0] != 4){
+			console.log("no the col",col,"is not finish");
+			console.log(lstBigBall[col]);
+			return false
+		}
+	}
+	console.log("all is finish");
+	return true
+}
+
 function getTwin(lstTwin,alreadyTry){
 	//console.log("\n  //get twin",lstTwin);
 	
@@ -217,38 +236,56 @@ function getTwin(lstTwin,alreadyTry){
 	}return [output,lstOfCol]
 }//get twin
 
+function crissCross(){
+	let thisWay = [];			//local try
+	let lstOfCrissCross = [];	//global try
+	let a = [];					//intermediar buffer
+	let emptyBtl = emptyBotle();	//nececary for the first move
+	let target ;					//same with color
 
-let thisWay = [];			//local try
-let lstOfCrissCross = [];	//global try
-let a = [];
-let emptyBtl = emptyBotle();	//nececary for the first move
-let target ;					//same with color
 
+	let alreadyTry =[];	//global anti double
+	let newTry =[];		//local  anti double
 
-let alreadyTry =[];	//global anti double
-let newTry =[];		//local  anti double
-
-for( way in columns){
-	if(columns[way].length == 0){continue}		//empty botle
-	if(alreadyTry.indexOf(way) != -1){continue}	//already try this column
-	if(lstBigBall[way][1] != 0){continue}		//its a color
-	target = Target(way);
+	for( way in columns){
+		if(columns[way].length == 0){continue}		//empty botle
+		if(alreadyTry.indexOf(way) != -1){continue}	//already try this column
+		if(lstBigBall[way][1] != 0){continue}		//its a color
+		target = Target(way);
 	
-	a = getTwin([target,way],alreadyTry);
-	if(a[0].length == 0){continue}
-	[thisWay,newTry] = a;
-	console.log("\n i want it that way",thisWay);
-	//console.log("all column include in calcul",newTry);
+		a = getTwin([target,way],alreadyTry);
+		if(a[0].length == 0){continue}
+		[thisWay,newTry] = a;
+		console.log("\n i want it that way",thisWay);
+		//console.log("all column include in calcul",newTry);
 	
-	lstOfCrissCross = lstOfCrissCross.concat(thisWay);
+		lstOfCrissCross = lstOfCrissCross.concat(thisWay);
 	
-	alreadyTry = alreadyTry.concat(newTry);
-	//console.log("lst global",alreadyTry);
+		alreadyTry = alreadyTry.concat(newTry);
+		//console.log("lst global",alreadyTry);
+	}
+	return lstOfCrissCross
 }
-console.log("\n",lstOfCrissCross);
 
-for (way in lstOfCrissCross){
-	doTheMove(lstOfCrissCross[way]);
+
+
+
+
+	//first Cycle
+let thisCc ;
+for(let i=0;i<3;i++){
+	thisCc = crissCross();
+	if(thisCc.length ==0){
+		console.log("no move posible");
+		if(isFinish()){
+			console.log("it works");
+		}else{
+			console.log("what can i do ?\n",columns);
+		}
+		return
+	}
+	console.log("\n",thisCc);
+	doAllMove(thisCc);
 }
 
 var end = new Date().getTime();
