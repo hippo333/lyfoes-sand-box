@@ -1,15 +1,14 @@
 var Column = require('./column');
-var columns = require('./level');
-var [move,lstOfMove] = require('./move');
-var [bigBall,lstBigBall] = require('./bigBall');
+var move = require('./move')[0];
 
 
-
-var doTheMove = function(order){/*
+var doTheMove = function(state,order){/*
 	console.log("\n// do the move");
 	console.log("list of move already done",lstOfMove);
 	console.log("state of the game",columns);
 	console.log("what i ave to do",order,"\n");*/
+	
+	[columns,lstBigBall,lstOfMove] = state;
 
 	let from;
 	let to;
@@ -32,7 +31,7 @@ var doTheMove = function(order){/*
 			}	
 		}
 		//console.log("i move from to",from,to,"\n");
-		move(from,to);	
+		move(state,from,to);	
 	}
 	//finish line
 	from = order[0][1];
@@ -42,7 +41,7 @@ var doTheMove = function(order){/*
 		to = to[0];			
 	}	
 	//console.log("finish move",from,to);
-	move(from,to);
+	move(state,from,to);
 	
 
 	console.log(columns);

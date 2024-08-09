@@ -65,6 +65,16 @@ var columns = [
 ];
 break;
 
+case "tstcc4":
+var columns = [
+	new Column([RED, RED, BLUE, RED]),
+	new Column([BLUE, BLUE, YELLOW, BLUE]),
+	new Column([YELLOW, YELLOW, RED, YELLOW]),
+	new Column([]),
+	new Column([]),
+];
+break;
+
 case "finish":
 var columns = [
 	new Column([RED, RED, RED]),

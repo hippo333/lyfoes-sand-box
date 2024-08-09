@@ -1,24 +1,27 @@
+var startTime = new Date().getTime();
 var Column = require('./column');
 var columns = require('./level');
-var [move,lstOfMove] = require('./move');
+var lstOfMove = require('./move')[1];
 var [bigBall,lstBigBall] = require('./bigBall');
 var doTheMove = require('./doTheMove');
-var startTime = new Date().getTime();
+
+let firstState = [columns,lstBigBall,lstOfMove];
 
 console.log(columns);
 
 //get the ball above the column
-function topBall(col){
-	let theCll = columns[col]
+function topBall(columns2,col){
+	let theCll = columns2[col]
 	let theBll = theCll[theCll.length -1]
 	return theBll
 }
 
-function secondBall(col){
+function secondBall(state,col){
 	//console.log("\n      //secondeBall col",col);
+	let [columns2,lstBigBall2,xxx] = state;
 	
-	let theCll = columns[col];
-	let bgBll = lstBigBall[col][0];
+	let theCll = columns2[col];
+	let bgBll = lstBigBall2[col][0];
 	
 	
 	if(bgBll == theCll.length){return null}
@@ -36,8 +39,8 @@ function secondBall(col){
 	return [theBll,highSdBll,0]//if the second ball touch the bottom
 }
 
-function getColor(blue){
-	let out = lstBigBall.findIndex(
+function getColor(lstBigBall2,blue){
+	let out = lstBigBall2.findIndex(
 		out => out[1] == blue	
 	);
 	if(out != -1){
@@ -47,8 +50,8 @@ function getColor(blue){
 	}
 }
 
-function emptyBotle(){
-	btl = lstBigBall.findIndex(
+function emptyBotle(lstBigBall2){
+	btl = lstBigBall2.findIndex(
 		btl => btl[0] ==0
 		&& btl[1] == 0
 	);
@@ -59,8 +62,9 @@ function emptyBotle(){
 	}
 }
 
-function aboveIt(col,blue){
-	let theCol = columns[col];
+function aboveIt(columns2,col,blue){
+	
+	let theCol = columns2[col];
 	let highestBl = theCol.lastIndexOf(blue);
 	let above = (theCol.length-1)-highestBl;
 	
@@ -71,21 +75,23 @@ function aboveIt(col,blue){
 	}
 }
 
-function Target(col){	//place for move the ball above col
+function Target(state,col){	//place for move the ball above col
 	//console.log("      //target for col",col);
-	let theCol = columns[col];
+	
+	let [columns2,lstBigBall2,xxx] = state;
+	let theCol = columns2[col];
 	let theBall = theCol[theCol.length -1];
 	
 	if(theBall == undefined){
 		console.log("      can't find the ball above",col,theCol);
 	}
-	let theColor = getColor(theBall);
+	let theColor = getColor(lstBigBall2,theBall);
 	if(theColor != null){
-		//console.log("      i get a color for",theBall,theColor,columns[theColor]);
+		//console.log("      i get a color for",theBall,theColor,columns2[theColor]);
 		return theColor
 	}else{
 		//console.log("      i can't get a color for",col,theBall);	
-		let emptyBtl = emptyBotle();
+		let emptyBtl = emptyBotle(lstBigBall2);
 		if (emptyBtl != null){
 			return emptyBtl
 		}else{
@@ -96,25 +102,27 @@ function Target(col){	//place for move the ball above col
 }
 
 //all column who contain a blue ball and the one with the lowest ball above
-function highestBlue(blue,colB,blackList){
+function highestBlue(state,blue,colB,blackList){
 	//console.log("    //highestBlue",blue,colB);//keep it
 	//colB is the source and we search a target
+	let [columns2,lstBigBall2,xxx] = state;
+	
 	let higestBl = [0,5]; //column , above
 	let allBlue = [];
 	let hiestBlue;	//the highest ball on the column
 	let above;		//ball above the blue
 	if(blackList == undefined){blackList = []}
 	
-	for(col in columns){
+	for(col in columns2){
 		if(col == colB){continue}
 		if(blackList.indexOf(col) !=-1){continue}
 		
-		if(lstBigBall[col][1] == 0){
-			above = aboveIt(col,blue);
+		if(lstBigBall2[col][1] == 0){
+			above = aboveIt(columns2,col,blue);
 			
 			if(above == null){continue}// no blue in the col
 			
-			//console.log(		  columns[col]);
+			//console.log(		  columns2[col]);
 			if(above <= higestBl[1]){
 				higestBl = [col,above];
 			}
@@ -124,17 +132,18 @@ function highestBlue(blue,colB,blackList){
 	return [allBlue,higestBl[0]]
 }
 
-function ifColor(lstTwin, col, color){	//if we can move the ball to a color
+function ifColor(state,lstTwin, col, color){	//if we can move the ball to a color
 	//console.log("	//ifColor lstTwin Col Color",lstTwin, col, color)
+	let [columns2,lstBigBall2,xxx] = state;
 
-	let theCol = columns[col];
+	let theCol = columns2[col];
 	let firstColor = theCol.lastIndexOf(color);
 	let theColor;	
 	let theBall;
 	
 	for(ball= firstColor;ball >=0;ball--){
 		theBall = theCol[ball];
-		theColor = getColor(theBall);
+		theColor = getColor(lstBigBall2,theBall);
 		
 		if (theColor != null){
 			lstTwin.push([col, theColor]);//take out the second ball
@@ -146,18 +155,20 @@ function ifColor(lstTwin, col, color){	//if we can move the ball to a color
 
 }
 
-function doAllMove(lstCrissCross){
+function doAllMove(state,lstCrissCross){
+	
 	for(way in lstCrissCross){
-		doTheMove(lstCrissCross[way]);
+		doTheMove(state,lstCrissCross[way]);
 	}
 }
 
-function isFinish(){
+function isFinish(lstBigBall2){
 	console.log("is finish ?");
-	for(col in lstBigBall){
-		if(lstBigBall[col][0] != 0 && lstBigBall[col][0] != 4){
+	
+	for(col in lstBigBall2){
+		if(lstBigBall2[col][0] != 0 && lstBigBall2[col][0] != 4){
 			console.log("no the col",col,"is not finish");
-			console.log(lstBigBall[col]);
+			console.log(lstBigBall2[col]);
 			return false
 		}
 	}
@@ -165,22 +176,23 @@ function isFinish(){
 	return true
 }
 
-function getTwin(lstTwin,alreadyTry){
+function getTwin(state,lstTwin,alreadyTry){
 	//console.log("\n  //get twin",lstTwin);
+	let [columns2,lstBigBall2,xxx] = state;
 	
-	if(lstTwin.length > columns.length){return}//loop killer
+	if(lstTwin.length > columns2.length){return}//loop killer
 	
 	let output =[];
 	let lstOfCol =[];	//all col include in calcul (anti double)
 	let lastCol = lstTwin[lstTwin.length -1];//last col of the list
 	
 	
-	let bllBelow = secondBall(lastCol);		//second ball of the botle
+	let bllBelow = secondBall(state,lastCol);		//second ball of the botle
 	if(bllBelow == null){return [lstTwin,[]]}//it end with a new empty botle
 	let [sdBall,sdBigBall] = bllBelow;
 	
 	
-	let afterClr = ifColor(lstTwin, lastCol, sdBall);
+	let afterClr = ifColor(state,lstTwin, lastCol, sdBall);
 	if(afterClr != undefined){
 		//console.log("  afterClr",afterClr);
 		[lstTwin, sdBall] = afterClr;
@@ -196,7 +208,7 @@ function getTwin(lstTwin,alreadyTry){
 			return [lstTwin,[]]
 		}
 	}
-	let allBlue = highestBlue(sdBall,lastCol)[0];
+	let allBlue = highestBlue(state,sdBall,lastCol)[0];
 		
 	let thisTry;		//curent element of the loop
 	let alreadyThere;	//short cut of intern loop
@@ -207,10 +219,10 @@ function getTwin(lstTwin,alreadyTry){
 		thisCoppy = [...lstTwin];//clone
 		//console.log("  all blue element",way,thisTry);
 		
-		if(topBall(thisTry) != sdBall){continue}//the ball is'nt on top
+		if(topBall(columns2,thisTry) != sdBall){continue}//the ball is'nt on top
 		if(alreadyTry.indexOf(thisTry) != -1){continue}	//already try this column
 		
-		if(lstBigBall[thisTry][0] > aboveIt(lastCol,sdBall)){continue}//big ball
+		if(lstBigBall2[thisTry][0] > aboveIt(columns2,lastCol,sdBall)){continue}//big ball
 		
 		lstOfCol.push(thisTry);		
 		alreadyThere =lstTwin.indexOf(thisTry);//if we loop on the list
@@ -226,7 +238,7 @@ function getTwin(lstTwin,alreadyTry){
 			
 		}else{//do it recursively
 			thisCoppy.push(thisTry);
-			let nextStep = getTwin(thisCoppy,alreadyTry);//do it 
+			let nextStep = getTwin(state,thisCoppy,alreadyTry);//do it 
 			
 			if(nextStep[0].length != 0){		//if the next recursive loop work
 				output = output.concat(nextStep[0]);	//return it for the previous
@@ -236,24 +248,27 @@ function getTwin(lstTwin,alreadyTry){
 	}return [output,lstOfCol]
 }//get twin
 
-function crissCross(){
+function crissCross(state){
+	
+	let [columns2,lstBigBall2,xxx] = state;
+	
 	let thisWay = [];			//local try
 	let lstOfCrissCross = [];	//global try
 	let a = [];					//intermediar buffer
-	let emptyBtl = emptyBotle();	//nececary for the first move
+	let emptyBtl = emptyBotle(lstBigBall2);	//nececary for the first move
 	let target ;					//same with color
 
 
 	let alreadyTry =[];	//global anti double
 	let newTry =[];		//local  anti double
 
-	for( way in columns){
-		if(columns[way].length == 0){continue}		//empty botle
+	for( way in columns2){
+		if(columns2[way].length == 0){continue}		//empty botle
 		if(alreadyTry.indexOf(way) != -1){continue}	//already try this column
-		if(lstBigBall[way][1] != 0){continue}		//its a color
-		target = Target(way);
+		if(lstBigBall2[way][1] != 0){continue}		//its a color
+		target = Target(state,way);
 	
-		a = getTwin([target,way],alreadyTry);
+		a = getTwin(state,[target,way],alreadyTry);
 		if(a[0].length == 0){continue}
 		[thisWay,newTry] = a;
 		console.log("\n i want it that way",thisWay);
@@ -270,24 +285,24 @@ function crissCross(){
 
 
 
-
 	//first Cycle
 let thisCc ;
 for(let i=0;i<3;i++){
-	thisCc = crissCross();
+	thisCc = crissCross(firstState);
 	if(thisCc.length ==0){
-		console.log("no move posible");
-		if(isFinish()){
+		console.log("\nno move posible");
+		if(isFinish(firstState[1])){
 			console.log("it works");
 		}else{
-			console.log("what can i do ?\n",columns);
+			console.log("what can i do ?\n",columns2);
 		}
+		
+		var end = new Date().getTime();
+		var time = end - startTime;
+		console.log("calcul in",time/1000,"s");
 		return
 	}
 	console.log("\n",thisCc);
-	doAllMove(thisCc);
+	doAllMove(firstState,thisCc);
 }
 
-var end = new Date().getTime();
-var time = end - startTime;
-console.log("calcul in",time/1000,"s");

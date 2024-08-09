@@ -7,8 +7,8 @@ for (btl in columns){
 	lstBigBall.push([0,0])
 }
 
-function bigBall(botle){
-	let theColumn = columns[botle];
+function bigBall(columns2,botle){
+	let theColumn = columns2[botle];
 	let lastBall = theColumn[theColumn.length -1];
 	
 	// for the botle who contain one ball
@@ -58,7 +58,7 @@ function bigBall(botle){
 }
 
 for (btl in columns){
-	bigBall(btl);
+	bigBall(columns,btl);
 }
 
 //console.log("big ball",lstBigBall);
