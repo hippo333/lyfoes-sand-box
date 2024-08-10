@@ -37,7 +37,7 @@ var coppy = function(state){
 	
 	columns2 = coppyColumns(columns1);
 	lstBigBall2 = cpArray(lstBigBall1);
-	lstOfMove2 = lstOfMove1.slice();
+	lstOfMove2 = cpArray(lstOfMove1);
 	
 	
 	let output = [columns2, lstBigBall2, lstOfMove2];
