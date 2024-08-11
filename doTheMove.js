@@ -8,7 +8,7 @@ var doTheMove = function(state,order){/*
 	console.log("state of the game",columns);
 	console.log("what i ave to do",order,"\n");*/
 	
-	[columns,lstBigBall,lstOfMove] = state;
+	[columns2,lstBigBall,lstOfMove] = state;
 
 	let from;
 	let to;
@@ -44,8 +44,8 @@ var doTheMove = function(state,order){/*
 	move(state,from,to);
 	
 
-	console.log(columns);
-	return [columns]
+	console.log(columns2);
+	return [columns2]
 }
 
 module.exports = doTheMove;

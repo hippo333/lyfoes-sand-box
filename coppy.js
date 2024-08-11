@@ -42,13 +42,14 @@ var coppy = function(state){
 	
 	let output = [columns2, lstBigBall2, lstOfMove2];
 	
-	console.log("output",output);
+	//console.log("output",output);
 	return output
 }
+/*
 lstBigBall.push(0);
 let a = coppy([columns,lstBigBall,[]]);
 lstBigBall[0].push("ananas");
-console.log(a);
+console.log(a);*/
 
 
 module.exports = coppy;

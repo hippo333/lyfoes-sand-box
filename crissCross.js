@@ -21,15 +21,18 @@ function topBall(columns2,col){
 function secondBall(state,col){
 	//console.log("\n      //secondeBall col",col);
 	let [columns2,lstBigBall2,xxx] = state;
+	//console.log("      thecll",columns2[col]);
 	
 	let theCll = columns2[col];
 	let bgBll = lstBigBall2[col][0];
 	
-	
+	//console.log("      bgBll",bgBll);
+	//console.log("      thecll",theCll);
 	if(bgBll == theCll.length){return null}
 	
 	let theBll = theCll[theCll.length - bgBll-1];
 	let highSdBll =theCll.length - bgBll;
+	//console.log("      highSdBll",highSdBll);
 	
 	for(bll = 1 ;bll<highSdBll;bll++){
 		
@@ -164,7 +167,7 @@ function doAllMove(state,lstCrissCross){
 	for(way in lstCrissCross){
 		if(way != lstCrissCross.length-1){
 			newState = coppy(state);
-			lstOfState.push(newState)
+			lstOfStates.push(newState)
 		}else{
 			newState = state;
 		}
@@ -196,8 +199,9 @@ function getTwin(state,lstTwin,alreadyTry){
 	let lstOfCol =[];	//all col include in calcul (anti double)
 	let lastCol = lstTwin[lstTwin.length -1];//last col of the list
 	
-	
+	//console.log("  the col",columns2[lastCol]);
 	let bllBelow = secondBall(state,lastCol);		//second ball of the botle
+	//console.log("  bllBelow",bllBelow);
 	if(bllBelow == null){return [lstTwin,[]]}//it end with a new empty botle
 	let [sdBall,sdBigBall] = bllBelow;
 	
@@ -240,7 +244,6 @@ function getTwin(state,lstTwin,alreadyTry){
 		if(alreadyThere != -1){//if we loop on the list of move short cut
 			let firstMove = [,thisCoppy[0]];
 			firstMove[0] = thisTry;
-			//console.log("  firstMove",firstMove);
 			thisCoppy = thisCoppy.slice(alreadyThere+1);//cut the col befor the loop
 			
 			thisCoppy = [firstMove].concat(thisCoppy);
@@ -298,7 +301,7 @@ function crissCross(state){
 	//first Cycle
 let thisCc ;
 let thisState =[];
-for(let i=0;i<2;i++){
+for(let i=0;i<5;i++){
 
 	console.log("\n",i,"step");
 	console.log(lstOfStates.length,"way");
@@ -319,9 +322,9 @@ for(let i=0;i<2;i++){
 				return
 				
 			}else{
-				console.log("what can i do ?\n",columns2);
-				lstOfStetes.splice(j,1);
-				continue;
+				console.log("what can i do ?\n",thisState[0]);
+				lstOfStates.splice(j,1);
+				//continue;
 			}
 		}else{
 		console.log("\n",thisCc);

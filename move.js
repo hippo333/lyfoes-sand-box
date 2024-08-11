@@ -39,6 +39,7 @@ function move(state,from,to){
 		return "error";
 	}
 	//console.log("la colune from contien",lstBigBall3[from][0]);
+	//console.log("column from",columns3[from]);
 	//bigBall 
 	
 	colFrom.pop();
@@ -47,8 +48,8 @@ function move(state,from,to){
 		colFrom.pop();
 		colTo.push(ballFrom);
 	}
-	bigBall(columns3,from);
-	bigBall(columns3,to);
+	bigBall(state,from);
+	bigBall(state,to);
 	lstOfMove.push([from,to]);
 }
 

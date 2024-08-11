@@ -16,7 +16,7 @@ const PINK = 11
 const CYAN = 12;
 const ORANGE = 13;
 
-var level = "tstcc2";
+var level = "tstcc5";
 var columns;
 
 var numLst = [];
@@ -70,6 +70,28 @@ var columns = [
 	new Column([RED, RED, BLUE, RED]),
 	new Column([BLUE, BLUE, YELLOW, BLUE]),
 	new Column([YELLOW, YELLOW, RED, YELLOW]),
+	new Column([]),
+	new Column([]),
+];
+break;
+
+case "tstcc5":
+var columns = [
+	new Column([ RED, RED, BLUE, RED]),
+	new Column([ BLUE, BLUE, RED, BLUE]),
+	new Column([ YELLOW, YELLOW, ORANGE, YELLOW]),
+	new Column([ ORANGE, ORANGE, YELLOW, ORANGE]),
+	new Column([]),
+	new Column([]),
+];
+break;
+
+case "tstcc6":
+var columns = [
+	new Column([ RED, BLUE, BLUE]),
+	new Column([ BLUE, RED, RED]),
+	new Column([ YELLOW, ORANGE, ORANGE]),
+	new Column([ ORANGE, YELLOW, YELLOW]),
 	new Column([]),
 	new Column([]),
 ];
