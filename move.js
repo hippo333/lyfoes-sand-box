@@ -1,12 +1,11 @@
 var Column = require('./column');
 var bigBall = require('./bigBall')[0];
-var lstOfMove = [];
 
 
 function move(state,from,to){
 	//console.log("move: from:",from,"to:",to);	
 	
-	let [columns3,lstBigBall3,xxx] = state;
+	let [columns3,lstBigBall3,lstOfMove3] = state;
 	
 	if(from ==-1 || to ==-1){
 		console.log("there are a probleme with the move",from,to);
@@ -50,7 +49,7 @@ function move(state,from,to){
 	}
 	bigBall(state,from);
 	bigBall(state,to);
-	lstOfMove.push([from,to]);
+	lstOfMove3.push([from,to]);
 }
 
-module.exports = [move, lstOfMove];
+module.exports = move;

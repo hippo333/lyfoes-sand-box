@@ -1,10 +1,11 @@
 var startTime = new Date().getTime();
 var Column = require('./column');
 var columns = require('./level');
-var [move,lstOfMove] = require('./move');
+var move = require('./move');
 var [bigBall,lstBigBall] = require('./bigBall');
 var doTheMove = require('./doTheMove');
 var coppy = require('./coppy');
+var lstOfMove = [];
 
 let firstState = [columns,lstBigBall,lstOfMove];
 let lstOfStates = [firstState];
@@ -179,7 +180,7 @@ function isFinish(lstBigBall2){
 	//console.log("is finish ?");
 	
 	for(col in lstBigBall2){
-		if(lstBigBall2[col][0] != 0 && lstBigBall2[col][0] != 4){
+		if(lstBigBall2[col][0] != 0 && lstBigBall2[col][1] ==0){
 			console.log("no the col",col,"is not finish");
 			console.log(lstBigBall2[col]);
 			return false
@@ -284,11 +285,12 @@ function crissCross(state){
 		a = getTwin(state,[target,way],alreadyTry);
 		if(a[0].length == 0){continue}
 		[thisWay,newTry] = a;
-		console.log(" i want it that way",thisWay);
+		//console.log(" i want it that way",thisWay);
 		//console.log("all column include in calcul",newTry);
 	
 		lstOfCrissCross = lstOfCrissCross.concat(thisWay);
-	
+		//console.log("\n  i ave crisscross",lstOfCrissCross);
+		
 		alreadyTry = alreadyTry.concat(newTry);
 		//console.log("lst global",alreadyTry);
 	}
@@ -304,11 +306,12 @@ let thisState =[];
 for(let i=0;i<5;i++){
 
 	console.log("\n",i,"step");
-	console.log(lstOfStates.length,"way");
+	console.log(" ",lstOfStates.length,"way");
 	
 	for(j in lstOfStates){
 		thisState = lstOfStates[j];
 		thisCc = crissCross(thisState);
+				//console.log("\nthisstate",thisState[0]);
 	
 		if(thisCc.length ==0){
 			console.log("\nno move posible");
@@ -324,10 +327,11 @@ for(let i=0;i<5;i++){
 			}else{
 				console.log("what can i do ?\n",thisState[0]);
 				lstOfStates.splice(j,1);
-				//continue;
+				continue;
 			}
 		}else{
-		console.log("\n",thisCc);
+		//console.log("this crisscross",thisCc);
+		//console.log("history of move",thisState[2]);
 		doAllMove(thisState,thisCc);
 		}
 	}

@@ -1,5 +1,5 @@
 var Column = require('./column');
-var move = require('./move')[0];
+var move = require('./move');
 
 
 var doTheMove = function(state,order){/*
@@ -44,7 +44,7 @@ var doTheMove = function(state,order){/*
 	move(state,from,to);
 	
 
-	console.log(columns2);
+	//console.log(columns2);
 	return [columns2]
 }
 

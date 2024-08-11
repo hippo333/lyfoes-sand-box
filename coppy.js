@@ -45,10 +45,10 @@ var coppy = function(state){
 	//console.log("output",output);
 	return output
 }
+
 /*
-lstBigBall.push(0);
 let a = coppy([columns,lstBigBall,[]]);
-lstBigBall[0].push("ananas");
+lstBigBall[2].push("ananas");
 console.log(a);*/
 
 

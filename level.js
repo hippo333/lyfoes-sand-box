@@ -97,6 +97,17 @@ var columns = [
 ];
 break;
 
+case "tstcc7":
+var columns = [
+	new Column([ RED, RED, BLUE, BLUE]),
+	new Column([ BLUE, BLUE, RED, RED]),
+	new Column([ YELLOW, YELLOW, ORANGE, ORANGE]),
+	new Column([ ORANGE, ORANGE, YELLOW, YELLOW]),
+	new Column([]),
+	new Column([]),
+];
+break;
+
 case "finish":
 var columns = [
 	new Column([RED, RED, RED]),
