@@ -71,6 +71,39 @@ function aboveIt(columns2,col,blue){
 	}
 }
 
+// anti dublon branch
+/*
+
+function lastHighestBall(lstOfMove2){
+	//console.log("    the highest Ball ot the last move",lstOfMove2);
+	let lastMove = lstOfMove2[lstOfMove2.length-1];
+	if(typeof(lastMove) != "object"){
+		console.log("    the last move is not an array");
+		return null
+	}
+	let lastEmptyBotle = lastMove[0];
+	let highestBall = -1;
+	let thisMove;
+	
+	for(let i=lstOfMove2.length -2;i>=0;i--){
+		thisMove = lstOfMove2[i];
+		
+		if(parseInt(thisMove[0]) > highestBall){
+			highestBall = thisMove[0];		
+		}
+		else if(parseInt(thisMove) > highestBall ){
+			highestBall = thisMove;
+		}
+		if(thisMove[1] == lastEmptyBotle){
+			return highestBall;
+		}
+	
+	}
+
+}
+
+*/
+//anti dublon Branch
 
 function Target(state,col){	//place for move the ball above col
 	//console.log("      //target for col",col);
@@ -99,14 +132,13 @@ function Target(state,col){	//place for move the ball above col
 }
 
 //all column who contain a blue ball and the one with the lowest ball above
-function highestBlue(state,blue,colB,blackList){
+function AllBlue(state,blue,colB,blackList){
 	//console.log("    //highestBlue",blue,colB);//keep it
 	//colB is the source and we search a target
 	let [columns2,lstBigBall2,xxx] = state;
 	
-	let higestBl = [0,5]; //column , above
+	
 	let allBlue = [];
-	let hiestBlue;	//the highest ball on the column
 	let above;		//ball above the blue
 	if(blackList == undefined){blackList = []}
 	
@@ -119,14 +151,10 @@ function highestBlue(state,blue,colB,blackList){
 			
 			if(above == null){continue}// no blue in the col
 			
-			//console.log(		  columns2[col]);
-			if(above <= higestBl[1]){
-				higestBl = [col,above];
-			}
-			allBlue.push(col);
+			allBlue.push(parseInt(col));
 		}
 	}
-	return [allBlue,higestBl[0]]
+	return allBlue
 }
 
 function ifColor(state,lstTwin, col, color){	//if we can move the ball to a color
@@ -186,7 +214,7 @@ function getTwin(state,lstTwin,alreadyTry){
 			return [lstTwin,[]]
 		}
 	}
-	let allBlue = highestBlue(state,sdBall,lastCol)[0];
+	let allBlue = AllBlue(state,sdBall,lastCol);
 		
 	let thisTry;		//curent element of the loop
 	let alreadyThere;	//short cut of intern loop
@@ -239,7 +267,6 @@ var CrissCross = function(state){
 
 	let alreadyTry =[];	//global anti double
 	let newTry =[];		//local  anti double
-
 	for( way in columns2){
 		if(columns2[way].length == 0){continue}		//empty botle
 		if(alreadyTry.indexOf(way) != -1){continue}	//already try this column
