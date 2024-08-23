@@ -9,43 +9,6 @@ function topBall(columns2,col){
 	return theBll
 }
 
-function secondBall(state,col){
-	//console.log("\n      //secondeBall col",col);
-	let [columns2,lstBigBall2,xxx] = state;
-	//console.log("      thecll",columns2[col]);
-	
-	let theCll = columns2[col];
-	let bgBll = lstBigBall2[col][0];
-	
-	//console.log("      bgBll",bgBll);
-	//console.log("      thecll",theCll);
-	if(bgBll == theCll.length){return null}
-	
-	let theBll = theCll[theCll.length - bgBll-1];
-	let highSdBll =theCll.length - bgBll;
-	//console.log("      highSdBll",highSdBll);
-	
-	for(bll = 1 ;bll<highSdBll;bll++){
-		
-		if(theCll[theCll.length - bgBll-1- bll] ==theBll){continue;}
-		
-		else{
-		return [theBll,bll]}//the ball , the bigball
-	}
-	return [theBll,highSdBll,0]//if the second ball touch the bottom
-}
-
-function getColor(lstBigBall2,blue){
-	let out = lstBigBall2.findIndex(
-		out => out[1] == blue	
-	);
-	if(out != -1){
-		return out
-	}else{
-		return null
-	}
-}
-
 function emptyBotle(lstBigBall2){
 	btl = lstBigBall2.findIndex(
 		btl => btl[0] ==0
@@ -57,6 +20,46 @@ function emptyBotle(lstBigBall2){
 		return null
 	}
 }
+
+function secondBall(state,col,lstTwin,level){
+	//console.log("\n    //secondeBall col",col);
+	//console.log("      lst Twin",lstTwin);
+	let [columns2,lstBigBall2,lstOfMove2] = state;
+	//console.log("      columns",columns2);
+	
+	let thisBigBall = lstBigBall2[col][0];	//the big bal of the column
+	let thisCol = columns2[col];			//curent column
+	let secondBallLevel;
+	
+	if(thisBigBall == thisCol.length || level ==0){
+		return null
+	}	//if it contain only one big ball
+	
+	if(level == undefined){
+		secondBallLevel = thisCol.length -1 -thisBigBall;
+	}else{
+		secondBallLevel = level-1;
+	}
+	
+	let secondBall = thisCol[secondBallLevel];
+	let secondBigBall = 1;
+	
+	for(let i = secondBallLevel-1;i>=0;i--){
+	//	console.log("\n    :level",i,"ball",thisCol[i]);
+		
+		if(thisCol[i]== secondBall){
+			secondBigBall++;
+			continue;
+		}
+		
+		i= -1;
+	}
+	if(secondBall == null){return null}
+		
+	//console.log("      second ball",secondBall,"second big ball",secondBigBall);
+	return [secondBall,secondBigBall]
+}
+
 
 function aboveIt(columns2,col,blue){
 	
@@ -71,39 +74,6 @@ function aboveIt(columns2,col,blue){
 	}
 }
 
-// anti dublon branch
-/*
-
-function lastHighestBall(lstOfMove2){
-	//console.log("    the highest Ball ot the last move",lstOfMove2);
-	let lastMove = lstOfMove2[lstOfMove2.length-1];
-	if(typeof(lastMove) != "object"){
-		console.log("    the last move is not an array");
-		return null
-	}
-	let lastEmptyBotle = lastMove[0];
-	let highestBall = -1;
-	let thisMove;
-	
-	for(let i=lstOfMove2.length -2;i>=0;i--){
-		thisMove = lstOfMove2[i];
-		
-		if(parseInt(thisMove[0]) > highestBall){
-			highestBall = thisMove[0];		
-		}
-		else if(parseInt(thisMove) > highestBall ){
-			highestBall = thisMove;
-		}
-		if(thisMove[1] == lastEmptyBotle){
-			return highestBall;
-		}
-	
-	}
-
-}
-
-*/
-//anti dublon Branch
 
 function Target(state,col){	//place for move the ball above col
 	//console.log("      //target for col",col);
@@ -157,6 +127,67 @@ function AllBlue(state,blue,colB,blackList){
 	return allBlue
 }
 
+function newVirtualColumn(VColumn,columns2,lstBigBall2){
+	console.log("\n      virtualcolumn");
+	
+	for(i in columns2){
+		let color = topBall(columns2,i);
+		let bigBall = lstBigBall2[i][0];
+		let sizeCol = columns2[i].length ;
+		if (sizeCol ==0){
+			color = 0;
+			bigBall = 0;
+		}
+		
+		VColumn.push([color,bigBall,sizeCol]);	
+		console.log("      the column",i,"color",color,"bigball",bigBall,"sizecol",sizeCol);
+		
+	}
+}
+
+function virtualUpdate(columns2,VColumn,from,to){
+	console.log("\n      virtual update");
+	let bllFrom = VColumn[from][0];
+	let bBFrom = VColumn[from][1];
+	let sizeFrom = VColumn[from][2];
+	
+	let bllTo = VColumn[to][0];
+	let bBTo = VColumn[to][1];
+	let sizeTo = VColumn[to][2];
+	
+	bBTo += bBFrom;
+	sizeTo +=bBFrom;
+	bllTo = bllFrom
+	
+	sizeFrom -= bBFrom;
+	bllFrom = columns2[from][sizeFrom];
+	bBFrom =1;
+	
+	for(let i=sizeFrom-1;i>=0;i--){
+		if(columns2[from][i] == bllFrom){
+			bBFrom++
+		}else{
+			i= -1
+		}
+	}
+	VColumn[from] = [bllFrom,bBFrom,sizeFrom];
+	VColumn[to] = [bllTo,bBTo,sizeTo];
+	
+	console.log("      from",from,"to",to);
+	console.log("      Vcolumn",VColumn);
+}
+
+function getColor(lstBigBall2,blue){
+	let out = lstBigBall2.findIndex(
+		out => out[1] == blue	
+	);
+	if(out != -1){
+		return out
+	}else{
+		return null
+	}
+}
+
 function ifColor(state,lstTwin, col, color){	//if we can move the ball to a color
 	//console.log("	//ifColor lstTwin Col Color",lstTwin, col, color)
 	let [columns2,lstBigBall2,xxx] = state;
@@ -180,8 +211,19 @@ function ifColor(state,lstTwin, col, color){	//if we can move the ball to a colo
 
 }
 
+function ifNewColor(col,columns2,lstTwin,lstBigBall){
+	//console.log("\n      if new color");
+	let firstCol = lstTwin[1];
+	let firstBall = topBall(columns2,col);
+	let firstBigBall = lstBigBall[firstCol][0];
+	//console.log("      firs:col",firstCol,"ball",firstBall,"bigball",firstBigBall);
+	//console.log("      lst Twin",lstTwin);
+	
+	let thisBigBall = lstBigBall[col][0];
+	//console.log("      thisBigBall",thisBigBall);
+}
 
-function getTwin(state,lstTwin,alreadyTry){
+function getTwin(state,lstTwin,alreadyTry,mode,VColumn){
 	//console.log("\n  //get twin",lstTwin);
 	let [columns2,lstBigBall2,xxx] = state;
 	
@@ -192,16 +234,17 @@ function getTwin(state,lstTwin,alreadyTry){
 	let lastCol = lstTwin[lstTwin.length -1];//last col of the list
 	
 	//console.log("  the col",columns2[lastCol]);
-	let bllBelow = secondBall(state,lastCol);		//second ball of the botle
+	let bllBelow = secondBall(state,lastCol,lstTwin);//second ball of the botle
 	//console.log("  bllBelow",bllBelow);
+	
 	if(bllBelow == null){return [lstTwin,[]]}//it end with a new empty botle
 	let [sdBall,sdBigBall] = bllBelow;
 	
 	
-	let afterClr = ifColor(state,lstTwin, lastCol, sdBall);
-	if(afterClr != undefined){
-		//console.log("  afterClr",afterClr);
-		[lstTwin, sdBall] = afterClr;
+	let goToColor = ifColor(state,lstTwin, lastCol, sdBall);
+	if(goToColor != undefined){
+		//console.log("  go to color",goToColor);
+		[lstTwin, sdBall] = goToColor;
 		
 		//console.log("  sdBall",sdBall);
 		if(sdBall == "finish"){
@@ -214,6 +257,8 @@ function getTwin(state,lstTwin,alreadyTry){
 			return [lstTwin,[]]
 		}
 	}
+	ifNewColor(lastCol,columns2,lstTwin,lstBigBall);
+	
 	let allBlue = AllBlue(state,sdBall,lastCol);
 		
 	let thisTry;		//curent element of the loop
@@ -233,7 +278,8 @@ function getTwin(state,lstTwin,alreadyTry){
 		lstOfCol.push(thisTry);		
 		alreadyThere =lstTwin.indexOf(thisTry);//if we loop on the list
 		
-		if(alreadyThere != -1){//if we loop on the list of move short cut
+		if(alreadyThere != -1 && (mode == "standard" || alreadyThere !=1)){
+		//if we loop on the list of move short cut
 			let firstMove = [,thisCoppy[0]];
 			firstMove[0] = thisTry;
 			thisCoppy = thisCoppy.slice(alreadyThere+1);//cut the col befor the loop
@@ -243,7 +289,9 @@ function getTwin(state,lstTwin,alreadyTry){
 			
 		}else{//do it recursively
 			thisCoppy.push(thisTry);
-			let nextStep = getTwin(state,thisCoppy,alreadyTry);//do it 
+			virtualUpdate(columns2,VColumn,lastCol,thisTry);
+			
+			let nextStep = getTwin(state,thisCoppy,alreadyTry,mode,VColumn);//do it 
 			
 			if(nextStep[0].length != 0){		//if the next recursive loop work
 				output = output.concat(nextStep[0]);	//return it for the previous
@@ -256,7 +304,8 @@ function getTwin(state,lstTwin,alreadyTry){
 var CrissCross = function(state){
 	
 	let [columns2,lstBigBall2,lstOfMove2] = state;
-	
+	let VColumn = [];
+	newVirtualColumn(VColumn,columns2,lstBigBall2);
 	
 	let thisWay = [];			//local try
 	let lstOfCrissCross = [];	//global try
@@ -273,7 +322,7 @@ var CrissCross = function(state){
 		if(lstBigBall2[way][1] != 0){continue}		//its a color
 		target = Target(state,way);
 	
-		a = getTwin(state,[target,way],alreadyTry);
+		a = getTwin(state,[target,way],alreadyTry,"standard",VColumn);
 		if(a[0].length == 0){continue}
 		[thisWay,newTry] = a;
 		//console.log(" i want it that way",thisWay);
