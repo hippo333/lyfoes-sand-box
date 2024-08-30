@@ -11,14 +11,14 @@ function move(state,from,to){
 		throw new error("from",from,"to",to);
 	}
 	
-	let colFrom = columns3[from];
-	let colTo = columns3[to];
+	let colFrom = columns3[from].content;
+	let colTo = columns3[to].content;
 	
 	let ballFrom = colFrom[colFrom.length -1];
 	let ballTo = colTo[colTo.length -1];
 	
 	
-	if(columns3[to].length ==4){
+	if(columns3[to].content.length ==4){
 		throw new error("col is overfeeding",to,colTo);
 		return "error"
 		//the botle to is not empty
@@ -38,7 +38,7 @@ function move(state,from,to){
 		return "error";
 	}
 	//console.log("la colune from contien",lstBigBall3[from][0]);
-	//console.log("column from",columns3[from]);
+	//console.log("column from",columns3[from].content);
 	//bigBall 
 	
 	colFrom.pop();

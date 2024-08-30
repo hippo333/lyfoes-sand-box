@@ -7,7 +7,7 @@ function coppyColumns(columns3){
 	let theCol = [];
 	
 	for(col in columns3){
-		theCol = columns3[col];
+		theCol = columns3[col].content;
 		output.push(new Column(theCol));
 	}
 	return output

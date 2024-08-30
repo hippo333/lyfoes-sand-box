@@ -4,7 +4,7 @@ var [bigBall,lstBigBall] = require('./bigBall');
 
 //get the ball above the column
 function topBall(columns2,col){
-	let theCll = columns2[col]
+	let theCll = columns2[col].content
 	let theBll = theCll[theCll.length -1]
 	return theBll
 }
@@ -28,7 +28,7 @@ function secondBall(state,col,lstTwin,level){
 	//console.log("      columns",columns2);
 	
 	let thisBigBall = lstBigBall2[col][0];	//the big bal of the column
-	let thisCol = columns2[col];			//curent column
+	let thisCol = columns2[col].content;			//curent column
 	let secondBallLevel;
 	
 	if(thisBigBall == thisCol.length || level ==0){
@@ -63,7 +63,7 @@ function secondBall(state,col,lstTwin,level){
 
 function aboveIt(columns2,col,blue){
 	
-	let theCol = columns2[col];
+	let theCol = columns2[col].content;
 	let highestBl = theCol.lastIndexOf(blue);
 	let above = (theCol.length-1)-highestBl;
 	
@@ -79,7 +79,7 @@ function Target(state,col){	//place for move the ball above col
 	//console.log("      //target for col",col);
 	
 	let [columns2,lstBigBall2,xxx] = state;
-	let theCol = columns2[col];
+	let theCol = columns2[col].content;
 	let theBall = theCol[theCol.length -1];
 	
 	if(theBall == undefined){
@@ -87,7 +87,7 @@ function Target(state,col){	//place for move the ball above col
 	}
 	let theColor = getColor(lstBigBall2,theBall);
 	if(theColor != null){
-		//console.log("      i get a color for",theBall,theColor,columns2[theColor]);
+		//console.log("      i get a color for",theBall,theColor,columns2[theColor].content);
 		return theColor
 	}else{
 		//console.log("      i can't get a color for",col,theBall);	
@@ -133,7 +133,7 @@ function newVirtualColumn(VColumn,columns2,lstBigBall2){
 	for(i in columns2){
 		let color = topBall(columns2,i);
 		let bigBall = lstBigBall2[i][0];
-		let sizeCol = columns2[i].length ;
+		let sizeCol = columns2[i].content.length ;
 		if (sizeCol ==0){
 			color = 0;
 			bigBall = 0;
@@ -160,14 +160,14 @@ function virtualUpdate(columns2,VColumn,from,to){
 	bllTo = bllFrom
 	
 	sizeFrom -= bBFrom;
-	bllFrom = columns2[from][sizeFrom];
+	bllFrom = columns2[from].content[sizeFrom];
 	bBFrom =1;
 	
 	for(let i=sizeFrom-1;i>=0;i--){
-		if(columns2[from][i] == bllFrom){
+		if(columns2[from].content[i] == bllFrom){
 			bBFrom++
 		}else{
-			i= -1
+			break;
 		}
 	}
 	VColumn[from] = [bllFrom,bBFrom,sizeFrom];
@@ -192,7 +192,7 @@ function ifColor(state,lstTwin, col, color){	//if we can move the ball to a colo
 	//console.log("	//ifColor lstTwin Col Color",lstTwin, col, color)
 	let [columns2,lstBigBall2,xxx] = state;
 
-	let theCol = columns2[col];
+	let theCol = columns2[col].content;
 	let firstColor = theCol.lastIndexOf(color);
 	let theColor;	
 	let theBall;
@@ -233,7 +233,7 @@ function getTwin(state,lstTwin,alreadyTry,mode,VColumn){
 	let lstOfCol =[];	//all col include in calcul (anti double)
 	let lastCol = lstTwin[lstTwin.length -1];//last col of the list
 	
-	//console.log("  the col",columns2[lastCol]);
+	//console.log("  the col",columns2[lastCol].content);
 	let bllBelow = secondBall(state,lastCol,lstTwin);//second ball of the botle
 	//console.log("  bllBelow",bllBelow);
 	
@@ -317,7 +317,7 @@ var CrissCross = function(state){
 	let alreadyTry =[];	//global anti double
 	let newTry =[];		//local  anti double
 	for( way in columns2){
-		if(columns2[way].length == 0){continue}		//empty botle
+		if(columns2[way].content.length == 0){continue}		//empty botle
 		if(alreadyTry.indexOf(way) != -1){continue}	//already try this column
 		if(lstBigBall2[way][1] != 0){continue}		//its a color
 		target = Target(state,way);

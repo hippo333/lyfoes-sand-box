@@ -16,7 +16,9 @@ const PINK = 11
 const CYAN = 12;
 const ORANGE = 13;
 
-var level = "tstcc5";
+var level = "tst1";
+//var level = "tstcc7";
+
 var columns;
 
 var numLst = [];
@@ -34,7 +36,7 @@ function addInNumLst(color){
 
 switch (level){
 
-case "tst1":
+case "tst1":	//single criss cross
 default:
 var columns = [
 	new Column([RED, RED, RED, BLUE]),
@@ -45,7 +47,7 @@ var columns = [
 ];
 break;
 
-case "tstcc2":
+case "tstcc2":	//twin criss cross
 var columns = [
 	new Column([RED, RED, BLUE, BLUE]),
 	new Column([BLUE, BLUE, YELLOW, YELLOW]),
@@ -55,7 +57,7 @@ var columns = [
 ];
 break;
 
-case "tstcc3":
+case "tstcc3":	//folowing blue
 var columns = [
 	new Column([RED, RED, BLUE, RED]),
 	new Column([BLUE, RED, YELLOW, BLUE]),
@@ -65,7 +67,7 @@ var columns = [
 ];
 break;
 
-case "tstcc4":
+case "tstcc4":	//permutation on the midle
 var columns = [
 	new Column([RED, RED, BLUE, RED]),
 	new Column([BLUE, BLUE, YELLOW, BLUE]),
@@ -75,7 +77,7 @@ var columns = [
 ];
 break;
 
-case "tstcc5":
+case "tstcc5":	//double twin premutation on the midle
 var columns = [
 	new Column([ RED, RED, BLUE, RED]),
 	new Column([ BLUE, BLUE, RED, BLUE]),
@@ -86,7 +88,7 @@ var columns = [
 ];
 break;
 
-case "tstcc6":
+case "tstcc6":	//3ball double permutation on the ground
 var columns = [
 	new Column([ RED, BLUE, BLUE]),
 	new Column([ BLUE, RED, RED]),
@@ -97,7 +99,7 @@ var columns = [
 ];
 break;
 
-case "tstcc7":
+case "tstcc7":	//double permutation on the midle
 var columns = [
 	new Column([ RED, RED, BLUE, BLUE]),
 	new Column([ BLUE, BLUE, RED, RED]),

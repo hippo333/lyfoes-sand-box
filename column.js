@@ -3,10 +3,12 @@
 const MAXSIZE = 4;
 
 var Column = function(contents) {
-  var obj = [];
+  var obj = {
+  		content : [],
+  	}
 
   for (var i in contents) {
-    obj.push(contents[i]);
+    obj.content.push(contents[i]);
   }
   
   return obj;

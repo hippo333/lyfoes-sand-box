@@ -34,7 +34,7 @@ function isFinish(lstBigBall2){
 	for(col in lstBigBall2){
 		if(lstBigBall2[col][0] != 0 && lstBigBall2[col][1] ==0){
 			console.log("no the col",col,"is not finish");
-			console.log(lstBigBall2[col]);
+			console.log(lstBigBall2);
 			return false
 		}
 	}

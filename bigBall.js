@@ -11,7 +11,7 @@ for (btl in columns){
 
 function bigBall(state,botle){
 	let [columns2,lstBigBall2,xxx] = state;
-	let theColumn = columns2[botle];
+	let theColumn = columns2[botle].content;
 	let lastBall = theColumn[theColumn.length -1];
 	
 	// for the botle who contain one ball
