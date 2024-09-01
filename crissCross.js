@@ -1,13 +1,7 @@
 var Column = require('./column');
 var [bigBall,lstBigBall] = require('./bigBall');
+let VColumn = [];
 
-
-//get the ball above the column
-function topBall(columns2,col){
-	let theCll = columns2[col].content
-	let theBll = theCll[theCll.length -1]
-	return theBll
-}
 
 function emptyBotle(lstBigBall2){
 	btl = lstBigBall2.findIndex(
@@ -21,45 +15,9 @@ function emptyBotle(lstBigBall2){
 	}
 }
 
-function secondBall(state,col,lstTwin,level){
-	//console.log("\n    //secondeBall col",col);
-	//console.log("      lst Twin",lstTwin);
-	let [columns2,lstBigBall2,lstOfMove2] = state;
-	//console.log("      columns",columns2);
-	
-	let thisBigBall = lstBigBall2[col][0];	//the big bal of the column
-	let thisCol = columns2[col].content;			//curent column
-	let secondBallLevel;
-	
-	if(thisBigBall == thisCol.length || level ==0){
-		return null
-	}	//if it contain only one big ball
-	
-	if(level == undefined){
-		secondBallLevel = thisCol.length -1 -thisBigBall;
-	}else{
-		secondBallLevel = level-1;
-	}
-	
-	let secondBall = thisCol[secondBallLevel];
-	let secondBigBall = 1;
-	
-	for(let i = secondBallLevel-1;i>=0;i--){
-	//	console.log("\n    :level",i,"ball",thisCol[i]);
-		
-		if(thisCol[i]== secondBall){
-			secondBigBall++;
-			continue;
-		}
-		
-		i= -1;
-	}
-	if(secondBall == null){return null}
-		
-	//console.log("      second ball",secondBall,"second big ball",secondBigBall);
-	return [secondBall,secondBigBall]
+function secondBall2(col){
+	return [VColumn[col][0],VColumn[col][1]]
 }
-
 
 function aboveIt(columns2,col,blue){
 	
@@ -79,8 +37,8 @@ function Target(state,col){	//place for move the ball above col
 	//console.log("      //target for col",col);
 	
 	let [columns2,lstBigBall2,xxx] = state;
-	let theCol = columns2[col].content;
-	let theBall = theCol[theCol.length -1];
+	let theCol = columns2[col];
+	let theBall = theCol.top();
 	
 	if(theBall == undefined){
 		console.log("      can't find the ball above",col,theCol);
@@ -102,36 +60,25 @@ function Target(state,col){	//place for move the ball above col
 }
 
 //all column who contain a blue ball and the one with the lowest ball above
-function AllBlue(state,blue,colB,blackList){
-	//console.log("    //highestBlue",blue,colB);//keep it
-	//colB is the source and we search a target
-	let [columns2,lstBigBall2,xxx] = state;
-	
-	
+
+function AllBlue2(colB,blue){
 	let allBlue = [];
-	let above;		//ball above the blue
-	if(blackList == undefined){blackList = []}
-	
-	for(col in columns2){
-		if(col == colB){continue}
-		if(blackList.indexOf(col) !=-1){continue}
-		
-		if(lstBigBall2[col][1] == 0){
-			above = aboveIt(columns2,col,blue);
-			
-			if(above == null){continue}// no blue in the col
-			
-			allBlue.push(parseInt(col));
+	for(let i in VColumn){
+		if(VColumn[i][0]==blue && i!=colB){
+			allBlue.push(i);
+			//console.log("    blue",i);
 		}
 	}
-	return allBlue
+	
+	return allBlue;
 }
 
 function newVirtualColumn(VColumn,columns2,lstBigBall2){
-	console.log("\n      virtualcolumn");
+	//console.log("\n______virtualcolumn");
+	VColumn = [];
 	
 	for(i in columns2){
-		let color = topBall(columns2,i);
+		let color = columns2[i].top();
 		let bigBall = lstBigBall2[i][0];
 		let sizeCol = columns2[i].content.length ;
 		if (sizeCol ==0){
@@ -139,14 +86,16 @@ function newVirtualColumn(VColumn,columns2,lstBigBall2){
 			bigBall = 0;
 		}
 		
-		VColumn.push([color,bigBall,sizeCol]);	
-		console.log("      the column",i,"color",color,"bigball",bigBall,"sizecol",sizeCol);
+		VColumn.push([color,bigBall,sizeCol]);
 		
 	}
+	//console.log("      color, bigBall, sizeCol");
+	//console.log("      Vcolumns",VColumn);
+	return VColumn
 }
 
 function virtualUpdate(columns2,VColumn,from,to){
-	console.log("\n      virtual update");
+	//console.log(`\n      virtual update from:${from} to:${to}`);
 	let bllFrom = VColumn[from][0];
 	let bBFrom = VColumn[from][1];
 	let sizeFrom = VColumn[from][2];
@@ -155,15 +104,24 @@ function virtualUpdate(columns2,VColumn,from,to){
 	let bBTo = VColumn[to][1];
 	let sizeTo = VColumn[to][2];
 	
+	if(bllFrom != bllTo){
+		console.log("      the ball are different");
+	}
+	
 	bBTo += bBFrom;
 	sizeTo +=bBFrom;
 	bllTo = bllFrom
 	
 	sizeFrom -= bBFrom;
-	bllFrom = columns2[from].content[sizeFrom];
-	bBFrom =1;
+	if(sizeFrom > 0){
+		bllFrom = columns2[from].content[sizeFrom-1];
+		bBFrom =1;
+	}else{
+		bllFrom =0;
+		bBFrom = 0;
+	}
 	
-	for(let i=sizeFrom-1;i>=0;i--){
+	for(let i=sizeFrom-2;i>=0;i--){
 		if(columns2[from].content[i] == bllFrom){
 			bBFrom++
 		}else{
@@ -173,8 +131,8 @@ function virtualUpdate(columns2,VColumn,from,to){
 	VColumn[from] = [bllFrom,bBFrom,sizeFrom];
 	VColumn[to] = [bllTo,bBTo,sizeTo];
 	
-	console.log("      from",from,"to",to);
-	console.log("      Vcolumn",VColumn);
+	//console.log("      from",from,"to",to);
+	//console.log("      Vcolumn",VColumn);
 }
 
 function getColor(lstBigBall2,blue){
@@ -214,7 +172,7 @@ function ifColor(state,lstTwin, col, color){	//if we can move the ball to a colo
 function ifNewColor(col,columns2,lstTwin,lstBigBall){
 	//console.log("\n      if new color");
 	let firstCol = lstTwin[1];
-	let firstBall = topBall(columns2,col);
+	let firstBall = columns2[col].top();
 	let firstBigBall = lstBigBall[firstCol][0];
 	//console.log("      firs:col",firstCol,"ball",firstBall,"bigball",firstBigBall);
 	//console.log("      lst Twin",lstTwin);
@@ -234,7 +192,8 @@ function getTwin(state,lstTwin,alreadyTry,mode,VColumn){
 	let lastCol = lstTwin[lstTwin.length -1];//last col of the list
 	
 	//console.log("  the col",columns2[lastCol].content);
-	let bllBelow = secondBall(state,lastCol,lstTwin);//second ball of the botle
+	//let bllBelow = secondBall(state,lastCol,lstTwin);//second ball of the botle
+	let bllBelow = secondBall2(lastCol,VColumn);//second ball of the botle
 	//console.log("  bllBelow",bllBelow);
 	
 	if(bllBelow == null){return [lstTwin,[]]}//it end with a new empty botle
@@ -254,12 +213,12 @@ function getTwin(state,lstTwin,alreadyTry,mode,VColumn){
 			lstTwin = lstTwin.slice(2);		//remove old begin
 			lstTwin = [goToEmpty].concat(lstTwin);	//insert new at begin
 			
-			return [lstTwin,[]]
+			return [[lstTwin],[]]
 		}
 	}
 	ifNewColor(lastCol,columns2,lstTwin,lstBigBall);
 	
-	let allBlue = AllBlue(state,sdBall,lastCol);
+	let allBlue = AllBlue2(lastCol,sdBall);
 		
 	let thisTry;		//curent element of the loop
 	let alreadyThere;	//short cut of intern loop
@@ -270,10 +229,10 @@ function getTwin(state,lstTwin,alreadyTry,mode,VColumn){
 		thisCoppy = [...lstTwin];//clone
 		//console.log("  all blue element",way,thisTry);
 		
-		if(topBall(columns2,thisTry) != sdBall){continue}//the ball is'nt on top
+		//if(columns2[thisTry].top() != sdBall){continue}//the ball is'nt on top
 		if(alreadyTry.indexOf(thisTry) != -1){continue}	//already try this column
 		
-		if(lstBigBall2[thisTry][0] > aboveIt(columns2,lastCol,sdBall)){continue}//big ball
+		if(VColumn[thisTry][1] + VColumn[lastCol][2] > 4){continue}//big ball
 		
 		lstOfCol.push(thisTry);		
 		alreadyThere =lstTwin.indexOf(thisTry);//if we loop on the list
@@ -289,7 +248,7 @@ function getTwin(state,lstTwin,alreadyTry,mode,VColumn){
 			
 		}else{//do it recursively
 			thisCoppy.push(thisTry);
-			virtualUpdate(columns2,VColumn,lastCol,thisTry);
+			virtualUpdate(columns2,VColumn,thisTry,lastCol);
 			
 			let nextStep = getTwin(state,thisCoppy,alreadyTry,mode,VColumn);//do it 
 			
@@ -304,8 +263,7 @@ function getTwin(state,lstTwin,alreadyTry,mode,VColumn){
 var CrissCross = function(state){
 	
 	let [columns2,lstBigBall2,lstOfMove2] = state;
-	let VColumn = [];
-	newVirtualColumn(VColumn,columns2,lstBigBall2);
+	
 	
 	let thisWay = [];			//local try
 	let lstOfCrissCross = [];	//global try
@@ -321,6 +279,10 @@ var CrissCross = function(state){
 		if(alreadyTry.indexOf(way) != -1){continue}	//already try this column
 		if(lstBigBall2[way][1] != 0){continue}		//its a color
 		target = Target(state,way);
+	
+	
+		VColumn = newVirtualColumn(VColumn,columns2,lstBigBall2);
+		virtualUpdate(columns2,VColumn,way,target);
 	
 		a = getTwin(state,[target,way],alreadyTry,"standard",VColumn);
 		if(a[0].length == 0){continue}

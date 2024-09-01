@@ -11,7 +11,9 @@ var lstOfMove = [];
 let firstState = [columns,lstBigBall,lstOfMove];
 let lstOfStates = [firstState];
 
-console.log(columns);
+for(let col of columns){
+	console.log(col.content);
+}
 
 function doAllMove(state,lstCrissCross){
 	let newState = [];

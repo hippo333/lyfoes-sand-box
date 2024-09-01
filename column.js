@@ -11,6 +11,17 @@ var Column = function(contents) {
     obj.content.push(contents[i]);
   }
   
+  obj.top = function (){
+  	return this.content[this.content.length -1];
+  }
+  
+  obj.isFull = function(){
+  	if(this.content.length == 0){
+  		return false
+  	}else{
+  		return this.content.length ==4
+  }	}
+  
   return obj;
 }
 
