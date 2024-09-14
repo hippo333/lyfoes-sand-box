@@ -17,7 +17,7 @@ var doTheMove = function(state,order){
 		let botle = order[i];
 		//console.log("the element n°",botle,i);
 		
-		if(typeof(botle) == "object"){
+		if(typeof(botle) == "object"){	// first move
 			//console.log("it's array",botle);
 			from = botle[0];
 			to = botle[1];
@@ -26,23 +26,13 @@ var doTheMove = function(state,order){
 			from = botle;
 			to = order[i-1];
 			
-			if(typeof(to) == "object"){
+			if(typeof(to) == "object"){	//to color
 				to = to[0];			
 			}	
 		}
 		//console.log("i move from to",from,to,"\n");
 		move(state,from,to);	
 	}
-	//finish line
-	from = order[0][1];
-	to = order[order.length -1];
-	//console.log("to",to);
-	if(typeof(to) == "object"){
-		to = to[0];			
-	}	
-	//console.log("finish move",from,to);
-	move(state,from,to);
-	
 
 	//console.log(columns2);
 	return [columns2]

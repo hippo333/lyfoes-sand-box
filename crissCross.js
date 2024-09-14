@@ -104,7 +104,7 @@ function virtualUpdate(columns2,VColumn,from,to){
 	let bBTo = VColumn[to][1];
 	let sizeTo = VColumn[to][2];
 	
-	if(bllFrom != bllTo){
+	if(bllFrom != bllTo && bBTo != 0){
 		console.log("      the ball are different");
 	}
 	

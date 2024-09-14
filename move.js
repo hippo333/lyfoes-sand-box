@@ -30,6 +30,7 @@ function move(state,from,to){
 	}
 	if(ballFrom == undefined){
 		console.log("error no ball From",from,colFrom);
+		console.log(`from ${from}, to ${to}`);
 		return "error"
 	}
 	if(colTo.length + lstBigBall3[from][0] >4){
