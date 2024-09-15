@@ -19,19 +19,6 @@ function secondBall2(col){
 	return [VColumn[col][0],VColumn[col][1]]
 }
 
-function aboveIt(columns2,col,blue){
-	
-	let theCol = columns2[col].content;
-	let highestBl = theCol.lastIndexOf(blue);
-	let above = (theCol.length-1)-highestBl;
-	
-	if(highestBl !=-1){
-		return above
-	}else {
-		return null
-	}
-}
-
 
 function Target(state,col){	//place for move the ball above col
 	//console.log("      //target for col",col);
@@ -96,6 +83,7 @@ function newVirtualColumn(VColumn,columns2,lstBigBall2){
 
 function virtualUpdate(columns2,VColumn,from,to){
 	//console.log(`\n      virtual update from:${from} to:${to}`);
+	//console.log("      ",VColumn);
 	let bllFrom = VColumn[from][0];
 	let bBFrom = VColumn[from][1];
 	let sizeFrom = VColumn[from][2];
@@ -182,14 +170,19 @@ function ifNewColor(col,columns2,lstTwin,lstBigBall){
 }
 
 function getTwin(state,lstTwin,alreadyTry,mode,VColumn){
-	//console.log("\n  //get twin",lstTwin);
+	console.log("\n  //get twin",lstTwin);
 	let [columns2,lstBigBall2,xxx] = state;
 	
-	if(lstTwin.length > columns2.length){return}//loop killer
+	if(lstTwin.length > columns2.length*2){return}//loop killer
 	
 	let output =[];
 	let lstOfCol =[];	//all col include in calcul (anti double)
 	let lastCol = lstTwin[lstTwin.length -1];//last col of the list
+	
+	if(typeof(lastCol)== "object"){
+		lastCol = lastCol[0];
+	}
+	//console.log("  lastCol",lastCol,typeof(lastCol));
 	
 	//console.log("  the col",columns2[lastCol].content);
 	//let bllBelow = secondBall(state,lastCol,lstTwin);//second ball of the botle
@@ -219,36 +212,79 @@ function getTwin(state,lstTwin,alreadyTry,mode,VColumn){
 	ifNewColor(lastCol,columns2,lstTwin,lstBigBall);
 	
 	let allBlue = AllBlue2(lastCol,sdBall);
+	
+	if(allBlue.length ==0){	//all ball who can go to the first empty botle
+		console.log("\n  no ball can go to",lastCol);
+		
+		let firstTarget = lstTwin[0];
+		let sdBall2 = VColumn[firstTarget][0];
+		console.log(`  for the column ${firstTarget} hase only ${sdBall}`);
+		
+		let allRed = AllBlue2(firstTarget,sdBall2);
+		console.log("  allRed",allRed);
+		
+		if(allRed.length > 0){
+			lstTwin.push([allRed[0],firstTarget]);
+			virtualUpdate(columns2,VColumn,allRed[0],firstTarget);
+			console.log(`  i can move ${allRed[0]} - ${firstTarget}`);
+			console.log("  ",VColumn);
+		//	
+			let nextStep = getTwin(state,lstTwin,alreadyTry,mode,VColumn);//do it 
+			
+			if(nextStep[0].length != 0){		//if the next recursive loop work
+				output = output.concat(nextStep[0]);	//return it for the previous
+			} 
+		}
+		//here
+		
+		
+		
+	}
 		
 	let thisTry;		//curent element of the loop
 	let alreadyThere;	//short cut of intern loop
 	let thisCoppy = []	//coppy of lstTwin 
 	
+	//console.log("  for all col who contain the color");
 	for(way in allBlue){
 		thisTry = allBlue[way];
 		thisCoppy = [...lstTwin];//clone
-		//console.log("  all blue element",way,thisTry);
+		console.log("  all blue element",way,thisTry);
 		
-		//if(columns2[thisTry].top() != sdBall){continue}//the ball is'nt on top
 		if(alreadyTry.indexOf(thisTry) != -1){continue}	//already try this column
+		console.log(" -i never try this");
 		
 		if(VColumn[thisTry][1] + VColumn[lastCol][2] > 4){continue}//big ball
+		console.log(" -the big ball dont over feed");
 		
 		lstOfCol.push(thisTry);		
 		alreadyThere =lstTwin.indexOf(thisTry);//if we loop on the list
 		
 		if(alreadyThere != -1 && (mode == "standard" || alreadyThere !=1)){
 		//if we loop on the list of move short cut
+			console.log(" -bouya");
 			let firstMove = [,thisCoppy[0]];
 			firstMove[0] = thisTry;
 			thisCoppy = thisCoppy.slice(alreadyThere+1);//cut the col befor the loop
 			
 			thisCoppy = [firstMove].concat(thisCoppy);
 			output.push(thisCoppy);
+			//here its fuck top
+			
 			
 		}else{//do it recursively
 			thisCoppy.push(thisTry);
 			virtualUpdate(columns2,VColumn,thisTry,lastCol);
+			//console.log("  we use Vcolumn");
+			//if we get multiple choices what happen ?
+			
+			
+			
+			
+			
+			
+			
+			
 			
 			let nextStep = getTwin(state,thisCoppy,alreadyTry,mode,VColumn);//do it 
 			
