@@ -16,7 +16,7 @@ const PINK = 11
 const CYAN = 12;
 const ORANGE = 13;
 
-var level = "tst3";
+var level = 2.2;
 //var level = "tstcc7";
 
 var columns;
@@ -47,7 +47,18 @@ var columns = [
 ];
 break;
 
-case "tst2":	//no solution one botle
+case "tst2":	//just free a botle
+console.log("broken , free a botle");
+var columns = [
+	new Column([RED, BLUE, ORANGE, YELLOW]),
+	new Column([PINK, RED, BLUE]),
+	new Column([YELLOW, RED, YELLOW, BLUE]),
+	new Column([RED]),
+	new Column([]),
+];
+break;
+
+case "tst3":	//no solution one botle
 var columns = [
 	new Column([RED, YELLOW, RED, RED]),
 	new Column([YELLOW, YELLOW, BLUE, BLUE]),
@@ -57,7 +68,7 @@ var columns = [
 ];
 break;
 
-case "tst3":	//two choice
+case "tst4":	//two choice
 var columns = [
 	new Column([BLUE, YELLOW, RED, BLUE]),
 	new Column([RED, RED, BLUE, YELLOW]),
@@ -67,7 +78,7 @@ var columns = [
 ];
 break;
 
-case "tst4":	//tst3 with first move
+case "tst5":	//tst3 with first move
 var columns = [	//and genius there are no empty botle
 	new Column([BLUE, YELLOW, RED]),
 	new Column([RED, RED, BLUE, YELLOW]),
@@ -76,7 +87,7 @@ var columns = [	//and genius there are no empty botle
 ];
 break;
 
-case "tst5":	//3 ball per color
+case "tst6":	//3 ball per color
 var columns = [
 	new Column([ YELLOW, RED, BLUE]),
 	new Column([RED, BLUE, YELLOW]),

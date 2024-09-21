@@ -46,19 +46,6 @@ function Target(state,col){	//place for move the ball above col
 	}
 }
 
-//all column who contain a blue ball and the one with the lowest ball above
-
-function AllBlue2(colB,blue){
-	let allBlue = [];
-	for(let i in VColumn){
-		if(VColumn[i][0]==blue && i!=colB){
-			allBlue.push(i);
-			//console.log("    blue",i);
-		}
-	}
-	
-	return allBlue;
-}
 
 function newVirtualColumn(VColumn,columns2,lstBigBall2){
 	//console.log("\n______virtualcolumn");
@@ -82,7 +69,7 @@ function newVirtualColumn(VColumn,columns2,lstBigBall2){
 }
 
 function virtualUpdate(columns2,VColumn,from,to){
-	//console.log(`\n      virtual update from:${from} to:${to}`);
+	console.log(`\n      virtual update from:${from} to:${to}`);
 	//console.log("      ",VColumn);
 	let bllFrom = VColumn[from][0];
 	let bBFrom = VColumn[from][1];
@@ -134,27 +121,25 @@ function getColor(lstBigBall2,blue){
 	}
 }
 
-function ifColor(state,lstTwin, col, color){	//if we can move the ball to a color
-	//console.log("	//ifColor lstTwin Col Color",lstTwin, col, color)
-	let [columns2,lstBigBall2,xxx] = state;
 
-	let theCol = columns2[col].content;
-	let firstColor = theCol.lastIndexOf(color);
-	let theColor;	
-	let theBall;
-	
-	for(ball= firstColor;ball >=0;ball--){
-		theBall = theCol[ball];
-		theColor = getColor(lstBigBall2,theBall);
+//all column who contain a blue ball and the one with the lowest ball above
+
+function AllBlue2(colB,blue){
+	let allBlue = [];
+	for(let i in VColumn){
+		if(i== colB){continue}
 		
-		if (theColor != null){
-			lstTwin.push([col, theColor]);//take out the second ball
-		}else{
-			return [lstTwin, theCol[ball]]
+		if(lstBigBall[i][1]==blue){	//if it can go to color
+			console.log(`the on the col ${colB} the ball ${blue} go to ${i}`);
+			return [i]
+		
+		}if(VColumn[i][0]==blue ){
+			allBlue.push(i);
+			//console.log("    blue",i);
 		}
 	}
-	return [lstTwin, "finish"]
-
+	
+	return allBlue;
 }
 
 function ifNewColor(col,columns2,lstTwin,lstBigBall){
@@ -170,7 +155,7 @@ function ifNewColor(col,columns2,lstTwin,lstBigBall){
 }
 
 function getTwin(state,lstTwin,alreadyTry,mode,VColumn){
-	//console.log("\n  //get twin",lstTwin);
+	console.log("\n  //get twin",lstTwin);
 	let [columns2,lstBigBall2,xxx] = state;
 	
 	if(lstTwin.length > columns2.length*2){return}//loop killer
@@ -184,27 +169,24 @@ function getTwin(state,lstTwin,alreadyTry,mode,VColumn){
 	}
 	
 	let sdBall = VColumn[lastCol][0];
-	let SdBigBall = VColumn[lastCol][1];
+	let sdBigBall = VColumn[lastCol][1];
+	console.log(` lastCol ${lastCol} sdBall ${sdBall} sdBigBall ${sdBigBall}`)
 	
-	if(sdBall == 0 && false ){return [lstTwin,[]]}
-	//it end with a new empty botle
-	
-	
-	let goToColor = ifColor(state,lstTwin, lastCol, sdBall);
-	if(goToColor != undefined){
-		console.log("  go to color",goToColor);
-		[lstTwin, sdBall] = goToColor;
+	if(sdBall == 0 && true ){
+		console.log("  it free a botle");
 		
-		if(sdBall == "finish"){
-			let firstBall = lstTwin[1];
-			let goToEmpty = [firstBall,lstTwin[0]];	//clean the first move
-			
-			lstTwin = lstTwin.slice(2);		//remove old begin
-			lstTwin = [goToEmpty].concat(lstTwin);	//insert new at begin
-			
-			return [[lstTwin],[]]
-		}
+		
+		
+		let firstMove = [lstTwin[1],lstTwin[0]];
+		
+		lstTwin = lstTwin.slice(2);		
+		lstTwin = [firstMove].concat(lstTwin);
+		
+		console.log("  lstTwin",lstTwin);
+		return [[lstTwin],[]]
 	}
+
+
 	ifNewColor(lastCol,columns2,lstTwin,lstBigBall);
 	
 	let allBlue = AllBlue2(lastCol,sdBall);
@@ -231,9 +213,9 @@ function getTwin(state,lstTwin,alreadyTry,mode,VColumn){
 		lstOfCol.push(thisTry);		
 		alreadyThere =lstTwin.indexOf(thisTry);//if we loop on the list
 		
-		if(alreadyThere != -1 )){
+		if(alreadyThere != -1 ){
 		//if we loop on the list of move short cut
-			console.log(" -bouya");
+			console.log(" -already there");
 			let firstMove = [,thisCoppy[0]];
 			firstMove[0] = thisTry;
 			thisCoppy = thisCoppy.slice(alreadyThere+1);//cut the col befor the loop

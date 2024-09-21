@@ -3,12 +3,12 @@ var move = require('./move');
 
 
 var doTheMove = function(state,order){
-	//console.log("\n// do the move");
-	//console.log("list of move already done",lstOfMove);
-	//console.log("what i ave to do",order,"\n");
+	console.log("\n// do the move");
 	
 	[columns2,lstBigBall,lstOfMove] = state;
 	//console.log("state of the game",columns2);
+	console.log("list of move already done",lstOfMove);
+	console.log("what i ave to do",order,"\n");
 
 	let from;
 	let to;
@@ -30,7 +30,7 @@ var doTheMove = function(state,order){
 				to = to[0];			
 			}	
 		}
-		//console.log("i move from to",from,to,"\n");
+		console.log("i move from to",from,to,"\n");
 		move(state,from,to);	
 	}
 

@@ -3,7 +3,7 @@ var bigBall = require('./bigBall')[0];
 
 
 function move(state,from,to){
-	//console.log("move: from:",from,"to:",to);	
+	console.log("move: from:",from,"to:",to);	
 	
 	let [columns3,lstBigBall3,lstOfMove3] = state;
 	
