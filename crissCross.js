@@ -170,7 +170,7 @@ function ifNewColor(col,columns2,lstTwin,lstBigBall){
 }
 
 function getTwin(state,lstTwin,alreadyTry,mode,VColumn){
-	console.log("\n  //get twin",lstTwin);
+	//console.log("\n  //get twin",lstTwin);
 	let [columns2,lstBigBall2,xxx] = state;
 	
 	if(lstTwin.length > columns2.length*2){return}//loop killer
@@ -179,26 +179,22 @@ function getTwin(state,lstTwin,alreadyTry,mode,VColumn){
 	let lstOfCol =[];	//all col include in calcul (anti double)
 	let lastCol = lstTwin[lstTwin.length -1];//last col of the list
 	
-	if(typeof(lastCol)== "object"){
+	if(typeof(lastCol)== "object"){	//if last move is a color
 		lastCol = lastCol[0];
 	}
-	//console.log("  lastCol",lastCol,typeof(lastCol));
 	
-	//console.log("  the col",columns2[lastCol].content);
-	//let bllBelow = secondBall(state,lastCol,lstTwin);//second ball of the botle
-	let bllBelow = secondBall2(lastCol,VColumn);//second ball of the botle
-	//console.log("  bllBelow",bllBelow);
+	let sdBall = VColumn[lastCol][0];
+	let SdBigBall = VColumn[lastCol][1];
 	
-	if(bllBelow == null){return [lstTwin,[]]}//it end with a new empty botle
-	let [sdBall,sdBigBall] = bllBelow;
+	if(sdBall == 0 && false ){return [lstTwin,[]]}
+	//it end with a new empty botle
 	
 	
 	let goToColor = ifColor(state,lstTwin, lastCol, sdBall);
 	if(goToColor != undefined){
-		//console.log("  go to color",goToColor);
+		console.log("  go to color",goToColor);
 		[lstTwin, sdBall] = goToColor;
 		
-		//console.log("  sdBall",sdBall);
 		if(sdBall == "finish"){
 			let firstBall = lstTwin[1];
 			let goToEmpty = [firstBall,lstTwin[0]];	//clean the first move
@@ -213,33 +209,8 @@ function getTwin(state,lstTwin,alreadyTry,mode,VColumn){
 	
 	let allBlue = AllBlue2(lastCol,sdBall);
 	
-	if(allBlue.length ==0){	//all ball who can go to the first empty botle
-		console.log("\n  no ball can go to",lastCol);
-		
-		let firstTarget = lstTwin[0];
-		let sdBall2 = VColumn[firstTarget][0];
-		console.log(`  for the column ${firstTarget} hase only ${sdBall}`);
-		
-		let allRed = AllBlue2(firstTarget,sdBall2);
-		console.log("  allRed",allRed);
-		
-		if(allRed.length > 0){
-			lstTwin.push([allRed[0],firstTarget]);
-			virtualUpdate(columns2,VColumn,allRed[0],firstTarget);
-			console.log(`  i can move ${allRed[0]} - ${firstTarget}`);
-			console.log("  ",VColumn);
-		//	
-			let nextStep = getTwin(state,lstTwin,alreadyTry,mode,VColumn);//do it 
-			
-			if(nextStep[0].length != 0){		//if the next recursive loop work
-				output = output.concat(nextStep[0]);	//return it for the previous
-			} 
-		}
-		//here
-		
-		
-		
-	}
+	//if we can't move saw if we can go to to the first empty
+	
 		
 	let thisTry;		//curent element of the loop
 	let alreadyThere;	//short cut of intern loop
@@ -249,18 +220,18 @@ function getTwin(state,lstTwin,alreadyTry,mode,VColumn){
 	for(way in allBlue){
 		thisTry = allBlue[way];
 		thisCoppy = [...lstTwin];//clone
-		console.log("  all blue element",way,thisTry);
+		//console.log("  all blue element",way,thisTry);
 		
 		if(alreadyTry.indexOf(thisTry) != -1){continue}	//already try this column
-		console.log(" -i never try this");
+		//console.log(" -i never try this");
 		
 		if(VColumn[thisTry][1] + VColumn[lastCol][2] > 4){continue}//big ball
-		console.log(" -the big ball dont over feed");
+		//console.log(" -the big ball dont over feed");
 		
 		lstOfCol.push(thisTry);		
 		alreadyThere =lstTwin.indexOf(thisTry);//if we loop on the list
 		
-		if(alreadyThere != -1 && (mode == "standard" || alreadyThere !=1)){
+		if(alreadyThere != -1 )){
 		//if we loop on the list of move short cut
 			console.log(" -bouya");
 			let firstMove = [,thisCoppy[0]];
@@ -276,13 +247,7 @@ function getTwin(state,lstTwin,alreadyTry,mode,VColumn){
 			thisCoppy.push(thisTry);
 			virtualUpdate(columns2,VColumn,thisTry,lastCol);
 			//console.log("  we use Vcolumn");
-			//if we get multiple choices what happen ?
-			
-			
-			
-			
-			
-			
+			//if we get multiple choices what happen ?	
 			
 			
 			
