@@ -1,6 +1,5 @@
 var Column = require('./column');
 var [bigBall,lstBigBall] = require('./bigBall');
-let VColumn = [];
 
 
 function emptyBotle(lstBigBall2){
@@ -15,9 +14,6 @@ function emptyBotle(lstBigBall2){
 	}
 }
 
-function secondBall2(col){
-	return [VColumn[col][0],VColumn[col][1]]
-}
 
 
 function Target(state,col){	//place for move the ball above col
@@ -48,9 +44,9 @@ function Target(state,col){	//place for move the ball above col
 }
 
 
-function newVirtualColumn(VColumn,columns2,lstBigBall2){
+function newVirtualColumn(columns2,lstBigBall2){
 	//console.log("\n______virtualcolumn");
-	VColumn = [];
+	VColumn2 = [];
 	
 	for(i in columns2){
 		let color = columns2[i].top();
@@ -61,30 +57,30 @@ function newVirtualColumn(VColumn,columns2,lstBigBall2){
 			bigBall = 0;
 		}
 		
-		VColumn.push([color,bigBall,sizeCol]);
+		VColumn2.push([color,bigBall,sizeCol]);
 		
 	}
 	//console.log("      color, bigBall, sizeCol");
-	//console.log("      Vcolumns",VColumn);
-	return VColumn
+	//console.log("      Vcolumns",VColumn2);
+	return VColumn2
 }
 
-function virtualUpdate(columns2,VColumn,from,to){
+function virtualUpdate(columns2,VColumn2,from,to){
 	//console.log(`\n      virtual update from:${from} to:${to}`);
 	//console.log("      ",VColumn);
-	let bllFrom = VColumn[from][0];
-	let bBFrom = VColumn[from][1];
-	let sizeFrom = VColumn[from][2];
+	let bllFrom = VColumn2[from][0];
+	let bBFrom = VColumn2[from][1];
+	let sizeFrom = VColumn2[from][2];
 	
-	let bllTo = VColumn[to][0];
-	let bBTo = VColumn[to][1];
-	let sizeTo = VColumn[to][2];
+	let bllTo = VColumn2[to][0];
+	let bBTo = VColumn2[to][1];
+	let sizeTo = VColumn2[to][2];
 	
 	if(bllFrom != bllTo && bBTo != 0){
 		console.log("  ____error ");
 		console.log("      the ball are different");
 		console.log(`      virtual update from:${from} to:${to}`);
-		console.log("      ",VColumn);
+		console.log("      ",VColumn2);
 	}
 	
 	bBTo += bBFrom;
@@ -107,11 +103,11 @@ function virtualUpdate(columns2,VColumn,from,to){
 			break;
 		}
 	}
-	VColumn[from] = [bllFrom,bBFrom,sizeFrom];
-	VColumn[to] = [bllTo,bBTo,sizeTo];
+	VColumn2[from] = [bllFrom,bBFrom,sizeFrom];
+	VColumn2[to] = [bllTo,bBTo,sizeTo];
 	
 	//console.log("      from",from,"to",to);
-	//console.log("      Vcolumn",VColumn);
+	//console.log("      Vcolumn",VColumn2);
 }
 
 function getColor(lstBigBall2,blue){
@@ -128,16 +124,19 @@ function getColor(lstBigBall2,blue){
 
 //all column who contain a blue ball and the one with the lowest ball above
 
-function AllBlue2(colB,blue){
+function AllBlue2(VColumn2,colB,blue){
 	let allBlue = [];
-	for(let i in VColumn){
+	console.log("all blue col",colB,"place for",VColumn2[colB][2],"balls");
+	for(let i in VColumn2){
 		if(i== colB){continue}
 		
-		if(lstBigBall[i][1]==blue){	//if it can go to color
+		if(lstBigBall[i][1]==blue ){	//if it can go to color
 			console.log(`the on the col ${colB} the ball ${blue} go to ${i}`);
 			return [i]
 		
-		}if(VColumn[i][0]==blue ){
+		}
+		
+		if(VColumn2[i][0]==blue && VColumn2[i][1] <= VColumn2[colB][2]){
 			allBlue.push(i);
 			//console.log("    blue",i);
 		}
@@ -158,7 +157,7 @@ function ifNewColor(col,columns2,lstTwin,lstBigBall){
 	//console.log("      thisBigBall",thisBigBall);
 }
 
-function getTwin(state,lstTwin,alreadyTry,mode,VColumn){
+function getTwin(state,lstTwin,alreadyTry,mode,VColumn2){
 	console.log("\n  //get twin",lstTwin);
 	let [columns2,lstBigBall2,xxx] = state;
 	
@@ -172,11 +171,11 @@ function getTwin(state,lstTwin,alreadyTry,mode,VColumn){
 		lastCol = lastCol[0];
 	}
 	
-	let sdBall = VColumn[lastCol][0];
-	let sdBigBall = VColumn[lastCol][1];
+	let sdBall = VColumn2[lastCol][0];
+	let sdBigBall = VColumn2[lastCol][1];
 	//console.log(` lastCol ${lastCol} sdBall ${sdBall} sdBigBall ${sdBigBall}`)
 	
-	if(sdBall == 0 && true ){
+	if(sdBall == 0  ){
 		console.log("  it free a botle");
 		
 		
@@ -193,9 +192,26 @@ function getTwin(state,lstTwin,alreadyTry,mode,VColumn){
 
 	ifNewColor(lastCol,columns2,lstTwin,lstBigBall);
 	
-	let allBlue = AllBlue2(lastCol,sdBall);
+	let allBlue = AllBlue2(VColumn2,lastCol,sdBall);
 	
 	//if we can't move saw if we can go to to the first empty
+	if (allBlue.length ==0){
+		console.log("*/* no blue to ",lastCol);
+		let firstMove = lstTwin[0];
+		let firstBall = VColumn2[firstMove][0]
+		console.log(`the fist empty botle ${firstMove} the ball ${firstBall} in the list ${lstTwin}`);
+		
+		sdBall = firstBall;
+		lastCol = firstMove;
+		allBlue = AllBlue2(VColumn2,lastCol,sdBall);
+		
+		console.log("all blue 2.0",allBlue);
+		
+		
+		mode = "go to first";
+	}else{
+		console.log("all blue",allBlue);
+	}
 	
 		
 	let thisTry;		//curent element of the loop
@@ -211,13 +227,13 @@ function getTwin(state,lstTwin,alreadyTry,mode,VColumn){
 		if(alreadyTry.indexOf(thisTry) != -1){continue}	//already try this column
 		//console.log(" -i never try this");
 		
-		if(VColumn[thisTry][1] + VColumn[lastCol][2] > 4){continue}//big ball
+		if(VColumn2[thisTry][1] + VColumn2[lastCol][2] > 4){continue}//big ball
 		//console.log(" -the big ball dont over feed");
 		
 		lstOfCol.push(thisTry);		
 		alreadyThere =lstTwin.indexOf(thisTry);//if we loop on the list
 		
-		if(alreadyThere != -1 ){
+		if(alreadyThere != -1 && mode =="standard" ){
 		//if we loop on the list of move short cut
 			console.log(" -already there");
 			let firstMove = [,thisCoppy[0]];
@@ -231,13 +247,13 @@ function getTwin(state,lstTwin,alreadyTry,mode,VColumn){
 			
 		}else{//do it recursively
 			thisCoppy.push(thisTry);
-			virtualUpdate(columns2,VColumn,thisTry,lastCol);
+			virtualUpdate(columns2,VColumn2,thisTry,lastCol);
 			//console.log("  we use Vcolumn");
 			//if we get multiple choices what happen ?	
 			
 			
 			
-			let nextStep = getTwin(state,thisCoppy,alreadyTry,mode,VColumn);//do it 
+			let nextStep = getTwin(state,thisCoppy,alreadyTry,mode,VColumn2);//do it 
 			
 			if(nextStep[0].length != 0){		//if the next recursive loop work
 				output = output.concat(nextStep[0]);	//return it for the previous
@@ -268,10 +284,10 @@ var CrissCross = function(state){
 		target = Target(state,way);
 	
 	
-		VColumn = newVirtualColumn(VColumn,columns2,lstBigBall2);
-		virtualUpdate(columns2,VColumn,way,target);
+		let VColumn2 = newVirtualColumn(columns2,lstBigBall2);
+		virtualUpdate(columns2,VColumn2,way,target);
 	
-		a = getTwin(state,[target,way],alreadyTry,"standard",VColumn);
+		a = getTwin(state,[target,way],alreadyTry,"standard",VColumn2);
 		if(a[0].length == 0){continue}
 		[thisWay,newTry] = a;
 		//console.log(" i want it that way",thisWay);
