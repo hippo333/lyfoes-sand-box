@@ -21,7 +21,7 @@ function secondBall2(col){
 
 
 function Target(state,col){	//place for move the ball above col
-	//console.log("      //target for col",col);
+	console.log("      //target for col",col);
 	
 	let [columns2,lstBigBall2,xxx] = state;
 	let theCol = columns2[col];
@@ -38,6 +38,7 @@ function Target(state,col){	//place for move the ball above col
 		//console.log("      i can't get a color for",col,theBall);	
 		let emptyBtl = emptyBotle(lstBigBall2);
 		if (emptyBtl != null){
+			//console.log("      i can do empty botlr",emptyBtl);
 			return emptyBtl
 		}else{
 			console.log("      no target for",col);
@@ -69,7 +70,7 @@ function newVirtualColumn(VColumn,columns2,lstBigBall2){
 }
 
 function virtualUpdate(columns2,VColumn,from,to){
-	console.log(`\n      virtual update from:${from} to:${to}`);
+	//console.log(`\n      virtual update from:${from} to:${to}`);
 	//console.log("      ",VColumn);
 	let bllFrom = VColumn[from][0];
 	let bBFrom = VColumn[from][1];
@@ -80,7 +81,10 @@ function virtualUpdate(columns2,VColumn,from,to){
 	let sizeTo = VColumn[to][2];
 	
 	if(bllFrom != bllTo && bBTo != 0){
+		console.log("  ____error ");
 		console.log("      the ball are different");
+		console.log(`      virtual update from:${from} to:${to}`);
+		console.log("      ",VColumn);
 	}
 	
 	bBTo += bBFrom;
@@ -170,7 +174,7 @@ function getTwin(state,lstTwin,alreadyTry,mode,VColumn){
 	
 	let sdBall = VColumn[lastCol][0];
 	let sdBigBall = VColumn[lastCol][1];
-	console.log(` lastCol ${lastCol} sdBall ${sdBall} sdBigBall ${sdBigBall}`)
+	//console.log(` lastCol ${lastCol} sdBall ${sdBall} sdBigBall ${sdBigBall}`)
 	
 	if(sdBall == 0 && true ){
 		console.log("  it free a botle");
