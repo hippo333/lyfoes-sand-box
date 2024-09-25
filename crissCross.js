@@ -1,5 +1,6 @@
 var Column = require('./column');
 var [bigBall,lstBigBall] = require('./bigBall');
+var abstract = require('./abstract');
 
 
 function emptyBotle(lstBigBall2){
@@ -16,10 +17,23 @@ function emptyBotle(lstBigBall2){
 
 
 
-function Target(state,col){	//place for move the ball above col
+function Target(state,col,VColumn2){	//place for move the ball above col
 	console.log("      //target for col",col);
 	
 	let [columns2,lstBigBall2,xxx] = state;
+	
+	if(VColumn2 != undefined){
+		console.log("      last chance")
+		let theBall = VColumn2[col][0];
+		for(way in VColumn2){
+			if(VColumn2[way][0] != theBall){continue}
+			if(way == col){continue}
+			if(VColumn2[col][1] + VColumn2[way][2] <= 4){
+				return way
+			}
+			
+		}
+	}
 	let theCol = columns2[col];
 	let theBall = theCol.top();
 	
@@ -80,7 +94,7 @@ function virtualUpdate(columns2,VColumn2,from,to){
 		console.log("  ____error ");
 		console.log("      the ball are different");
 		console.log(`      virtual update from:${from} to:${to}`);
-		console.log("      ",VColumn2);
+		console.log("      ",VColumn2,"\n");
 	}
 	
 	bBTo += bBFrom;
@@ -126,7 +140,7 @@ function getColor(lstBigBall2,blue){
 
 function AllBlue2(VColumn2,colB,blue){
 	let allBlue = [];
-	console.log("all blue col",colB,"place for",VColumn2[colB][2],"balls");
+	//console.log("all blue col",colB,"place for",VColumn2[colB][2],"balls");
 	for(let i in VColumn2){
 		if(i== colB){continue}
 		
@@ -136,7 +150,7 @@ function AllBlue2(VColumn2,colB,blue){
 		
 		}
 		
-		if(VColumn2[i][0]==blue && VColumn2[i][1] <= VColumn2[colB][2]){
+		if(VColumn2[i][0]==blue && VColumn2[i][1] * VColumn2[colB][2] <=4){
 			allBlue.push(i);
 			//console.log("    blue",i);
 		}
@@ -161,7 +175,7 @@ function getTwin(state,lstTwin,alreadyTry,mode,VColumn2){
 	console.log("\n  //get twin",lstTwin);
 	let [columns2,lstBigBall2,xxx] = state;
 	
-	if(lstTwin.length > columns2.length*2){return}//loop killer
+	if(lstTwin.length > columns2.length*3){return}//loop killer
 	
 	let output =[];
 	let lstOfCol =[];	//all col include in calcul (anti double)
@@ -199,18 +213,46 @@ function getTwin(state,lstTwin,alreadyTry,mode,VColumn2){
 		console.log("*/* no blue to ",lastCol);
 		let firstMove = lstTwin[0];
 		let firstBall = VColumn2[firstMove][0]
-		console.log(`the fist empty botle ${firstMove} the ball ${firstBall} in the list ${lstTwin}`);
+		//console.log(`the first empty botle ${firstMove} the ball ${firstBall} in the list ${lstTwin}`);
 		
 		sdBall = firstBall;
 		lastCol = firstMove;
 		allBlue = AllBlue2(VColumn2,lastCol,sdBall);
 		
-		console.log("all blue 2.0",allBlue);
+		//console.log("all blue 2.0",allBlue);
+
 		
+		if (allBlue.length !=0){
+			mode = "go to first";		
+		}else{	//move the above ball to an other column
 		
-		mode = "go to first";
-	}else{
-		console.log("all blue",allBlue);
+			lastCol = lstTwin[lstTwin.length -1];//last col of the list
+			
+			if(typeof(lastCol)== "object"){
+				lastCol = lastCol[0];
+			}
+			
+			sdBall = VColumn2[lastCol][0];
+			
+			
+			let target2 = Target(state,lastCol,VColumn2);
+			
+			console.log("now the col",lastCol,"can go to",target2);
+			
+			let thisCoppy = [...lstTwin];
+			thisCoppy.push([lastCol,target2]);
+			
+			
+			virtualUpdate(columns2,VColumn2,lastCol,target2);
+						
+			let nextStep = getTwin(state,thisCoppy,alreadyTry,mode,VColumn2);//do it 
+			
+			if(nextStep[0].length != 0){		//if the next recursive loop work
+				output = output.concat(nextStep[0]);	//return it for the previous
+			}
+			
+			return [output,lstOfCol]
+		}
 	}
 	
 		
@@ -219,6 +261,7 @@ function getTwin(state,lstTwin,alreadyTry,mode,VColumn2){
 	let thisCoppy = []	//coppy of lstTwin 
 	
 	//console.log("  for all col who contain the color");
+	console.log("  ",allBlue.length ,"way possible");
 	for(way in allBlue){
 		thisTry = allBlue[way];
 		thisCoppy = [...lstTwin];//clone
@@ -257,7 +300,10 @@ function getTwin(state,lstTwin,alreadyTry,mode,VColumn2){
 			
 			if(nextStep[0].length != 0){		//if the next recursive loop work
 				output = output.concat(nextStep[0]);	//return it for the previous
-			} 
+			} else{
+				console.log("  VColumn",VColumn2);
+				
+			}
 			lstOfCol = lstOfCol.concat(nextStep[1]);//add the col from the recursive
 		}
 	}return [output,lstOfCol]

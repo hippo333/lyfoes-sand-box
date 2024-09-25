@@ -49,7 +49,7 @@ function isFinish(lstBigBall2){
 	//first Cycle
 let thisCc ;
 let thisState =[];
-for(let i=0;i<5;i++){
+for(let i=0;i<6;i++){
 
 	console.log("\n",i,"step");
 	console.log(" ",lstOfStates.length,"way");
