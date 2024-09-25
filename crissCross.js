@@ -29,10 +29,13 @@ function Target(state,col,VColumn2){	//place for move the ball above col
 			if(VColumn2[way][0] != theBall){continue}
 			if(way == col){continue}
 			if(VColumn2[col][1] + VColumn2[way][2] <= 4){
+				console.log("from",col,"big ball",VColumn2[col][1]);
+				console.log("to",col,"big ball",VColumn2[way][2]);
 				return way
 			}
 			
 		}
+		return null
 	}
 	let theCol = columns2[col];
 	let theBall = theCol.top();
@@ -190,7 +193,7 @@ function getTwin(state,lstTwin,alreadyTry,mode,VColumn2){
 	//console.log(` lastCol ${lastCol} sdBall ${sdBall} sdBigBall ${sdBigBall}`)
 	
 	if(sdBall == 0  ){
-		console.log("  it free a botle");
+		//console.log("  it free a botle");
 		
 		
 		
@@ -199,7 +202,7 @@ function getTwin(state,lstTwin,alreadyTry,mode,VColumn2){
 		lstTwin = lstTwin.slice(2);		
 		lstTwin = [firstMove].concat(lstTwin);
 		
-		console.log("  lstTwin",lstTwin);
+		//console.log("  lstTwin",lstTwin);
 		return [[lstTwin],[]]
 	}
 
@@ -237,6 +240,8 @@ function getTwin(state,lstTwin,alreadyTry,mode,VColumn2){
 			
 			let target2 = Target(state,lastCol,VColumn2);
 			
+			if(target2 == null){return [[],[]]}
+			
 			console.log("now the col",lastCol,"can go to",target2);
 			
 			let thisCoppy = [...lstTwin];
@@ -261,7 +266,7 @@ function getTwin(state,lstTwin,alreadyTry,mode,VColumn2){
 	let thisCoppy = []	//coppy of lstTwin 
 	
 	//console.log("  for all col who contain the color");
-	console.log("  ",allBlue.length ,"way possible");
+	//console.log("  ",allBlue.length ,"way possible");
 	for(way in allBlue){
 		thisTry = allBlue[way];
 		thisCoppy = [...lstTwin];//clone
