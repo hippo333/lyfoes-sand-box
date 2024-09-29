@@ -7,6 +7,7 @@ var doTheMove = require('./doTheMove');
 var coppy = require('./coppy');
 var CrissCross = require('./crissCross');
 var lstOfMove = [];
+var abstract = require('./abstract');
 
 let firstState = [columns,lstBigBall,lstOfMove];
 let lstOfStates = [firstState];
@@ -71,7 +72,8 @@ for(let i=0;i<6;i++){
 				return
 				
 			}else{
-				console.log("what can i do ?\n",thisState[0]);
+				console.log("what can i do ?\n");
+				abstract(thisState[0]);
 				lstOfStates.splice(j,1);
 				continue;
 			}
