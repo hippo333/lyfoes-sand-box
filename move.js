@@ -1,7 +1,6 @@
 var Column = require('./column');
 var bigBall = require('./bigBall')[0];
 
-
 function move(state,from,to){
 	//console.log("move: from:",from,"to:",to);	
 	
@@ -24,7 +23,9 @@ function move(state,from,to){
 		//the botle to is not empty
 	}else if(ballTo != undefined){
 		if(ballFrom != ballTo){
-			console.log("error the ball are diferent",colFrom,colTo);
+			console.log("error the ball are diferent");
+			console.log("  from",from,"col from",colFrom);
+			console.log("  to",to,"col to",colTo);
 			return "error"
 		}
 	}

@@ -302,7 +302,7 @@ function getTwin(state,lstTwin,alreadyTry,mode,VColumn2){
 		lstOfCol.push(thisTry);		
 		alreadyThere =lstTwin.indexOf(thisTry);//if we loop on the list
 		
-		if(alreadyThere != -1 && mode =="standard" ){
+		if(alreadyThere != -1 && mode =="standard" && false){
 		//if we loop on the list of move short cut
 			console.log(" -already there");
 			let firstMove = [,thisCoppy[0]];
