@@ -99,7 +99,7 @@ function virtualUpdate(columns2,VColumn2,[from,to]){
 		console.log("  ____error ");
 		console.log("      the ball are different");
 		console.log(`      virtual update from:${from} to:${to}`);
-		console.log("      ",VColumn2,"\n");
+		throw Error("      ",VColumn2,"\n");
 	}
 	
 	bBTo += bBFrom;
@@ -158,7 +158,6 @@ function AllBlue2(VColumn2,colB,blue){
 			//console.log("    blue",i);
 		}
 	}
-	
 	return allBlue;
 }
 
@@ -200,11 +199,11 @@ function getTwin(state,lstTwin,alreadyTry,VColumn2){
 		
 		sdBall = firstBall;
 		lastCol = firstMove;
-		allBlue = AllBlue2(VColumn2,lastCol,sdBall);
+		let secondBlue = AllBlue2(VColumn2,lastCol,sdBall);
 		let target2;
 		
-		if (allBlue.length !=0){	//second ball can go to first
-			target2 = allBlue[0];
+		if (secondBlue.length !=0){	//second ball can go to first
+			target2 = secondBlue[0];
 			posibility.push([target2,lastCol]);				
 					
 		}else{	//move the above ball to an other column
@@ -232,13 +231,11 @@ function getTwin(state,lstTwin,alreadyTry,VColumn2){
 	let thisTry;		//curent element of the loop
 	let alreadyThere;	//short cut of intern loop
 	
-	
 	for(way in allBlue){
 		thisTry = allBlue[way];
 		//console.log("  all blue element",way,thisTry);
 		
 		if(alreadyTry.indexOf(thisTry) != -1){continue}	
-	
 		
 		lstOfCol.push(thisTry);		
 		posibility.push([thisTry,lastCol]);
