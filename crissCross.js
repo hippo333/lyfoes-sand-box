@@ -150,12 +150,10 @@ function AllBlue2(VColumn2,colB,blue){
 		if(i== colB){continue}
 		
 		if(lstBigBall[i][1]==blue ){	//if it can go to color
-			//console.log(`the on the col ${colB} the ball ${blue} go to ${i}`);
 			return [i]
-		
 		}
 		
-		if(VColumn2[i][0]==blue && VColumn2[i][1] * VColumn2[colB][2] <=4){
+		if(VColumn2[i][0]==blue && VColumn2[i][1] + VColumn2[colB][2] <=4){
 			allBlue.push(i);
 			//console.log("    blue",i);
 		}
@@ -173,6 +171,7 @@ function getTwin(state,lstTwin,alreadyTry,VColumn2){
 	
 	let output =[];
 	let lstOfCol =[];	//all col include in calcul (anti double)
+	let posibility = [];//all move posible
 	
 	let lastCol = lstTwin[lstTwin.length -1];//last col of the list
 	if(typeof(lastCol)== "object"){	//if last move is a color
@@ -193,10 +192,9 @@ function getTwin(state,lstTwin,alreadyTry,VColumn2){
 		return [[lstTwin],[]]
 	}
 
-	let posibility = []
 	let allBlue = AllBlue2(VColumn2,lastCol,sdBall);
 	
-	if (allBlue.length ==0){	//second ball go to first
+	if (allBlue.length ==0){	//if no move posible
 		let firstMove = lstTwin[0];
 		let firstBall = VColumn2[firstMove][0];
 		
@@ -206,14 +204,8 @@ function getTwin(state,lstTwin,alreadyTry,VColumn2){
 		let target2;
 		
 		if (allBlue.length !=0){	//second ball can go to first
-			
 			target2 = allBlue[0];
-			//console.log("now the col",lastCol,"can go to",target2);
-			
-			let thisCoppy = [...lstTwin];
-			thisCoppy.push([target2,lastCol]);
-			posibility.push([target2,lastCol]);
-				
+			posibility.push([target2,lastCol]);				
 					
 		}else{	//move the above ball to an other column
 		
@@ -232,8 +224,6 @@ function getTwin(state,lstTwin,alreadyTry,VColumn2){
 			
 			//console.log("now the col",lastCol,"can go to",target2);
 			
-			let thisCoppy = [...lstTwin];
-			thisCoppy.push([lastCol,target2]);
 			posibility.push([lastCol,target2]);
 		}
 	}
@@ -241,31 +231,25 @@ function getTwin(state,lstTwin,alreadyTry,VColumn2){
 		
 	let thisTry;		//curent element of the loop
 	let alreadyThere;	//short cut of intern loop
-	let thisCoppy = []	//coppy of lstTwin 
 	
-	//console.log("  for all col who contain the color");
-	//console.log("  ",allBlue.length ,"way possible");
+	
 	for(way in allBlue){
 		thisTry = allBlue[way];
-		thisCoppy = [...lstTwin];//clone
 		//console.log("  all blue element",way,thisTry);
 		
 		if(alreadyTry.indexOf(thisTry) != -1){continue}	
-		//already try this column
-		//console.log(" -i never try this");
-		
-		if(VColumn2[thisTry][1] + VColumn2[lastCol][2] > 4){continue}
-		//big ball
-		//console.log(" -the big ball dont over feed");
+	
 		
 		lstOfCol.push(thisTry);		
 		posibility.push([thisTry,lastCol]);
 	}
 	
 	
+	let thisCoppy = [];	//coppy of lstTwin 
+	let VColumn3 = [];
 	for(mv of posibility){
-		let VColumn3 = [...VColumn2];
-		let thisCoppy = [...lstTwin];
+		VColumn3 = [...VColumn2];
+		thisCoppy = [...lstTwin];
 		
 		thisCoppy.push(mv); 
 		virtualUpdate(columns2,VColumn3,mv);
