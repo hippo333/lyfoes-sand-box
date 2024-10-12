@@ -1,5 +1,4 @@
 var Column = require('./column');
-var [bigBall,lstBigBall] = require('./bigBall');
 var columns = require('./level');
 
 function coppyColumns(columns3){
@@ -31,25 +30,21 @@ function cpArray(array){
 
 
 var coppy = function(state){
-	let [columns2, lstBigBall2, lstOfMove2] = [[],[],[]];
-	let [columns1, lstBigBall1, lstOfMove1] = state;
+	let [columns2, lstOfMove2] = [[],[],[]];
+	let [columns1, lstOfMove1] = state;
 	
 	
 	columns2 = coppyColumns(columns1);
-	lstBigBall2 = cpArray(lstBigBall1);
 	lstOfMove2 = cpArray(lstOfMove1);
 	
 	
-	let output = [columns2, lstBigBall2, lstOfMove2];
+	let output = [columns2, lstOfMove2];
 	
 	//console.log("output",output);
 	return output
 }
 
-/*
-let a = coppy([columns,lstBigBall,[]]);
-lstBigBall[2].push("ananas");
-console.log(a);*/
+
 
 
 module.exports = coppy;

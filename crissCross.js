@@ -1,18 +1,12 @@
 var Column = require('./column');
-var [bigBall,lstBigBall] = require('./bigBall');
 var abstract = require('./abstract');
 
 
-function emptyBotle(lstBigBall2){
-	btl = lstBigBall2.findIndex(
-		btl => btl[0] ==0
-		&& btl[1] == 0
-	);
-	if(btl != -1){
-		return btl
-	}else{
-		return null
+function emptyBotle(columns2){
+	for(col in  columns2){
+		if(columns2[col].isEmpty()){return col}
 	}
+	return null
 }
 
 
@@ -20,7 +14,7 @@ function emptyBotle(lstBigBall2){
 function Target(state,col,VColumn2){	//place for move the ball above col
 	console.log("      //target for col",col);
 	
-	let [columns2,lstBigBall2,xxx] = state;
+	let [columns2,xxx] = state;
 	
 	if(VColumn2 != undefined){
 		console.log("      last chance")
@@ -44,13 +38,13 @@ function Target(state,col,VColumn2){	//place for move the ball above col
 	if(theBall == undefined){
 		console.log("      can't find the ball above",col,theCol);
 	}
-	let theColor = getColor(lstBigBall2,theBall);
+	let theColor = getColor(columns2,theBall);
 	if(theColor != null){
 		//console.log("      i get a color for",theBall,theColor,columns2[theColor].content);
 		return theColor
 	}else{
 		//console.log("      i can't get a color for",col,theBall);	
-		let emptyBtl = emptyBotle(lstBigBall2);
+		let emptyBtl = emptyBotle(columns2);
 		if (emptyBtl != null){
 			//console.log("      i can do empty botlr",emptyBtl);
 			return emptyBtl
@@ -62,13 +56,14 @@ function Target(state,col,VColumn2){	//place for move the ball above col
 }
 
 
-function newVirtualColumn(columns2,lstBigBall2){
+function newVirtualColumn(columns2){
 	//console.log("\n______virtualcolumn");
 	VColumn2 = [];
 	
 	for(i in columns2){
 		let color = columns2[i].top();
-		let bigBall = lstBigBall2[i][0];
+		let bigBall = columns2[i].bigBall;
+		
 		let sizeCol = columns2[i].content.length ;
 		if (sizeCol ==0){
 			color = 0;
@@ -129,9 +124,10 @@ function virtualUpdate(columns2,VColumn2,[from,to]){
 	//console.log("      Vcolumn2",VColumn2);
 }
 
-function getColor(lstBigBall2,blue){
-	let out = lstBigBall2.findIndex(
-		out => out[1] == blue	
+function getColor(columns2,blue){
+
+	let out = columns2.findIndex(
+		out => out.color == blue	
 	);
 	if(out != -1){
 		return out
@@ -143,13 +139,13 @@ function getColor(lstBigBall2,blue){
 
 //all column who contain a blue ball and the one with the lowest ball above
 
-function AllBlue2(VColumn2,colB,blue){
+function AllBlue2(columns2,VColumn2,colB,blue){
 	let allBlue = [];
 	//console.log("all blue col",colB,"place for",VColumn2[colB][2],"balls");
 	for(let i in VColumn2){
 		if(i== colB){continue}
 		
-		if(lstBigBall[i][1]==blue ){	//if it can go to color
+		if(columns2[i].color==blue ){	//if it can go to color
 			return [i]
 		}
 		
@@ -163,8 +159,8 @@ function AllBlue2(VColumn2,colB,blue){
 
 
 function getTwin(state,lstTwin,alreadyTry,VColumn2){
-	console.log("\n  //get twin",lstTwin);
-	let [columns2,lstBigBall2,xxx] = state;
+	//console.log("\n  //get twin",lstTwin);
+	let [columns2,xxx] = state;
 	
 	if(lstTwin.length > columns2.length*3){return}//loop killer
 	
@@ -191,7 +187,7 @@ function getTwin(state,lstTwin,alreadyTry,VColumn2){
 		return [[lstTwin],[]]
 	}
 
-	let allBlue = AllBlue2(VColumn2,lastCol,sdBall);
+	let allBlue = AllBlue2(columns2,VColumn2,lastCol,sdBall);
 	
 	if (allBlue.length ==0){	//if no move posible
 		let firstMove = lstTwin[0];
@@ -199,7 +195,7 @@ function getTwin(state,lstTwin,alreadyTry,VColumn2){
 		
 		sdBall = firstBall;
 		lastCol = firstMove;
-		let secondBlue = AllBlue2(VColumn2,lastCol,sdBall);
+		let secondBlue = AllBlue2(columns2,VColumn2,lastCol,sdBall);
 		let target2;
 		
 		if (secondBlue.length !=0){	//second ball can go to first
@@ -265,13 +261,13 @@ function getTwin(state,lstTwin,alreadyTry,VColumn2){
 
 var CrissCross = function(state){
 	
-	let [columns2,lstBigBall2,lstOfMove2] = state;
+	let [columns2,yyy,lstOfMove2] = state;
 	
 	
 	let thisWay = [];			//local try
 	let lstOfCrissCross = [];	//global try
 	let a = [];					//intermediar buffer
-	let emptyBtl = emptyBotle(lstBigBall2);	//nececary for the first move
+	let emptyBtl = emptyBotle(columns2);	//nececary for the first move
 	let target ;					//same with color
 
 
@@ -280,11 +276,11 @@ var CrissCross = function(state){
 	for( way in columns2){
 		if(columns2[way].content.length == 0){continue}		//empty botle
 		if(alreadyTry.indexOf(way) != -1){continue}	//already try this column
-		if(lstBigBall2[way][1] != 0){continue}		//its a color
+		if(columns2[way].color != 0){continue}		//its a color
 		target = Target(state,way);
 	
 	
-		let VColumn2 = newVirtualColumn(columns2,lstBigBall2);
+		let VColumn2 = newVirtualColumn(columns2);
 		virtualUpdate(columns2,VColumn2,[way,target]);
 	
 		a = getTwin(state,[target,way],alreadyTry,VColumn2);

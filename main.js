@@ -2,14 +2,13 @@ var startTime = new Date().getTime();
 var Column = require('./column');
 var columns = require('./level');
 var move = require('./move');
-var [bigBall,lstBigBall] = require('./bigBall');
 var doTheMove = require('./doTheMove');
 var coppy = require('./coppy');
 var CrissCross = require('./crissCross');
 var lstOfMove = [];
 var abstract = require('./abstract');
 
-let firstState = [columns,lstBigBall,lstOfMove];
+let firstState = [columns,lstOfMove];
 let lstOfStates = [firstState];
 
 for(let col of columns){
@@ -31,11 +30,11 @@ function doAllMove(state,lstCrissCross){
 	}
 }
 
-function isFinish(lstBigBall2){
+function isFinish(columns2){
 	//console.log("is finish ?");
 	
-	for(col in lstBigBall2){
-		if(lstBigBall2[col][0] != 0 && lstBigBall2[col][1] ==0){
+	for(col in columns2){
+		if(columns2[col].bigBall != 0 && columns2[col].color ==0){
 			console.log("no the col",col,"is not finish");
 			console.log(lstBigBall2);
 			return false
@@ -62,13 +61,13 @@ for(let i=0;i<6;i++){
 	
 		if(thisCc.length ==0){
 			console.log("\nno move posible");
-			if(isFinish(thisState[1])){
+			if(isFinish(thisState[0])){
 			
 				console.log("it works");
 				var end = new Date().getTime();
 				var time = end - startTime;
 				console.log("calcul in",time/1000,"s");
-				console.log(thisState[2]);
+				console.log(thisState[1]);
 				return
 				
 			}else{

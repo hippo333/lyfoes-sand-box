@@ -1,10 +1,9 @@
 var Column = require('./column');
-var bigBall = require('./bigBall')[0];
 
 function move(state,from,to){
 	//console.log("move: from:",from,"to:",to);	
 	
-	let [columns3,lstBigBall3,lstOfMove3] = state;
+	let [columns3,lstOfMove3] = state;
 	
 	if(from ==-1 || to ==-1){
 		throw Error("error from",from,"to",to);
@@ -31,22 +30,23 @@ function move(state,from,to){
 		console.log("error no ball From",from,colFrom);
 		throw Error(`from ${from}, to ${to}`);
 	}
-	if(colTo.length + lstBigBall3[from][0] >4){
-		throw error("error lstBigBall from",lstBigBall3[from]);
+	if(colTo.length + columns3[from].bigBall >4){
+		throw error("error lstBigBall from",columns3[from].bigBall);
 	}
-	//console.log("la colune from contien",lstBigBall3[from][0]);
-	//console.log("column from",columns3[from].content);
-	//bigBall 
+	
+	//we can do the move
 	
 	colFrom.pop();
 	colTo.push(ballFrom);
-	for ( let ball =1;ball < lstBigBall3[from][0];ball++){
+	for ( let ball =1;ball < columns3[from].bigBall;ball++){
 		colFrom.pop();
 		colTo.push(ballFrom);
 	}
-	bigBall(state,from);
-	bigBall(state,to);
-	lstOfMove3.push([from,to]);
+	
+	columns3[from].newBigBall();
+	columns3[to].newBigBall();
+	
+	lstOfMove3.push([from,to]);//add the move into the history
 }
 
 module.exports = move;
