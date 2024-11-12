@@ -1,7 +1,8 @@
 var Column = require('./column');
+var abstract = require('./abstract');
 
 function move(state,from,to){
-	//console.log("move: from:",from,"to:",to);	
+	console.log("__move: from:",from,"to:",to);	
 	
 	let [columns3,lstOfMove3] = state;
 	
@@ -23,7 +24,7 @@ function move(state,from,to){
 		if(ballFrom != ballTo){
 			console.log("error the ball are diferent");
 			console.log("  from",from,"col from",colFrom);
-			throw Error("  to",to,"col to",colTo);
+			console.log("  to",to,"col to",colTo);
 		}
 	}
 	if(ballFrom == undefined){
@@ -31,7 +32,9 @@ function move(state,from,to){
 		throw Error(`from ${from}, to ${to}`);
 	}
 	if(colTo.length + columns3[from].bigBall >4){
-		throw error("error lstBigBall from",columns3[from].bigBall);
+		console.log("\nerror lstBigBall from",columns3[from].bigBall);
+		abstract(columns3);
+		throw Error();
 	}
 	
 	//we can do the move

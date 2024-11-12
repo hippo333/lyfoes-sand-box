@@ -16,6 +16,7 @@ for(let col of columns){
 }
 
 function doAllMove(state,lstCrissCross){
+	console.log("\n  do all move");
 	let newState = [];
 	
 	
@@ -30,13 +31,43 @@ function doAllMove(state,lstCrissCross){
 	}
 }
 
+function emptyBotle(columns2){
+	for(col in  columns2){
+		if(columns2[col].isEmpty()){return col}
+	}
+	return null
+}
+
+function trySecond(state,emptyBtl){
+	//console.log("try second");	
+	console.log("    empty botle",emptyBtl);
+	let newState = [];
+	let columns3 =state[0];
+	
+	
+	for(col7 in columns3){
+		if(columns3[col7].content.length ==0){continue}
+		if(col7 ==emptyBtl){continue}
+		
+		if(col7 != columns3.length-1){
+			newState = coppy(state);
+			lstOfStates.push(newState)
+		}else{
+			newState = state;
+		}
+		console.log("\n    move",[col7,emptyBtl]);
+		console.log("    the empty btl",columns3[emptyBtl].content);
+		doTheMove(newState,[[col7,emptyBtl]]);
+	}
+}
+
 function isFinish(columns2){
 	//console.log("is finish ?");
 	
 	for(col in columns2){
 		if(columns2[col].bigBall != 0 && columns2[col].color ==0){
 			console.log("no the col",col,"is not finish");
-			console.log(lstBigBall2);
+			//console.log(lstBigBall2);
 			return false
 		}
 	}
@@ -57,7 +88,7 @@ for(let i=0;i<6;i++){
 	for(j in lstOfStates){
 		thisState = lstOfStates[j];
 		thisCc = CrissCross(thisState);
-				//console.log("\nthisstate",thisState[0]);
+		abstract(thisState[0]);
 	
 		if(thisCc.length ==0){
 			console.log("\nno move posible");
@@ -71,10 +102,17 @@ for(let i=0;i<6;i++){
 				return
 				
 			}else{
-				console.log("what can i do ?\n");
-				abstract(thisState[0]);
-				lstOfStates.splice(j,1);
-				continue;
+				let emptyBtl = emptyBotle(thisState[0]);
+				if (emptyBtl == null){
+					console.log("what can i do ?\n");
+					abstract(thisState[0]);
+					lstOfStates.splice(j,1);
+					continue;
+				}else{
+					console.log("\nthy second ball");
+					trySecond(thisState,emptyBtl)
+					continue;
+				}
 			}
 		}else{
 		//console.log("this crisscross",thisCc);

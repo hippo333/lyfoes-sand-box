@@ -12,12 +12,12 @@ function emptyBotle(columns2){
 
 
 function Target(state,col,VColumn2){	//place for move the ball above col
-	console.log("      //target for col",col);
+	//console.log("      //target for col",col);
 	
 	let [columns2,xxx] = state;
 	
 	if(VColumn2 != undefined){
-		console.log("      last chance")
+		//console.log("      last chance")
 		let theBall = VColumn2[col][0];
 		for(way in VColumn2){
 			if(VColumn2[way][0] != theBall){continue}
@@ -29,14 +29,14 @@ function Target(state,col,VColumn2){	//place for move the ball above col
 			}
 			
 		}
-		console.log("      no target possible");
+		//console.log("      no target possible",col);
 		return null
 	}
 	let theCol = columns2[col];
 	let theBall = theCol.top();
 	
 	if(theBall == undefined){
-		console.log("      can't find the ball above",col,theCol);
+		//console.log("      can't find the ball above",col,theCol);
 	}
 	let theColor = getColor(columns2,theBall);
 	if(theColor != null){
@@ -79,7 +79,7 @@ function newVirtualColumn(columns2){
 }
 
 function virtualUpdate(columns2,VColumn2,[from,to]){
-	//console.log(`\n      virtual update from:${from} to:${to}`);
+	console.log(`\n      -virtual update from:${from} to:${to}`);
 	//console.log("      ",VColumn2);
 	let bllFrom = VColumn2[from][0];
 	let bBFrom = VColumn2[from][1];
@@ -108,6 +108,10 @@ function virtualUpdate(columns2,VColumn2,[from,to]){
 	}else{
 		bllFrom =0;
 		bBFrom = 0;
+	}if(sizeTo >4){
+		console.log("error VColumn over feed, from",from,"to",to,"ball",bllTo)
+		abstract(columns2);
+		throw error();
 	}
 	
 	for(let i=sizeFrom-2;i>=0;i--){
@@ -119,9 +123,11 @@ function virtualUpdate(columns2,VColumn2,[from,to]){
 	}
 	VColumn2[from] = [bllFrom,bBFrom,sizeFrom];
 	VColumn2[to] = [bllTo,bBTo,sizeTo];
-	
-	//console.log("      from",from,"to",to);
-	//console.log("      Vcolumn2",VColumn2);
+	/*
+	console.log("      -from",from,"to",to);
+	console.log("      -Vcolumn from",VColumn2[from]);
+	console.log("      -Vcolumn to",VColumn2[to]);
+	console.log("      -ball, big ball, size");*/
 }
 
 function getColor(columns2,blue){
@@ -141,19 +147,24 @@ function getColor(columns2,blue){
 
 function AllBlue2(columns2,VColumn2,colB,blue){
 	let allBlue = [];
-	//console.log("all blue col",colB,"place for",VColumn2[colB][2],"balls");
+	console.log("\nall blue col",colB,"place for",VColumn2[colB][2],"balls","colueur",VColumn2[colB][0]);
 	for(let i in VColumn2){
 		if(i== colB){continue}
 		
+		/* what the hell is that?
 		if(columns2[i].color==blue ){	//if it can go to color
+			
 			return [i]
-		}
+		}*/
 		
-		if(VColumn2[i][0]==blue && VColumn2[i][1] + VColumn2[colB][2] <=4){
+		if(VColumn2[i][0]==blue && (VColumn2[i][1] + VColumn2[colB][2] <=4)){
 			allBlue.push(i);
-			//console.log("    blue",i);
+			console.log("    blue",i);
+			console.log("    big ball from",VColumn2[i][1]);/*
+			console.log("    the col to contain",VColumn2[i][2]);*/
 		}
 	}
+	console.log("lst all blue",allBlue);
 	return allBlue;
 }
 
@@ -199,6 +210,7 @@ function getTwin(state,lstTwin,alreadyTry,VColumn2){
 		let target2;
 		
 		if (secondBlue.length !=0){	//second ball can go to first
+			//console.log("  go to first");
 			target2 = secondBlue[0];
 			posibility.push([target2,lastCol]);				
 					
@@ -270,6 +282,7 @@ var CrissCross = function(state){
 	let emptyBtl = emptyBotle(columns2);	//nececary for the first move
 	let target ;					//same with color
 
+	if(emptyBtl == null){return}
 
 	let alreadyTry =[];	//global anti double
 	let newTry =[];		//local  anti double
