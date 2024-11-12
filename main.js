@@ -16,7 +16,7 @@ for(let col of columns){
 }
 
 function doAllMove(state,lstCrissCross){
-	console.log("\n  do all move");
+	//console.log("\n  do all move");
 	let newState = [];
 	
 	
@@ -40,7 +40,7 @@ function emptyBotle(columns2){
 
 function trySecond(state,emptyBtl){
 	//console.log("try second");	
-	console.log("    empty botle",emptyBtl);
+	//console.log("    empty botle",emptyBtl);
 	let newState = [];
 	let columns3 =state[0];
 	
@@ -55,8 +55,6 @@ function trySecond(state,emptyBtl){
 		}else{
 			newState = state;
 		}
-		console.log("\n    move",[col7,emptyBtl]);
-		console.log("    the empty btl",columns3[emptyBtl].content);
 		doTheMove(newState,[[col7,emptyBtl]]);
 	}
 }
@@ -88,7 +86,7 @@ for(let i=0;i<6;i++){
 	for(j in lstOfStates){
 		thisState = lstOfStates[j];
 		thisCc = CrissCross(thisState);
-		abstract(thisState[0]);
+		//abstract(thisState[0]);
 	
 		if(thisCc.length ==0){
 			console.log("\nno move posible");
@@ -109,7 +107,7 @@ for(let i=0;i<6;i++){
 					lstOfStates.splice(j,1);
 					continue;
 				}else{
-					console.log("\nthy second ball");
+					console.log("\ntry second ball");
 					trySecond(thisState,emptyBtl)
 					continue;
 				}

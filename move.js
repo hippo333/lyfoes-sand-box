@@ -2,7 +2,7 @@ var Column = require('./column');
 var abstract = require('./abstract');
 
 function move(state,from,to){
-	console.log("__move: from:",from,"to:",to);	
+	//console.log("__move: from:",from,"to:",to);	
 	
 	let [columns3,lstOfMove3] = state;
 	

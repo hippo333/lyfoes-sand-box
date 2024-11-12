@@ -79,7 +79,7 @@ function newVirtualColumn(columns2){
 }
 
 function virtualUpdate(columns2,VColumn2,[from,to]){
-	console.log(`\n      -virtual update from:${from} to:${to}`);
+	//console.log(`\n      -virtual update from:${from} to:${to}`);
 	//console.log("      ",VColumn2);
 	let bllFrom = VColumn2[from][0];
 	let bBFrom = VColumn2[from][1];
@@ -147,7 +147,7 @@ function getColor(columns2,blue){
 
 function AllBlue2(columns2,VColumn2,colB,blue){
 	let allBlue = [];
-	console.log("\nall blue col",colB,"place for",VColumn2[colB][2],"balls","colueur",VColumn2[colB][0]);
+	//console.log("\nall blue col",colB,"place for",VColumn2[colB][2],"balls","colueur",VColumn2[colB][0]);
 	for(let i in VColumn2){
 		if(i== colB){continue}
 		
@@ -158,13 +158,13 @@ function AllBlue2(columns2,VColumn2,colB,blue){
 		}*/
 		
 		if(VColumn2[i][0]==blue && (VColumn2[i][1] + VColumn2[colB][2] <=4)){
-			allBlue.push(i);
+			allBlue.push(i);/*
 			console.log("    blue",i);
 			console.log("    big ball from",VColumn2[i][1]);/*
 			console.log("    the col to contain",VColumn2[i][2]);*/
 		}
 	}
-	console.log("lst all blue",allBlue);
+	//console.log("lst all blue",allBlue);
 	return allBlue;
 }
 
