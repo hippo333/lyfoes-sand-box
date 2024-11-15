@@ -128,6 +128,6 @@ for(let i=0;i<7;i++){
 	}
 }
 if(!finish){
-	console.log("the loop is over");
+	console.log("\n\n__the loop is over");
 }
 
