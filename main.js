@@ -76,6 +76,7 @@ function isFinish(columns2){
 
 
 	//first Cycle
+let finish = false;
 let thisCc ;
 let thisState =[];
 for(let i=0;i<7;i++){
@@ -93,8 +94,10 @@ for(let i=0;i<7;i++){
 			if(isFinish(thisState[0])){
 			
 				console.log("it works");
+				console.log("on",thisState[1].length,"move");
 				var end = new Date().getTime();
 				var time = end - startTime;
+				finish = true;
 				console.log("calcul in",time/1000,"s");
 				console.log(thisState[1]);
 				abstract(thisState[0]);
@@ -123,5 +126,8 @@ for(let i=0;i<7;i++){
 		doAllMove(thisState,thisCc);
 		}
 	}
+}
+if(!finish){
+	console.log("the loop is over");
 }
 
