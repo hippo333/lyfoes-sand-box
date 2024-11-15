@@ -109,7 +109,7 @@ function virtualUpdate(columns2,VColumn2,[from,to]){
 	}if(sizeTo >4){
 		console.log("error VColumn over feed, from",from,"to",to,"ball",bllTo)
 		abstract(columns2);
-		throw Error();
+		throw error();
 	}
 	
 	for(let i=sizeFrom-2;i>=0;i--){
@@ -297,17 +297,15 @@ var CrissCross = function(state){
 	for( way in columns2){
 		if(columns2[way].content.length == 0){continue}		//empty botle
 		if(alreadyTry.indexOf(way) != -1){continue}	//already try this column
-		
-		if(columns2[way].color != 0 && columns2[way].content.length >2){
-			continue;		//dont move from a color
+		if(columns2[way].color != 0 ){
+			if(columns2[way].content.length >2){
+				continue;		//its a color
+			}
 		}
-		
-		target = Target(state,way);	//move 6 to 6
-		
-		let VColumn2 = newVirtualColumn(columns2);	
-		
-		if(target == null){continue}
-		
+		target = Target(state,way);
+	
+	
+		let VColumn2 = newVirtualColumn(columns2);
 		virtualUpdate(columns2,VColumn2,[way,target]);
 	
 		a = getTwin(state,[target,way],alreadyTry,VColumn2);

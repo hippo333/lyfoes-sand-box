@@ -78,7 +78,7 @@ function isFinish(columns2){
 	//first Cycle
 let thisCc ;
 let thisState =[];
-for(let i=0;i<6;i++){
+for(let i=0;i<7;i++){
 
 	console.log("\n",i,"step");
 	console.log(" ",lstOfStates.length,"way");
@@ -97,6 +97,7 @@ for(let i=0;i<6;i++){
 				var time = end - startTime;
 				console.log("calcul in",time/1000,"s");
 				console.log(thisState[1]);
+				abstract(thisState[0]);
 				return
 				
 			}else{
@@ -106,15 +107,19 @@ for(let i=0;i<6;i++){
 					abstract(thisState[0]);
 					lstOfStates.splice(j,1);
 					continue;
-				}else{
+				}else {
+					if(lstOfStates.length > 2){continue}//random
+					//it work only for last way
+					
 					console.log("\ntry second ball");
 					trySecond(thisState,emptyBtl)
 					continue;
 				}
 			}
-		}else{
-		//console.log("this crisscross",thisCc);
-		//console.log("history of move",thisState[2]);
+		}else{/*
+		console.log("this crisscross",thisCc);
+		console.log("history of move",thisState[2]);
+		abstract(thisState[0]);*/
 		doAllMove(thisState,thisCc);
 		}
 	}

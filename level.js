@@ -16,8 +16,8 @@ const PINK = 11
 const CYAN = 12;
 const ORANGE = 13;
 
-var level = 1.1;
-//var level = "tst1";
+var level = 2.3;
+//var level = "tstcc8";
 
 var columns;
 
@@ -156,6 +156,15 @@ var columns = [
 	new Column([ YELLOW, YELLOW, ORANGE, ORANGE]),
 	new Column([ ORANGE, ORANGE, YELLOW, YELLOW]),
 	new Column([]),
+	new Column([]),
+];
+break;
+
+case "tstcc8":	//twin criss cross
+var columns = [
+	new Column([RED, RED ]),
+	new Column([BLUE, BLUE, BLUE, BLUE]),
+	new Column([RED, RED]),
 	new Column([]),
 ];
 break;
