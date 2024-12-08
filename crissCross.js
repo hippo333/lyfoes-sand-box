@@ -40,7 +40,26 @@ function Target(state,col,VColumn2){	//place for move the ball above col
 	if(theColor != null){
 		//console.log("      i get a color for",theBall,theColor,columns2[theColor].content);
 		return theColor
-	}else{
+	}else {
+	
+					//if the ball can go to a col of one ball
+		let bbColor = columns2.findIndex(	
+			bbc => bbc.content.length ==1
+			&& bbc.content[0] == theBall
+		);
+		
+		if(bbColor != -1){
+			return bbColor;
+		}
+	
+		//usefull ?
+		 if(columns2[col].length ==columns2[col].bigBall){
+				console.log("\n\n no move from color to empty");
+				return null
+		} 
+		//usefull ?	
+	
+	
 		//console.log("      i can't get a color for",col,theBall);	
 		let emptyBtl = emptyBotle(columns2);
 		if (emptyBtl != null){
@@ -270,7 +289,9 @@ function getTwin(state,lstTwin,alreadyTry,VColumn2){
 		let nextStep = getTwin(state,thisCoppy,alreadyTry,VColumn3);
 			
 		if(nextStep[0].length != 0){		//if the next recursive loop work
+						
 			output = output.concat(nextStep[0]);	//return it for the previous
+			
 		}
 		lstOfCol = lstOfCol.concat(nextStep[1]);//add the col from the
 	
@@ -315,7 +336,8 @@ var CrissCross = function(state){
 		[thisWay,newTry] = a;
 		//console.log(" i want it that way",thisWay);
 		//console.log("all column include in calcul",newTry);
-	
+		
+			
 		lstOfCrissCross = lstOfCrissCross.concat(thisWay);
 		//console.log("\n  i ave crisscross",lstOfCrissCross);
 		
