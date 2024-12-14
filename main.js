@@ -81,7 +81,7 @@ let countOfDeadStates =0;
 let moveDoneThisCycle =0;
 let thisCc ;
 let thisState =[];
-for(let i=0;i<38;i++){
+for(let i=0;i<20;i++){
 
 	console.log("\n",i,"step");
 	console.log(" ",lstOfStates.length,"way");
