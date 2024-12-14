@@ -9,7 +9,18 @@ function emptyBotle(columns2){
 	return null
 }
 
-
+function sdCol(columns2){
+	let firstEmpty = emptyBotle(columns2)
+	
+	if(firstEmpty ==null){return 0}
+	
+	for(col in  columns2){
+		if(col == firstEmpty){continue}
+		if(columns2[col].isEmpty()){return 2}
+	}
+	
+	return 1
+}
 
 function Target(state,col,VColumn2){	//place for move the ball above col
 	//console.log("      //target for col",col);
@@ -66,7 +77,8 @@ function Target(state,col,VColumn2){	//place for move the ball above col
 			//console.log("      i can do empty botlr",emptyBtl);
 			return emptyBtl
 		}else{
-			console.log("      no target for",col);
+			//console.log("      no target for",col);
+			//console.log("      ",columns2[col].content);
 			return null
 		}
 	}
@@ -308,11 +320,14 @@ var CrissCross = function(state){
 	let thisWay = [];			//local try
 	let lstOfCrissCross = [];	//global try
 	let a = [];					//intermediar buffer
-	let emptyBtl = emptyBotle(columns2);	//nececary for the first move
 	let target ;					//same with color
 
-	if(emptyBtl == null){return}
-
+	if(sdCol(columns2) ==1){
+		console.log("\n\n  it's a 2 ball probleme");
+		abstract(columns2)
+	}//test
+	
+	
 	let alreadyTry =[];	//global anti double
 	let newTry =[];		//local  anti double
 	for( way in columns2){
@@ -344,6 +359,7 @@ var CrissCross = function(state){
 		alreadyTry = alreadyTry.concat(newTry);
 		//console.log("lst global",alreadyTry);
 	}
+	
 	return lstOfCrissCross
 }
 

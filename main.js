@@ -77,21 +77,30 @@ function isFinish(columns2){
 
 	//first Cycle
 let finish = false;
-let countOfDeadStates =0
+let countOfDeadStates =0;
+let moveDoneThisCycle =0;
 let thisCc ;
 let thisState =[];
-for(let i=0;i<7;i++){
+for(let i=0;i<38;i++){
 
 	console.log("\n",i,"step");
 	console.log(" ",lstOfStates.length,"way");
 	console.log("  dead states",countOfDeadStates);
+	console.log("  move done this cycle",moveDoneThisCycle);
 	countOfDeadStates = 0;
+	moveDoneThisCycle = 0;
+	
+	if(lstOfStates.length ==0){
+		console.log("____we fail no move posible");
+		
+		return	
+	}
 	
 	for(j in lstOfStates){
 		thisState = lstOfStates[j];
 		thisCc = CrissCross(thisState);
 		//abstract(thisState[0]);
-	
+		
 		if(thisCc.length ==0){
 			//console.log("\nno move posible");
 			if(isFinish(thisState[0])){
@@ -109,13 +118,20 @@ for(let i=0;i<7;i++){
 			}else{
 				let emptyBtl = emptyBotle(thisState[0]);
 				if (emptyBtl == null){
-					console.log("what can i do ?\n");
-					abstract(thisState[0]);
+					//console.log("what can i do ?\n");
+					//abstract(thisState[0]);
 					lstOfStates.splice(j,1);
 					countOfDeadStates++;
+					
 					continue;
 				}else {
-					if(lstOfStates.length > 2){continue}//random
+					if(lstOfStates.length > 2){		//random
+						lstOfStates.splice(j,1);
+						countOfDeadStates++;
+					
+						continue
+					}
+					
 					//it work only for last way
 					
 					console.log("\ntry second ball");
@@ -129,6 +145,7 @@ for(let i=0;i<7;i++){
 		abstract(thisState[0]);
 		console.log(thisCc,"move posible\n\n\n");*/
 		
+		moveDoneThisCycle++;
 		doAllMove(thisState,thisCc);
 		}
 	}
