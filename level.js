@@ -16,7 +16,7 @@ const PINK = 11
 const CYAN = 12;
 const ORANGE = 13;
 
-var level = 1.1;
+var level = "finish";
 //var level = "tstcc8";
 
 var columns;
@@ -174,7 +174,7 @@ var columns = [
 	new Column([RED, RED, RED]),
 	new Column([BLUE, BLUE, BLUE]),
 	new Column([YELLOW, YELLOW, YELLOW]),
-	new Column([YELLOW, BLUE]),
+	new Column([]),
 	new Column([]),
 ];
 break;
