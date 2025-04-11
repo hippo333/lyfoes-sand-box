@@ -54,7 +54,8 @@ function Vupdate(columns2,VColumn2,[from,to]){
 		bllFrom =0;
 		bBFrom = 0;
 	}if(sizeTo >4){
-		console.log("error VColumn over feed, from",from,"to",to,"ball",bllTo)
+		console.log("error VColumn over feed, from",from,"to",to,"ball",bllTo);
+		console.log("Vcolumn",VColumn2);
 		abstract(columns2);
 		throw Error();
 	}

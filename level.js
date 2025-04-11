@@ -17,7 +17,7 @@ const CYAN = 12;
 const ORANGE = 13;
 
 //var level = 1.1;
-var level = "tst1";
+var level = "tst7";
 
 var columns;
 
@@ -92,6 +92,16 @@ var columns = [
 	new Column([ YELLOW, RED, BLUE]),
 	new Column([RED, BLUE, YELLOW]),
 	new Column([YELLOW, RED, BLUE]),
+	new Column([]),
+	new Column([]),
+];
+break;
+
+case "tst7":	//3 ball per color
+var columns = [
+	new Column([ YELLOW, BLUE, BLUE, RED]),
+	new Column([RED, RED, RED, BLUE]),
+	new Column([YELLOW, YELLOW, YELLOW, BLUE]),
 	new Column([]),
 	new Column([]),
 ];
