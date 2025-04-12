@@ -77,6 +77,7 @@ function Vfinish(Vcolumn2){
 		if(Vcolumn2[col][1] ==0){continue}
 		//if the big ball of the column is not 4 the col is not full finish
 		if(Vcolumn2[col][1] <4){
+			//console.log("the column is not clean",col);
 			return false	
 		}
 	}
