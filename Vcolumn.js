@@ -71,4 +71,20 @@ function Vupdate(columns2,VColumn2,[from,to]){
 	VColumn2[to] = [bllTo,bBTo,sizeTo];
 }
 
-module.exports =[newVcolumn,Vupdate]
+function Vfinish(Vcolumn2){
+	for(col in Vcolumn2){
+		//empty botle
+		if(Vcolumn2[col][1] ==0){continue}
+		//if the big ball of the column is not 4 the col is not full finish
+		if(Vcolumn2[col][1] <4){
+			return false	
+		}
+	}
+	return true
+}
+
+
+
+
+
+module.exports =[newVcolumn,Vupdate,Vfinish]

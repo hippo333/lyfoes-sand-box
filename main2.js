@@ -6,7 +6,7 @@ var doTheMove = require('./doTheMove');
 var coppy = require('./coppy');
 var abstract = require('./abstract');
 var isFinish = require('./isFinish');
-var [newVcolumn,Vupdate] = require('./Vcolumn');
+var [newVcolumn,Vupdate,Vfinish] = require('./Vcolumn');
 
 
 abstract(columns);
@@ -36,7 +36,7 @@ function WhoCanGoTo(Vcolumn2,col2){
 	return output
 }
 
-
+let lstOfSolution =[];	//output of the function
 let lstOfMove = [];
 let Vcolumn = newVcolumn(columns);
 console.log(Vcolumn);
@@ -62,21 +62,29 @@ for(let i=0;i<4;i++){
 		
 		
 		Vupdate(columns,Vcolumn3,[colFrom,colTo])
-		lstOfMove.push(colFrom,colTo);
+		lstOfMove3.push([colFrom,colTo]);
 		console.log(Vcolumn3);
+		
+		if(Vfinish(Vcolumn3)){
+			lstOfSolution.push(lstOfMove3);
+			continue;	//add to the output
+		}
 
 		let lst = WhoCanGoTo(Vcolumn3,colFrom)
 		console.log("lst",lst);
 		
-		for(solution in lst){
-			Vlist2.push([[...Vcolumn3],[...lstOfMove3],lst[solution],colFrom]);
+		//add to the list for the next Cycle
+		for(k in lst){
+			Vlist2.push([[...Vcolumn3],[...lstOfMove3],lst[k],colFrom]);
 		}
 	}
 
-	Vlist = Vlist2;
+	Vlist = Vlist2;	//for the next cycle
 	console.log("Vlist",Vlist.length);
 }
 
+console.log("\n\n\nthe solution");
+console.log(lstOfSolution);
 
 
 
