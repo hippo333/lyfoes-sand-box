@@ -13,7 +13,7 @@ abstract(columns);
 
 function emptyBotle(columns2){
 	for(col in  columns2){
-		if(columns2[col].isEmpty()){return col}
+		if(columns2[col].isEmpty()){return parseInt(col)}
 	}
 	return null
 }
@@ -48,35 +48,51 @@ if(btl0 == null){return}
 
 let From0 = 0;
 let To0 = btl0;
-let Vlist = [[Vcolumn,lstOfMove,From0,To0]];
+let Vlist = [[Vcolumn,lstOfMove]];
 
 if (Vcolumn[From0][1] ==4 ){return}
 
+
+Vupdate(columns,Vcolumn,[From0,To0])
+lstOfMove.push([From0,To0]);
+console.log(Vcolumn);
+		
+		
 for(let i=0;i<4;i++){
-	console.log("\ni",i);
+	console.log("\ncycle",i);
 	let Vlist2 =[];
 	
 	for(let j=0;j<Vlist.length;j++){
 		console.log("j",j);
-		let [Vcolumn3,lstOfMove3,colFrom,colTo] = Vlist[j];
-		
-		
-		Vupdate(columns,Vcolumn3,[colFrom,colTo])
-		lstOfMove3.push([colFrom,colTo]);
-		console.log(Vcolumn3);
+		let [Vcolumn3,lstOfMove3] = Vlist[j];
 		
 		if(Vfinish(Vcolumn3)){
 			lstOfSolution.push(lstOfMove3);
 			continue;	//add to the output
 		}
 
-		let lst = WhoCanGoTo(Vcolumn3,colFrom)
+		colTo =lstOfMove3[lstOfMove3.length-1][0];
+		console.log("last move",lstOfMove3[lstOfMove3.length-1]);
+		console.log("colTo",colTo);
+		let lst = WhoCanGoTo(Vcolumn3,colTo);
 		console.log("lst",lst);
 		
 		//add to the list for the next Cycle
 		for(k in lst){
-			Vlist2.push([[...Vcolumn3],[...lstOfMove3],lst[k],colFrom]);
+			let Vcolumn4 = [...Vcolumn3];
+			let lstOfMove4 = [...lstOfMove3];
+			colFrom = lst[k];
+		
+			Vupdate(columns,Vcolumn4,[colFrom,colTo])
+			lstOfMove4.push([colFrom,colTo]);
+			console.log("move from",colFrom,"to",colTo);
+			console.log(Vcolumn4);
+			console.log(lstOfMove4);
+			
+			
+			Vlist2.push([Vcolumn4,lstOfMove4]);
 		}
+		
 	}
 
 	Vlist = Vlist2;	//for the next cycle
