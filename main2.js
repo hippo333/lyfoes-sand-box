@@ -19,15 +19,17 @@ function emptyBotle(columns2){
 }
 
 function WhoCanGoTo(Vcolumn2,col2){
+	//console.log("who can go to ",col2);
 	let output = [];
 	
 	for(let i=0;i<Vcolumn2.length;i++){
 		if(i == col2){continue};
 		if(Vcolumn[i][2] ==0){continue}	//no emptyBotle
 		//if the ball are the same
-		if(Vcolumn[i][0]!=Vcolumn[col2][0]){continue}
+		if(Vcolumn2[i][0]!=Vcolumn2[col2][0]){continue}
+		
 		//dont over feed
-		if(Vcolumn[i][1] + Vcolumn[col2][2] >4){continue}
+		if(Vcolumn2[i][1] + Vcolumn2[col2][2] >4){continue}
 		
 		output.push(i);		
 	}
