@@ -71,6 +71,7 @@ function Vupdate(columns2,VColumn2,[from,to]){
 	VColumn2[to] = [bllTo,bBTo,sizeTo];
 }
 
+/*
 function Vfinish(Vcolumn2){
 	for(col in Vcolumn2){
 		//empty botle
@@ -82,10 +83,10 @@ function Vfinish(Vcolumn2){
 		}
 	}
 	return true
-}
+}*/
 
 
 
 
 
-module.exports =[newVcolumn,Vupdate,Vfinish]
+module.exports =[newVcolumn,Vupdate]
