@@ -40,7 +40,7 @@ var doTheMove = function(state,order){
 
 	//console.log("the result");
 	//abstract(columns2);
-	return [columns2]
+	return state
 }
 
 module.exports = doTheMove;

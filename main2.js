@@ -16,6 +16,7 @@ let lstOfStates = [firstState];
 function doAllMove(state,lstCrissCross){
 	//console.log("\n  do all move");
 	let newState = [];
+	let output = [];
 	
 	
 	for(way in lstCrissCross){
@@ -26,27 +27,38 @@ function doAllMove(state,lstCrissCross){
 			newState = state;
 		}
 		doTheMove(newState,lstCrissCross[way]);
+		output.push(newState)
 	}
+	return output
 }
 
+for(let cycle=0;cycle <3; cycle++ ){
 
-for(state in lstOfStates){
-	let thisState = lstOfStates[state];
-	let [columns2,lstOfMove2] = thisState;
-	
-	let Step = step(columns2);
+	let lstOfStates2 = [];
 
-	console.log("\n\n\nthe solution");
-	console.log("out",Step);
-	
-	doAllMove(thisState,Step);
-	if(isFinish(columns2)){
-		console.log("it's over");
-		console.log("the solution:");
-		console.log(lstOfMove2);
+	for(state in lstOfStates){
+		let thisState = lstOfStates[state];
+		let [columns2,lstOfMove2] = thisState;
+		
+		if(isFinish(columns2)){
+			console.log("\nit's over");
+			abstract(columns2);
+			console.log("the solution:");
+			console.log(lstOfMove2);
+			break;
+		}
+		
+		let loop = step(columns2);
+
+		console.log("\n\n\nthe loop");
+		console.log(loop);
+		
+		let newState = doAllMove(thisState,loop);
+		lstOfStates2 = lstOfStates2.concat(newState);
 	}
+	
+	lstOfStates = lstOfStates2;
 }
-
 
 
 

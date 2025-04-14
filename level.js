@@ -37,7 +37,7 @@ function addInNumLst(color){
 switch (level){
 
 case "tst1":	//single criss cross
-default:
+default:		//main2
 var columns = [
 	new Column([RED, RED, RED, BLUE]),
 	new Column([BLUE, BLUE, BLUE, YELLOW]),
@@ -97,7 +97,7 @@ var columns = [
 ];
 break;
 
-case "tst7":	//3 ball per color
+case "tst7":	//do a choice
 var columns = [
 	new Column([ YELLOW, BLUE, BLUE, RED]),
 	new Column([RED, RED, RED, BLUE]),
@@ -107,8 +107,18 @@ var columns = [
 ];
 break;
 
-case "tstcc2":	//twin criss cross
+case "tst8":	//3 ball per color
 var columns = [
+	new Column([ BLUE, BLUE, RED, YELLOW]),
+	new Column([RED, RED, RED, YELLOW]),
+	new Column([YELLOW, YELLOW, BLUE, BLUE]),
+	new Column([]),
+	new Column([]),
+];
+break;
+
+case "tstcc2":	//twin criss cross
+var columns = [	//main2
 	new Column([RED, RED, BLUE, BLUE]),
 	new Column([BLUE, BLUE, YELLOW, YELLOW]),
 	new Column([YELLOW, YELLOW, RED, RED]),
@@ -128,7 +138,7 @@ var columns = [
 break;
 
 case "tstcc4":	//permutation on the midle
-var columns = [
+var columns = [	//main2
 	new Column([RED, RED, BLUE, RED]),
 	new Column([BLUE, BLUE, YELLOW, BLUE]),
 	new Column([YELLOW, YELLOW, RED, YELLOW]),

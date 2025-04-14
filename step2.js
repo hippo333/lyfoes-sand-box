@@ -14,9 +14,10 @@ function emptyBotle(columns2){
 	return null
 }
 
-function WhoCanGoTo(Vcolumn2,col2){
-	//console.log("    who can go to ",col2);
+function WhoCanGoTo(Vcolumn2,col2){		//move to the last from
+	console.log("    who can go to ",col2);
 	let output = [];
+	console.log("    the ball",Vcolumn2[col2][0]);
 	
 	for(let i=0;i<Vcolumn2.length;i++){
 		if(i == col2){continue};
@@ -28,19 +29,19 @@ function WhoCanGoTo(Vcolumn2,col2){
 		if(Vcolumn2[i][1] + Vcolumn2[col2][2] >4){continue}
 		
 		if(Vcolumn2[i][1] + Vcolumn2[col2][1] ==4){	//we compleat a col
-			if(Vcolumn2[i][1] >= Vcolumn2[col2][1]){//big ball to single
-				if(Vcolumn2[i][1] == Vcolumn2[i][2]){continue;}//finish from
-			}
+			if(Vcolumn2[i][1] == Vcolumn2[i][2]){	//from is mono
+			if(Vcolumn2[i][1] >= Vcolumn2[col2][1]){continue;}
+			}//big ball to single
 		}	//avoid bigBall to single ball
-		
 		output.push(i);		
 	}
 	return output
 }
 
-function WhoCanGoFrom(Vcolumn2,col2){
-	//console.log("    who can go to ",col2);
+function WereCanGoTo(Vcolumn2,col2){	//move from the last from
+	//console.log("    who can go from ",col2);
 	let output = [];
+	//console.log("    the ball is",Vcolumn2[col2][0]);
 	
 	for(let i=0;i<Vcolumn2.length;i++){
 		if(i == col2){continue};
@@ -52,17 +53,16 @@ function WhoCanGoFrom(Vcolumn2,col2){
 		if(Vcolumn2[i][2] + Vcolumn2[col2][1] >4){continue}
 		
 		if(Vcolumn2[i][1] + Vcolumn2[col2][1] ==4){//we compleat a col
-			if(Vcolumn2[i][1] < Vcolumn2[col2][1]){//big ball to single
-				if(Vcolumn2[col2][1] == Vcolumn2[col2][2]){continue;}//from
-			}
+			if(Vcolumn2[col2][1] == Vcolumn2[col2][2]){//from is mono
+				if(Vcolumn2[i][1] < Vcolumn2[col2][1]){continue;}
+			}//big ball to single
 		}	//avoid bigBall to single ball
-		
 		output.push(i);		
 	}
 	return output
 }
 
-function moveTo([Vcolumn2,lstOfMove2]){	
+function moveTo([Vcolumn2,lstOfMove2]){		//move to the last from
 	//console.log("  moveTo");
 	let output = [];
 	let endGame = [];
@@ -70,6 +70,7 @@ function moveTo([Vcolumn2,lstOfMove2]){
 	colTo =lstOfMove2[lstOfMove2.length-1][0];
 	let lst = WhoCanGoTo(Vcolumn2,colTo);
 	//console.log("  lst",lst);
+	//console.log(" ",colTo)
 	
 	//add to the list for the next Cycle
 	for(k in lst){
@@ -84,21 +85,22 @@ function moveTo([Vcolumn2,lstOfMove2]){
 		if(Vcolumn4[colFrom][1] == 0){
 			endGame.push(lstOfMove4);
 		}
-		//console.log(" ",colFrom,colTo);
+		console.log("  move to",colFrom,colTo);
 		output.push([Vcolumn4,lstOfMove4]);
 	}
 	
 	return [output,endGame]
 }
 
-function moveFrom([Vcolumn2,lstOfMove2]){	
+function moveFrom([Vcolumn2,lstOfMove2]){	//move from the last from
 	//console.log("  moveFrom");
 	let output = [];
 	let endGame = [];
-	
-	colFrom =lstOfMove2[lstOfMove2.length-1][0];
-	let lst = WhoCanGoFrom(Vcolumn2,colFrom);
+		
+	colFrom =lstOfMove2[lstOfMove2.length-1][0];	//dafuck
+	let lst = WereCanGoTo(Vcolumn2,colFrom);
 	//console.log("  lst",lst);
+	//console.log(" ",colFrom);
 	
 	//add to the list for the next Cycle
 	for(k in lst){
@@ -113,7 +115,35 @@ function moveFrom([Vcolumn2,lstOfMove2]){
 		if(Vcolumn4[colFrom][1] == 0){
 			endGame.push(lstOfMove4);
 		}
-		//console.log(" ",colFrom,colTo);
+		console.log("  move From",colFrom,colTo);
+		output.push([Vcolumn4,lstOfMove4]);
+	}
+	return [output,endGame]
+}
+
+function moveToBottle([Vcolumn2,lstOfMove2],firstBottle){//move to first empty
+	console.log("  move to bottle",firstBottle);
+	
+	let output = [];
+	let endGame = [];
+	
+	let colTo = firstBottle;
+	let lst = WhoCanGoTo(Vcolumn2,colTo);
+	console.log("  lst",lst);
+	
+	for(k in lst){
+		let Vcolumn4 = [...Vcolumn2];
+		let lstOfMove4 = [...lstOfMove2];
+		colFrom = lst[k];
+	
+		Vupdate(columns,Vcolumn4,[colFrom,colTo])
+		lstOfMove4.push([colFrom,colTo]);
+		
+		//we free a botle
+		if(Vcolumn4[colFrom][1] == 0){
+			endGame.push(lstOfMove4);
+		}
+		console.log("  move to empty botle",colFrom,colTo);
 		output.push([Vcolumn4,lstOfMove4]);
 	}
 	return [output,endGame]
@@ -140,8 +170,8 @@ function step(columns2){
 
 	Vupdate(columns2,Vcolumn,[From0,To0])
 	lstOfMove.push([From0,To0]);
-	console.log(Vcolumn);
-			
+	//console.log(Vcolumn);
+	console.log("first move",From0,To0);		
 			
 			
 	for(let i=0;i<4;i++){
@@ -150,21 +180,32 @@ function step(columns2){
 		
 		for(let j=0;j<Vlist.length;j++){
 			console.log("j",j);
-			let [Vcolumn3,lstOfMove3] = Vlist[j];
+			let [Vcolumn2,lstOfMove2] = Vlist[j];
 			
-			
+			//move to the last botle from
 			let [MoveTo,finishTo] = moveTo(Vlist[j]);
 			Vlist2 = Vlist2.concat(MoveTo);
+			//console.log("move to",MoveTo);
 			lstOfSolution = lstOfSolution.concat(finishTo);
 			
+			//move from the last bottle from
 			let [MoveFrom,finishFrom] = moveFrom(Vlist[j]);
 			Vlist2 = Vlist2.concat(MoveFrom);
+			console.log("MoveFrom",MoveFrom);
 			lstOfSolution = lstOfSolution.concat(finishFrom);
-			console.log("lst of solution",lstOfSolution);
+			
+			//move to the first empty botle
+			let [MoveToBottle,finishToBottle] = moveToBottle(Vlist[j],btl0);
+			Vlist2 = Vlist2.concat(MoveToBottle);
+			console.log("move to bottle",MoveToBottle)
+			lstOfSolution = lstOfSolution.concat(finishToBottle);
+			
+			console.log("lst of looped cycle",lstOfSolution);
+			//feed empty botle then make a new one
 		}
 
 		Vlist = Vlist2;	//for the next cycle
-		console.log("Vlist",Vlist.length);
+		console.log("Vlist",Vlist2.length);
 		
 		if(Vlist == []){break}	//if we can't do nothing we stop
 	}
