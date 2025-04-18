@@ -10,6 +10,7 @@ var step = require('./step2')
 abstract(columns);
 let lstOfMove =[];
 let firstState = [columns,lstOfMove];
+let [columns3,lstOfMove3] = coppy(firstState);	//dumb way to coppy columns
 let lstOfStates = [firstState];
 
 
@@ -42,7 +43,7 @@ for(let cycle=0;cycle <3; cycle++ ){
 		
 		if(isFinish(columns2)){
 			console.log("\nit's over");
-			abstract(columns2);
+			abstract(columns3);
 			console.log("the solution:");
 			console.log(lstOfMove2);
 			break;
