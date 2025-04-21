@@ -67,13 +67,49 @@ function simpleMove([Vcolumn2,lstOfMove2]){
 			output.push([Vcolumn4,lstOfMove4]);
 		}
 	}
-	if(output == endGame ==[]){
+	if(output == [] && endGame ==[]){
 		console.log("  i'm stuck");
 		console.log(lstOfMove2);
 	}
 	return [output,endGame]
 }
 
+function opening(branchInit,columns2){	//ball who can go to emptyBotle
+	let branch = [];
+	
+	if(branchInit .length > 1){
+		console.log("opening dafuck to many init set");
+		return []
+	}
+	
+	let btl0 = emptyBotle(columns2);
+	let from0 ;
+
+	if(btl0 == null){
+		console.log("opening no empty botle");
+		return []
+	}
+	
+	let [Vcolumn2,lstOfMove2] = branchInit[0];
+	
+	for (col in Vcolumn2){
+		if(Vcolumn2[col].length ==0){continue}	//empty column
+		if(Vcolumn2[col][1] == Vcolumn2[col][2]){continue}	
+		//monochrome col
+		
+		let Vcolumn3 = [...Vcolumn2];
+		let lstOfMove3 = [...lstOfMove2];
+		
+		from0 = parseInt(col)
+		
+		Vupdate(columns2,Vcolumn3,[from0,btl0])	//move the ball to empty botle
+		lstOfMove3.push([from0,btl0])
+					
+		branch.push([Vcolumn3,lstOfMove3]);	//new branch for each opening
+	}
+	console.log("opening ",branch.length,"opening");
+	return branch
+}
 
 function step(columns2){
 
@@ -81,36 +117,25 @@ function step(columns2){
 	let lstOfMove = [];
 	let Vcolumn = newVcolumn(columns2);
 	console.log(Vcolumn);
-
-	let btl0 = emptyBotle(columns2);
-
-	if(btl0 == null){return}
-
-
-	let From0 = 0;
-	let To0 = btl0;
-	let Vlist = [[Vcolumn,lstOfMove]];
-
-	if (Vcolumn[From0][1] ==4 ){return}
-
-
-	Vupdate(columns2,Vcolumn,[From0,To0])
-	lstOfMove.push([From0,To0]);
-	//console.log(Vcolumn);
-	console.log("first move",From0,To0);		
+	
+	// 	initial branch
+	let branch0 = [[Vcolumn,lstOfMove]];
+	
+	//new branch for each opening
+	let branch = opening(branch0,columns2);
 			
 			
 	for(let i=0;i<8;i++){
-		console.log("\ncycle",i);
-		let Vlist2 =[];
+		console.log("\nstep cycle",i);
+		let branch2 =[];
 		
-		for(let j=0;j<Vlist.length;j++){
+		for(let j=0;j<branch.length;j++){
 			console.log("j",j);
-			let [Vcolumn2,lstOfMove2] = Vlist[j];
+			let [Vcolumn2,lstOfMove2] = branch[j];
 			
 			//move to the last botle from
-			let [MoveTo,finishTo] = simpleMove(Vlist[j]);
-			Vlist2 = Vlist2.concat(MoveTo);
+			let [MoveTo,finishTo] = simpleMove(branch[j]);
+			branch2 = branch2.concat(MoveTo);
 			//console.log("move to",MoveTo);
 			lstOfSolution = lstOfSolution.concat(finishTo);
 			
@@ -118,10 +143,10 @@ function step(columns2){
 			//feed empty botle then make a new one
 		}
 
-		Vlist = Vlist2;	//for the next cycle
-		console.log("Vlist",Vlist2.length);
+		branch = branch2;	//for the next cycle
+		console.log("step2",branch.length,"branch");
 		
-		if(Vlist == []){break}	//if we can't do nothing we stop
+		if(branch.length == 0){break}	//if we can't do nothing we stop
 	}
 	console.log("Step loop is over");
 	return lstOfSolution

@@ -17,7 +17,7 @@ const CYAN = 12;
 const ORANGE = 13;
 
 //var level = 1.1;
-var level = "tst4";
+var level = "tst1";
 
 var columns;
 
@@ -69,7 +69,7 @@ var columns = [
 break;
 
 case "tst4":	//two choice
-var columns = [
+var columns = [	//main2
 	new Column([BLUE, YELLOW, RED, BLUE]),
 	new Column([RED, RED, BLUE, YELLOW]),
 	new Column([YELLOW, YELLOW, RED, BLUE]),
@@ -88,7 +88,7 @@ var columns = [	//and genius there are no empty botle
 break;
 
 case "tst6":	//3 ball per color
-var columns = [
+var columns = [	//mail 2
 	new Column([ YELLOW, RED, BLUE]),
 	new Column([RED, BLUE, YELLOW]),
 	new Column([YELLOW, RED, BLUE]),
@@ -98,7 +98,7 @@ var columns = [
 break;
 
 case "tst7":	//do a choice
-var columns = [
+var columns = [	//main2
 	new Column([ YELLOW, BLUE, BLUE, RED]),
 	new Column([RED, RED, RED, BLUE]),
 	new Column([YELLOW, YELLOW, YELLOW, BLUE]),
@@ -107,8 +107,8 @@ var columns = [
 ];
 break;
 
-case "tst8":	//3 ball per color
-var columns = [
+case "tst8":	//move from
+var columns = [	//main2
 	new Column([ BLUE, BLUE, RED, YELLOW]),
 	new Column([RED, RED, RED, YELLOW]),
 	new Column([YELLOW, YELLOW, BLUE, BLUE]),
@@ -128,7 +128,7 @@ var columns = [	//main2
 break;
 
 case "tstcc3":	//folowing blue
-var columns = [
+var columns = [	//main2
 	new Column([RED, RED, BLUE, RED]),
 	new Column([BLUE, RED, YELLOW, BLUE]),
 	new Column([YELLOW, YELLOW, YELLOW]),

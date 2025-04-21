@@ -36,7 +36,9 @@ function doAllMove(state,lstCrissCross){
 for(let cycle=0;cycle <3; cycle++ ){
 
 	let lstOfStates2 = [];
-
+	
+	console.log("main2",lstOfStates.length,"branche");
+	
 	for(state in lstOfStates){
 		let thisState = lstOfStates[state];
 		let [columns2,lstOfMove2] = thisState;
