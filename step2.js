@@ -39,7 +39,7 @@ function WhoCanGoTo(Vcolumn2,col2){		//move to the last from
 	return output
 }
 
-
+//each move simple move without empty botle
 function simpleMove([Vcolumn2,lstOfMove2]){		
 	//console.log("  moveTo");
 	let output = [];
@@ -57,7 +57,7 @@ function simpleMove([Vcolumn2,lstOfMove2]){
 			colFrom = lst[k];
 		
 			Vupdate(columns,Vcolumn4,[colFrom,colTo])
-			lstOfMove4.push([colFrom,colTo]);
+			lstOfMove4.push([parseInt(colFrom),parseInt(colTo)]);
 			
 			//we free a botle
 			if(Vcolumn4[colFrom][1] == 0){
@@ -74,7 +74,9 @@ function simpleMove([Vcolumn2,lstOfMove2]){
 	return [output,endGame]
 }
 
-function opening(branchInit,columns2){	//ball who can go to emptyBotle
+//in first move
+//ball who can go to emptyBotle
+function opening(branchInit,columns2){	
 	let branch = [];
 	
 	if(branchInit .length > 1){
@@ -103,12 +105,97 @@ function opening(branchInit,columns2){	//ball who can go to emptyBotle
 		from0 = parseInt(col)
 		
 		Vupdate(columns2,Vcolumn3,[from0,btl0])	//move the ball to empty botle
-		lstOfMove3.push([from0,btl0])
+		lstOfMove3.push([parseInt(from0),parseInt(btl0)])
 					
 		branch.push([Vcolumn3,lstOfMove3]);	//new branch for each opening
 	}
 	console.log("opening ",branch.length,"opening");
 	return branch
+}
+
+function normalise(lstOfMove){
+	console.log("normalise");
+	
+	let leftCol = [99,0];	//col,order
+	let emptyBtl = lstOfMove[0][1];
+	
+	//is criss cross
+	for(k=1; k<lstOfMove.length; k++){
+		console.log("k",k);
+		let mv = lstOfMove[k];
+		let lastMv = lstOfMove[k-1];
+		
+		if(mv[1] != lastMv[0]){
+			return lstOfMove
+		}
+		if(lastMv[0] < leftCol[0]){
+			leftCol = [lastMv[0],k-1];
+			console.log("it's on left",leftCol);
+		}
+	
+	}
+	//if we are already normalised
+	if(leftCol[1] == 0){return lstOfMove}
+	
+	//if we dont free the empty botle
+	if(lstOfMove[0][1] != lstOfMove[lstOfMove.length -1][0]){
+		console.log("first move",lstOfMove[0]);
+		console.log("last Move",lstOfMove[lstOfMove.length -1]);
+		return	lstOfMove
+	}
+	
+	let firstPart = lstOfMove.slice(1,leftCol[1]+1);
+	let lastPart =  lstOfMove.slice(leftCol[1]+1);
+	
+	lastPart.pop();	//remove the ending botle
+	
+	let hibrid = [lstOfMove[0][0],lstOfMove[lstOfMove.length-1][1]];
+	lastPart.push(hibrid);	//join the two part
+	firstPart.pop();	//old join
+	
+	lastPart.splice(0,0,[lastPart[0][1],emptyBtl]);	//opening
+	
+	let newLstOfMove = lastPart.concat(firstPart);
+	newLstOfMove.push([emptyBtl,newLstOfMove[newLstOfMove.length -1][0]]);
+	
+	console.log("it's criss cross");
+	console.log("the left col",leftCol);
+	console.log("first part",firstPart,"lastPart",lastPart);
+	console.log("l'hybride",hibrid);
+	console.log("lst of move",lstOfMove);
+	console.log("new list of move",newLstOfMove);
+	lstOfMove = newLstOfMove;
+	return lstOfMove
+}
+
+function addToList(list,newList){
+	console.log("\n\n\n\nadd to list");
+	console.log("old list",list.length);
+	console.log("new list",newList.length);
+	
+	for(element in newList){
+		let newElement0 = newList[element];
+		let newElement = normalise(newElement0);
+		
+		console.log("the solution ",newElement);
+		
+		
+		for(solution in list){
+			console.log("list",solution,list[solution]);
+			if(compareArray(list[solution][0], newElement[0])){
+				console.log("is already on the list");
+				return 
+			}
+			console.log(compareArray(list[solution][0], newElement[0]));
+			throw Error
+		}
+		console.log("is not on the list");
+		list.push(newElement);
+	}
+}
+
+function compareArray(arr1,arr2){
+	return arr1.toString() === arr2.toString()
 }
 
 function step(columns2){
@@ -133,11 +220,14 @@ function step(columns2){
 			console.log("j",j);
 			let [Vcolumn2,lstOfMove2] = branch[j];
 			
-			//move to the last botle from
+			//each move posible without empty botle
 			let [MoveTo,finishTo] = simpleMove(branch[j]);
 			branch2 = branch2.concat(MoveTo);
+			
+			
 			//console.log("move to",MoveTo);
-			lstOfSolution = lstOfSolution.concat(finishTo);
+			//lstOfSolution = lstOfSolution.concat(finishTo);
+			addToList(lstOfSolution,finishTo);
 			
 			console.log("lst of looped cycle",lstOfSolution);
 			//feed empty botle then make a new one
