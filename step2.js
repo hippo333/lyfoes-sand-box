@@ -158,6 +158,7 @@ function normalise(lstOfMove2){
 		let lastMv = lstOfMove2[k-1];
 		
 		if(mv[1] != lastMv[0]){
+			console.log("it's not criss cross");
 			return lstOfMove2
 		}
 		if(lastMv[0] < leftCol[0]){
@@ -196,8 +197,8 @@ function normalise(lstOfMove2){
 	console.log("first part",firstPart,"lastPart",lastPart);
 	console.log("l'hybride",hibrid);
 	console.log("lst of move",lstOfMove2);
-	console.log("new list of move",newLstOfMove);
-	lstOfMove2 = newLstOfMove;*/
+	console.log("new list of move",newLstOfMove);*/
+	lstOfMove2 = newLstOfMove;
 	return lstOfMove2
 }
 
