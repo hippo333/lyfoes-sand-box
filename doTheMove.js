@@ -10,9 +10,9 @@ var doTheMove = function(state,order){
 	/*
 	console.log("state of the game");
 	abstract(columns2);
-	console.log("list of move already done",lstOfMove);
-	console.log("what i ave to do",order);
-	*/
+	//console.log("list of move already done",lstOfMove);
+	console.log("what i ave to do",order);*/
+	
 
 	let from;
 	let to;

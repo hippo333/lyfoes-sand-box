@@ -48,11 +48,17 @@ for(let cycle=0;cycle <3; cycle++ ){
 			abstract(columns3);
 			console.log("the solution:");
 			console.log(lstOfMove2);
+			
+  		    var end = new Date().getTime();	//timer
+   			var time = end - startTime;
+   			console.log(time/1000,"s");
+			
 			break;
 		}
 		
 		let loop = step(columns2);
 
+			abstract(columns3);
 		console.log("\n\n\nthe loop");
 		console.log(loop);
 		

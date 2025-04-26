@@ -25,6 +25,7 @@ function move(state,from,to){
 			console.log("error the ball are diferent");
 			console.log("  from",from,"col from",colFrom);
 			console.log("  to",to,"col to",colTo);
+			throw Error
 		}
 	}
 	if(ballFrom == undefined){
@@ -45,6 +46,7 @@ function move(state,from,to){
 		colFrom.pop();
 		colTo.push(ballFrom);
 	}
+	//console.log("__move: from:",from,columns3[from].content);	
 	
 	columns3[from].newBigBall();
 	columns3[to].newBigBall();

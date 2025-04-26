@@ -67,6 +67,7 @@ function Vupdate(columns2,VColumn2,[from,to]){
 			break;
 		}
 	}
+	
 	VColumn2[from] = [bllFrom,bBFrom,sizeFrom];
 	VColumn2[to] = [bllTo,bBTo,sizeTo];
 }
