@@ -26,6 +26,7 @@ the big ball is when a ball is above the same ball we take it for one ball of 2 
 
 -is finish, return true if all column in the columns is monochrome or empty
 
+-add to the list kill the dublon in output of step2
 
 
 

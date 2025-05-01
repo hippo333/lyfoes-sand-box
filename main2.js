@@ -63,7 +63,11 @@ for(let cycle=0;cycle <3; cycle++ ){
 		console.log(loop);
 		
 		let newState = doAllMove(thisState,loop);
-		lstOfStates2 = lstOfStates2.concat(newState);
+		lstOfStates2 = lstOfStates2.concat(newState);	//add to the next cycle
+	}
+	
+	if(lstOfStates2.length ==0){	//if we are stuck
+		break
 	}
 	
 	lstOfStates = lstOfStates2;
