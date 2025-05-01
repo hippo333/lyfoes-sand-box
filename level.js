@@ -16,7 +16,7 @@ const PINK = 11
 const CYAN = 12;
 const ORANGE = 13;
 
-//var level = 1.1;
+//var level = 2.1;
 var level = "tst6";
 
 var columns;
@@ -209,7 +209,7 @@ var columns = [
 ];
 break;
 
-case 1.2:
+case 1.2:	//main2
 var columns = [
 	new Column([BLUE, YELLOW, BLUE, YELLOW]),
 	new Column([YELLOW, RED, RED, BLUE]),
@@ -219,7 +219,7 @@ var columns = [
 ];
 break;
 
-case 2.1:
+case 2.1:	//main2
 var columns = [
 	new Column([GREEN, RED, RED, BLUE]),
 	new Column([RED, YELLOW, BRIGHTPINK, BRIGHTPINK]),

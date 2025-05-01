@@ -244,7 +244,7 @@ function step(columns2){
 	let branch = opening(branch0,columns2);
 			
 			
-	for(let i=0;i<8;i++){
+	for(let i=0;i<12;i++){
 		console.log("\nstep cycle",i);
 		let branch2 =[];
 		
