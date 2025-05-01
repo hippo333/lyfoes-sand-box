@@ -15,6 +15,17 @@ function emptyBotle(columns2){
 	return null
 }
 
+function Vempty(Vcolumn2){
+	
+	for(let col=0; col<Vcolumn2.length;col++){
+		if(Vcolumn2[col][2] ==0){
+		
+			return parseInt(col)
+		}
+	}
+	return null
+}
+
 function WhoCanGoTo(Vcolumn2,col2){		
 	//console.log("    who can go to ",col2);
 	let output = [];
@@ -34,7 +45,8 @@ function WhoCanGoTo(Vcolumn2,col2){
 				if(Vcolumn2[i][1] > Vcolumn2[col2][1]){continue;}//3->1
 				if(Vcolumn2[i][1] == Vcolumn2[col2][1] && i>col){continue;}
 			}	//2 ball to 2 ball not count twice 
-		}	//avoid bigBall to single ball
+		}	//avoid bigBall to single ball	
+			
 				
 		output.push(i);		
 	}
@@ -64,11 +76,11 @@ function simpleMove([Vcolumn2,lstOfMove2],columns2){
 			
 			//we free a botle
 			if(Vcolumn4[colFrom][1] == 0){
-				endGame.push(lstOfMove4);
+				endGame.push([Vcolumn4,lstOfMove4]);
 				continue
 			}
 			
-			console.log("  move to",colFrom,colTo);
+			//console.log("  move to",colFrom,colTo);
 			output.push([Vcolumn4,lstOfMove4]);
 		}
 	}
@@ -118,16 +130,106 @@ function opening(branchInit,columns2){
 	console.log("opening ",branch.length,"opening");
 	return branch
 }
-
-
-
-function isTarget(lstOfMove2){	//compare 2 array (debug)
-	let target =[ [ 0, 3 ], [ 2, 3 ], [ 2, 0 ], [ 2, 1 ] ];
+function coppyBranch([Vcolumn2,lstOfMove2]){
+	let Vcolumn3 = [];
+	let lstOfMove3 = [];
 	
-	for(let e=0;e<lstOfMove2.length;e++){
-		if(lstOfMove2[e][0] != target[e][0]){return}
-		if(lstOfMove2[e][1] != target[e][1]){return}
+	for(let col=0;col<Vcolumn2.length;col++){
+		Vcolumn3.push([...Vcolumn2[col]]);
 	}
+	for(let mv=0;mv<lstOfMove2.length;mv++){
+		lstOfMove3.push([...lstOfMove2[mv]]);
+	}
+	return [Vcolumn3,lstOfMove3]
+}
+
+function secondBall(branch2,columns2){
+	console.log("\n\nsecond opening");
+	let [Vcolumn2,lstOfMove2] = branch2;
+	
+	
+	let smolestCol =[99,-1];	//size, position
+	let emptyBotle = -1;
+	
+	for(col in Vcolumn2){
+		if(Vcolumn2[col][2] ==0){
+			emptyBotle = col;
+			continue
+		}
+		if(Vcolumn2[col][1] > 2 ){continue}//we can't empty
+		
+		if(Vcolumn2[col][2] < smolestCol[0]){
+			smolestCol = [Vcolumn2[col][2],col];
+		}	
+	}
+	if(smolestCol[1] ==-1){
+		console.log("secondBall, no smolestCol")
+		console.log(Vcolumn2);
+		throw Error
+	}
+	if(emptyBotle ==-1){
+		console.log("secondBall, no empty Botle")
+		console.log(Vcolumn2);
+		throw Error
+	}
+	
+	let secondOpening = [parseInt(smolestCol[1]),parseInt(emptyBotle)]
+	lstOfMove2.push(secondOpening);
+	Vupdate(columns2,Vcolumn2,secondOpening)
+	
+	console.log(Vcolumn2);
+	
+	//now start the funny part
+	let branch3 = coppyBranch(branch2);
+	let lstBranch = [branch3];
+	let lstOfSolution = [];
+	
+	
+	for(i=0;i<12;i++){
+		lstBranch2 =[];
+		
+		for(j=0;j<lstBranch.length;j++){
+			let [Vcolumn3,lstOfMove3] = lstBranch[j];
+			console.log("Vcolumn",j)
+			console.log(Vcolumn3);
+			
+			
+			let [MoveTo,finishTo] = simpleMove(lstBranch[j],columns2);
+			lstBranch2 = lstBranch2.concat(MoveTo);
+			
+			if(finishTo.length == 0){continue}
+			
+			if(Vempty(Vcolumn3) == null){
+				console.log("finish to");
+				console.log(finishTo.length);
+				
+				
+				
+				
+				//this line
+				lstBranch2 = lstBranch2.concat(finishTo);
+				continue;			
+			}else{
+				console.log("finish to",finishTo);
+				addToList(lstOfSolution,finishTo);
+				continue
+			}
+			
+			
+			
+		}
+		console.log("lstbranch",lstBranch2.length);
+		if(lstBranch2.length ==0){
+			console.log("second solution");
+			console.log(lstOfSolution);
+			
+			return lstOfSolution
+		}else{
+			lstBranch = lstBranch2;
+		}
+		
+	}
+	console.log("second Ball i loop is over")
 	throw Error
 }
 
@@ -175,14 +277,21 @@ function step(columns2){
 		if(branch2.length == 0){	
 			console.log("\n\n\nstep2,step no move possible");
 			
-			for(j in branch){
-				console.log("branch",j);
-				console.log(branch[j][1]);
-			}	
-			console.log("");
-			abstract(columns2);		
-			//throw Error
-			break;
+			
+			console.log("first branch",0);	//random
+			console.log(branch[0][1]);
+			let lastChance = secondBall(branch[0],columns2);
+			
+			if(lastChance.length !=0){
+				console.log("we got it");
+				return lastChance;
+				
+			}else{	//no move 2botle from branch0
+				console.log("");
+				abstract(columns2);		
+				throw Error
+				break;
+			}
 		}
 
 

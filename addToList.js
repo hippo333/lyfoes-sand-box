@@ -68,7 +68,7 @@ function addToList(list,newList){
 	//console.log("new list",newList.length);
 	
 	for(element in newList){
-		let newElement0 = newList[element];
+		let newElement0 = newList[element][1];
 		let newElement = normalise(newElement0);
 		
 		for(solution in list){
