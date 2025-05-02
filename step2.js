@@ -214,16 +214,20 @@ function secondBall(branch2,columns2){
 				addToList(lstOfSolution,finishTo);
 				continue
 			}
-			
-			
-			
 		}
 		console.log("lstbranch",lstBranch2.length);
 		if(lstBranch2.length ==0){
 			console.log("second solution");
 			console.log(lstOfSolution);
 			
-			return lstOfSolution
+			if(lstOfSolution.length >0){
+				return lstOfSolution
+			}else{
+				abstract(columns2);
+				console.log(lstBranch[0]);
+				console.log("second Ball return nothing");
+				throw Error;
+			}
 		}else{
 			lstBranch = lstBranch2;
 		}
@@ -234,7 +238,7 @@ function secondBall(branch2,columns2){
 }
 
 
-function step(columns2){
+function step(columns2,nbEmptyBotle){
 
 	let lstOfSolution =[];	//output of the function
 	let lstOfMove = [];
@@ -277,6 +281,7 @@ function step(columns2){
 		if(branch2.length == 0){	
 			console.log("\n\n\nstep2,step no move possible");
 			
+			if(nbEmptyBotle ==1){break}	//main decide
 			
 			console.log("first branch",0);	//random
 			console.log(branch[0][1]);
@@ -289,7 +294,7 @@ function step(columns2){
 			}else{	//no move 2botle from branch0
 				console.log("");
 				abstract(columns2);		
-				throw Error
+				throw Error ("main2,secondBall return nothing");
 				break;
 			}
 		}

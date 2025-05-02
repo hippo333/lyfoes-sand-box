@@ -33,6 +33,8 @@ function doAllMove(state,lstCrissCross){
 	return output
 }
 
+let nbEmptyBotle = 1;	//how mayn empty botle we use
+
 for(let cycle=0;cycle <3; cycle++ ){
 
 	let lstOfStates2 = [];
@@ -42,6 +44,12 @@ for(let cycle=0;cycle <3; cycle++ ){
 	for(state in lstOfStates){
 		let thisState = lstOfStates[state];
 		let [columns2,lstOfMove2] = thisState;
+		
+		if(state == lstOfStates.length -1){
+			if(lstOfStates2.length ==0){	//if we are stuck with one botle
+				nbEmptyBotle =2;
+			}
+		}
 		
 		if(isFinish(columns2)){
 			console.log("\nit's over");
@@ -56,7 +64,8 @@ for(let cycle=0;cycle <3; cycle++ ){
 			break;
 		}
 		
-		let loop = step(columns2);
+		let loop = step(columns2, nbEmptyBotle);
+		nbEmptyBotle =1;
 
 			abstract(columns3);
 		console.log("\n\n\nthe loop");
