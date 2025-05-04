@@ -98,6 +98,10 @@ function step(columns2,nbEmptyBotle){
 		
 		//if we can't do nothing we stop
 		if(branch2.length == 0){	
+			if(lstOfSolution.length >0){	//if we ave a solution
+				return lstOfSolution
+			}
+			
 			console.log("\n\n\nstep2,step no move possible");
 			
 			if(nbEmptyBotle ==1){break}	//main decide

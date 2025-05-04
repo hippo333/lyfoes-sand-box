@@ -65,7 +65,7 @@ function bestOpening2(Vcolumn2){
 			continue
 		}
 		if(Vcolumn2[col][1] > 2 ){continue}//we can't empty
-		//if(Vcolumn2[col][1] == Vcolumn2[col][2]){continue}//monochrome
+		if(Vcolumn2[col][1] == Vcolumn2[col][2]){continue}//monochrome
 		
 		if(Vcolumn2[col][2] < smolestCol[0]){
 			smolestCol = [Vcolumn2[col][2],col];
