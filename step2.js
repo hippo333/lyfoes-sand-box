@@ -72,7 +72,7 @@ function step(columns2,nbEmptyBotle){
 	
 	let largestBranch = 0 ;	//mesure the largest branch
 			
-	for(let i=0;i<12;i++){
+	for(let i=0;i<30;i++){
 		console.log("\nstep cycle",i);
 		let branch2 = oneBotle(branch,columns2,lstOfSolution);
 		
@@ -87,7 +87,7 @@ function step(columns2,nbEmptyBotle){
 			
 			if(nbEmptyBotle ==1){break}	//main decide
 			
-			/*
+			
 			if(!Vempty(branch[0][0])){	//no free botle
 				abstract(columns2);
 				console.log(branch[0]);
@@ -105,22 +105,7 @@ function step(columns2,nbEmptyBotle){
 				branch = sdBall(branch,columns2);//make new branch
 				continue;
 			}
-			*/
 			
-			console.log("first branch",0);	//random
-			console.log(branch[0][1]);
-			let lastChance = secondBall(branch[0],columns2);
-			
-			if(lastChance.length !=0){
-				console.log("we got it");
-				return lastChance;
-				
-			}else{	//no move 2botle from branch0
-				console.log("");
-				abstract(columns2);		
-				throw Error ("main2,secondBall return nothing");
-				break;
-			}
 		}
 
 
