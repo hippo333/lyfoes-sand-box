@@ -123,27 +123,9 @@ function simpleMove([Vcolumn2,lstOfMove2],columns2){
 	return [output,endGame]
 }
 
-function secondBall(branch2,columns2){
-	console.log("\n\nsecond opening");
-	let [Vcolumn2,lstOfMove2] = branch2;
-	
-	let secondOpening = bestOpening2(Vcolumn2);
-	
-	lstOfMove2.push(secondOpening);
-	Vupdate(columns2,Vcolumn2,secondOpening)
-	
-	console.log(Vcolumn2);
-	
-	//now start the funny part
-	let branch3 = coppyBranch(branch2);
-	let lstBranch = [branch3];
-	let lstOfSolution = [];
-	let largestBranch =0;	//the size of the tree
-	
-	
-	for(i=0;i<12;i++){
-		lstBranch2 =[];
-		
+function oneBotle(lstBranch,columns2,lstOfSolution2){
+	let lstBranch2 = [];
+
 		
 		for(j=0;j<lstBranch.length;j++){
 			let [Vcolumn3,lstOfMove3] = lstBranch[j];
@@ -164,12 +146,51 @@ function secondBall(branch2,columns2){
 				continue;			
 			}else{
 				console.log("finish to",finishTo);
-				addToList(lstOfSolution,finishTo);
+				addToList(lstOfSolution2,finishTo);
 				continue
 			}
 		}
+	return lstBranch2
+}
+
+function sdBall(lstBranch3,columns2){
+
+	let [Vcolumn4,lstOfMove4] = lstBranch3[0];
+	let secondOpening = bestOpening2(Vcolumn4);
+	
+	console.log("second opening",secondOpening);
+	
+	lstOfMove4.push(secondOpening);
+	Vupdate(columns2,Vcolumn4,secondOpening)
+	
+	return [[Vcolumn4,lstOfMove4]];//make new branch
+
+}
+
+function secondBall(branch2,columns2){
+	console.log("\n\nsecond opening");
+	let [Vcolumn2,lstOfMove2] = branch2;
+	/*
+	let secondOpening = bestOpening2(Vcolumn2);
+	
+	lstOfMove2.push(secondOpening);
+	Vupdate(columns2,Vcolumn2,secondOpening)*/
+	
+	console.log(Vcolumn2);
+	
+	//now start the funny part
+	let branch3 = coppyBranch(branch2);
+	let lstBranch = [branch3];
+	let lstOfSolution = [];
+	let largestBranch =0;	//the size of the tree
+	
+	
+	for(i=0;i<16;i++){
+	
+		lstBranch2 = oneBotle(lstBranch,columns2,lstOfSolution);
 		
 		console.log("lstbranch",lstBranch2.length,"i",i);
+		
 		
 		if(lstBranch2.length ==0){
 			console.log("second solution");
@@ -178,6 +199,7 @@ function secondBall(branch2,columns2){
 			if(lstOfSolution.length >0){
 				return lstOfSolution
 			}
+			
 			if(!Vempty(lstBranch[0][0])){	//no free botle
 				abstract(columns2);
 				console.log(lstBranch[0]);
@@ -191,24 +213,16 @@ function secondBall(branch2,columns2){
 		
 				console.log("we ave afree botle");
 				
-				let [Vcolumn4,lstOfMove4] = lstBranch[0];
-				let secondOpening = bestOpening2(Vcolumn4);
 				
-				console.log("second opening",secondOpening);
-				
-				lstOfMove4.push(secondOpening);
-				Vupdate(columns2,Vcolumn4,secondOpening)
-				
-				lstBranch = [[Vcolumn4,lstOfMove4]];//make new branch
+				lstBranch = sdBall(lstBranch,columns2);//make new branch
 				continue;
 			}
 			
 			
-			
-			throw Error
 		}else{
-			lstBranch = lstBranch2;
+			lstBranch = lstBranch2;	//for next cycle
 			
+			//size of largest branch
 			if(lstBranch.length > largestBranch){
 				largestBranch = lstBranch.length
 			}
