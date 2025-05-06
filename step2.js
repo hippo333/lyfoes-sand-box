@@ -4,7 +4,7 @@ var move = require('./move');
 var abstract = require('./abstract');
 var [newVcolumn,Vupdate] = require('./Vcolumn');
 var addToList = require('./addToList');
-var [simpleMove,secondBall] = require('./searchMove');
+var [simpleMove,secondBall,Vempty,oneBotle,sdBall] = require('./searchMove');
 
 
 //abstract(columns);
@@ -69,32 +69,12 @@ function step(columns2,nbEmptyBotle){
 	
 	//new branch for each opening
 	let branch = opening(branch0,columns2);
-			
+	
+	let largestBranch = 0 ;	//mesure the largest branch
 			
 	for(let i=0;i<12;i++){
 		console.log("\nstep cycle",i);
-		let branch2 =[];
-		
-		for(let j=0;j<branch.length;j++){
-			console.log("j",j);
-			let [Vcolumn2,lstOfMove2] = branch[j];
-			
-			/*console.log("column");
-			abstract(columns2);
-			console.log("lst of move",lstOfMove2);*/
-			
-			//each move posible without empty botle
-			let [MoveTo,finishTo] = simpleMove(branch[j],columns2);
-			branch2 = branch2.concat(MoveTo);
-			
-			
-			//kill dublon
-			//lstOfSolution = lstOfSolution.concat(finishTo);
-			addToList(lstOfSolution,finishTo);
-			
-			console.log("lst of looped cycle",lstOfSolution);
-			//feed empty botle then make a new one
-		}
+		let branch2 = oneBotle(branch,columns2,lstOfSolution);
 		
 		//if we can't do nothing we stop
 		if(branch2.length == 0){	
@@ -104,7 +84,28 @@ function step(columns2,nbEmptyBotle){
 			
 			console.log("\n\n\nstep2,step no move possible");
 			
+			
 			if(nbEmptyBotle ==1){break}	//main decide
+			
+			/*
+			if(!Vempty(branch[0][0])){	//no free botle
+				abstract(columns2);
+				console.log(branch[0]);
+				console.log("i",i);
+				console.log("simple moves",lstOfMove.length);
+				console.log("we ave",branch.length,"branch");
+				console.log("largest branch",largestBranch);
+				console.log("second Ball return nothing");
+				throw Error;
+			}else{
+		
+				console.log("we ave afree botle");
+				
+				
+				branch = sdBall(branch,columns2);//make new branch
+				continue;
+			}
+			*/
 			
 			console.log("first branch",0);	//random
 			console.log(branch[0][1]);
@@ -125,6 +126,11 @@ function step(columns2,nbEmptyBotle){
 
 		branch = branch2;	//for the next cycle
 		console.log("step2",branch.length,"branch");
+			
+		//size of largest branch
+		if(branch.length > largestBranch){
+			largestBranch = branch.length
+		}
 	}
 	console.log("Step loop is over");
 	return lstOfSolution

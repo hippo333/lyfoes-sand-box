@@ -128,6 +128,7 @@ function oneBotle(lstBranch,columns2,lstOfSolution2){
 
 		
 		for(j=0;j<lstBranch.length;j++){
+		
 			let [Vcolumn3,lstOfMove3] = lstBranch[j];
 			console.log("Vcolumn",j)
 			console.log(Vcolumn3);
@@ -233,4 +234,4 @@ function secondBall(branch2,columns2){
 	throw Error
 }
 
-module.exports = [simpleMove,secondBall]
+module.exports = [simpleMove,secondBall,Vempty,oneBotle,sdBall]
