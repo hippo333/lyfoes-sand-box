@@ -15,6 +15,7 @@ function Vempty(Vcolumn2){
 	return null
 }
 
+
 function WhoCanGoTo(Vcolumn2,col2){		
 	//console.log("    who can go to ",col2);
 	let output = [];
@@ -42,18 +43,6 @@ function WhoCanGoTo(Vcolumn2,col2){
 	return output
 }
 
-function coppyBranch([Vcolumn2,lstOfMove2]){
-	let Vcolumn3 = [];
-	let lstOfMove3 = [];
-	
-	for(let col=0;col<Vcolumn2.length;col++){
-		Vcolumn3.push([...Vcolumn2[col]]);
-	}
-	for(let mv=0;mv<lstOfMove2.length;mv++){
-		lstOfMove3.push([...lstOfMove2[mv]]);
-	}
-	return [Vcolumn3,lstOfMove3]
-}
 
 function bestOpening2(Vcolumn2){
 	let smolestCol =[99,-1];	//size, position
@@ -84,9 +73,10 @@ function bestOpening2(Vcolumn2){
 	return [parseInt(smolestCol[1]),parseInt(emptyBotle)]
 }
 
+
 //each move simple move without empty botle
-function simpleMove([Vcolumn2,lstOfMove2],columns2){		
-	//console.log("  simpleMove");
+function oneBtl([Vcolumn2,lstOfMove2],columns2){		
+	//console.log("  oneBtl");
 	let output = [];
 	let endGame = [];
 	
@@ -123,7 +113,8 @@ function simpleMove([Vcolumn2,lstOfMove2],columns2){
 	return [output,endGame]
 }
 
-function oneBotle(lstBranch,columns2,lstOfSolution2){
+
+function simpleMove(lstBranch,columns2,lstOfSolution2){
 	let lstBranch2 = [];
 
 		
@@ -134,7 +125,7 @@ function oneBotle(lstBranch,columns2,lstOfSolution2){
 			console.log(Vcolumn3);
 			
 			
-			let [MoveTo,finishTo] = simpleMove(lstBranch[j],columns2);
+			let [MoveTo,finishTo] = oneBtl(lstBranch[j],columns2);
 			lstBranch2 = lstBranch2.concat(MoveTo);
 			
 			if(finishTo.length == 0){continue}
@@ -154,7 +145,8 @@ function oneBotle(lstBranch,columns2,lstOfSolution2){
 	return lstBranch2
 }
 
-function sdBall(lstBranch3,columns2){
+
+function secondOpening(lstBranch3,columns2){
 
 	let [Vcolumn4,lstOfMove4] = lstBranch3[0];
 	let secondOpening = bestOpening2(Vcolumn4);
@@ -168,70 +160,5 @@ function sdBall(lstBranch3,columns2){
 
 }
 
-function secondBall(branch2,columns2){
-	console.log("\n\nsecond opening");
-	let [Vcolumn2,lstOfMove2] = branch2;
-	/*
-	let secondOpening = bestOpening2(Vcolumn2);
-	
-	lstOfMove2.push(secondOpening);
-	Vupdate(columns2,Vcolumn2,secondOpening)*/
-	
-	console.log(Vcolumn2);
-	
-	//now start the funny part
-	let branch3 = coppyBranch(branch2);
-	let lstBranch = [branch3];
-	let lstOfSolution = [];
-	let largestBranch =0;	//the size of the tree
-	
-	
-	for(i=0;i<16;i++){
-	
-		lstBranch2 = oneBotle(lstBranch,columns2,lstOfSolution);
-		
-		console.log("lstbranch",lstBranch2.length,"i",i);
-		
-		
-		if(lstBranch2.length ==0){
-			console.log("second solution");
-			console.log(lstOfSolution);
-			
-			if(lstOfSolution.length >0){
-				return lstOfSolution
-			}
-			
-			if(!Vempty(lstBranch[0][0])){	//no free botle
-				abstract(columns2);
-				console.log(lstBranch[0]);
-				console.log("i",i);
-				console.log("simple moves",lstOfMove2.length);
-				console.log("we ave",lstBranch.length,"branch");
-				console.log("largest branch",largestBranch);
-				console.log("second Ball return nothing");
-				throw Error;
-			}else{
-		
-				console.log("we ave afree botle");
-				
-				
-				lstBranch = sdBall(lstBranch,columns2);//make new branch
-				continue;
-			}
-			
-			
-		}else{
-			lstBranch = lstBranch2;	//for next cycle
-			
-			//size of largest branch
-			if(lstBranch.length > largestBranch){
-				largestBranch = lstBranch.length
-			}
-		}
-		
-	}
-	console.log("second Ball i loop is over")
-	throw Error
-}
 
-module.exports = [simpleMove,secondBall,Vempty,oneBotle,sdBall]
+module.exports = [Vempty,simpleMove,secondOpening]

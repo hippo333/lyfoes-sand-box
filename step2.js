@@ -1,10 +1,8 @@
-//var Column = require('./column');
-var columns = require('./level');
-var move = require('./move');
+
 var abstract = require('./abstract');
 var [newVcolumn,Vupdate] = require('./Vcolumn');
 var addToList = require('./addToList');
-var [simpleMove,secondBall,Vempty,oneBotle,sdBall] = require('./searchMove');
+var [Vempty,simpleMove,secondOpening] = require('./searchMove');
 
 
 //abstract(columns);
@@ -74,7 +72,7 @@ function step(columns2,nbEmptyBotle){
 			
 	for(let i=0;i<30;i++){
 		console.log("\nstep cycle",i);
-		let branch2 = oneBotle(branch,columns2,lstOfSolution);
+		let branch2 = simpleMove(branch,columns2,lstOfSolution);
 		
 		//if we can't do nothing we stop
 		if(branch2.length == 0){	
@@ -83,7 +81,6 @@ function step(columns2,nbEmptyBotle){
 			}
 			
 			console.log("\n\n\nstep2,step no move possible");
-			
 			
 			if(nbEmptyBotle ==1){break}	//main decide
 			
@@ -102,7 +99,7 @@ function step(columns2,nbEmptyBotle){
 				console.log("we ave afree botle");
 				
 				
-				branch = sdBall(branch,columns2);//make new branch
+				branch = secondOpening(branch,columns2);//make new branch
 				continue;
 			}
 			
@@ -120,17 +117,6 @@ function step(columns2,nbEmptyBotle){
 	console.log("Step loop is over");
 	return lstOfSolution
 }
-
-/*
-let out = step(columns);
-
-console.log("\n\n\nthe solution");
-console.log(out);
-*/
-
-
-
-
 
 
 
