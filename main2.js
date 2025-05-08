@@ -13,6 +13,8 @@ let firstState = [columns,lstOfMove];
 let [columns3,lstOfMove3] = coppy(firstState);	//dumb way to coppy columns
 let lstOfStates = [firstState];
 
+let overViewBranch = [];	//log size branch
+
 
 function doAllMove(state,lstCrissCross){
 	//console.log("\n  do all move");
@@ -44,6 +46,7 @@ for(let cycle=0;cycle <3; cycle++ ){
 	for(state in lstOfStates){
 		let thisState = lstOfStates[state];
 		let [columns2,lstOfMove2] = thisState;
+		let branchView = [];		//log
 		
 		if(state == lstOfStates.length -1){
 			if(lstOfStates2.length ==0){	//if we are stuck with one botle
@@ -52,6 +55,8 @@ for(let cycle=0;cycle <3; cycle++ ){
 		}
 		
 		if(isFinish(columns2)){
+			console.log("overView branch");
+			console.log(overViewBranch);
 			console.log("\nit's over");
 			abstract(columns3);
 			console.log("the solution:");
@@ -64,7 +69,7 @@ for(let cycle=0;cycle <3; cycle++ ){
 			break;
 		}
 		
-		let loop = step(columns2, nbEmptyBotle);
+		let loop = step(columns2, nbEmptyBotle, branchView);
 		nbEmptyBotle =1;
 
 			abstract(columns3);
@@ -73,6 +78,17 @@ for(let cycle=0;cycle <3; cycle++ ){
 		
 		let newState = doAllMove(thisState,loop);
 		lstOfStates2 = lstOfStates2.concat(newState);	//add to the next cycle
+		
+		//update overView branch
+		
+		if(state ==0){
+			overViewBranch.push(["cycle",cycle]);
+		}
+		overViewBranch.push(["state",parseInt(state)]);
+		overViewBranch.push(branchView);
+		
+		
+		
 	}
 	
 	if(lstOfStates2.length ==0){	//if we are stuck

@@ -55,7 +55,7 @@ function opening(branchInit,columns2){
 }
 
 
-function step(columns2,nbEmptyBotle){
+function step(columns2,nbEmptyBotle,branchView){
 
 	let lstOfSolution =[];	//output of the function
 	let lstOfMove = [];
@@ -69,6 +69,7 @@ function step(columns2,nbEmptyBotle){
 	let branch = opening(branch0,columns2);
 	
 	let largestBranch = 0 ;	//mesure the largest branch
+	
 			
 	for(let i=0;i<30;i++){
 		console.log("\nstep cycle",i);
@@ -98,7 +99,6 @@ function step(columns2,nbEmptyBotle){
 		
 				console.log("we ave afree botle");
 				
-				
 				branch = secondOpening(branch,columns2);//make new branch
 				continue;
 			}
@@ -113,6 +113,7 @@ function step(columns2,nbEmptyBotle){
 		if(branch.length > largestBranch){
 			largestBranch = branch.length
 		}
+		branchView.push(branch.length);
 	}
 	console.log("Step loop is over");
 	return lstOfSolution
