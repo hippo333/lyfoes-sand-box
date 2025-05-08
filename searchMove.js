@@ -145,20 +145,51 @@ function simpleMove(lstBranch,columns2,lstOfSolution2){
 	return lstBranch2
 }
 
+function thirdOpening(lstBranch3,columns2){
+	
+	let [Vcolumn2,lstOfMove2] = lstBranch3[0];
+	let lstBranch4 = [];
+	
+	let emptyBtl = Vempty(Vcolumn2);
+	
+	if(emptyBtl == null){
+		console.log(Vcolumn2);
+		throw Error
+	}
+	
+	for(let i=0;i<Vcolumn2.length;i++){
+		if(Vcolumn2[i][2] ==0){continue}
+		
+		if(Vcolumn2[i][1] == Vcolumn2[i][2]){continue}	//color
+		
+		let Vcolumn3 = [...Vcolumn2];
+		let lstOfMove3 = [...lstOfMove2];
+		
+		let sdOpening = [i,emptyBtl];
+		lstOfMove3.push(sdOpening);
+		Vupdate(columns2,Vcolumn3,sdOpening)
+		
+		lstBranch4.push([Vcolumn3,lstOfMove3]);
+	}
+	return lstBranch4
+}
 
 function secondOpening(lstBranch3,columns2){
 
 	let [Vcolumn4,lstOfMove4] = lstBranch3[0];
-	let secondOpening = bestOpening2(Vcolumn4);
+	let sdOpening = bestOpening2(Vcolumn4);
 	
-	console.log("second opening",secondOpening);
+	console.log("second opening",sdOpening);
 	
-	lstOfMove4.push(secondOpening);
-	Vupdate(columns2,Vcolumn4,secondOpening)
+	lstOfMove4.push(sdOpening);
+	Vupdate(columns2,Vcolumn4,sdOpening)
 	
 	return [[Vcolumn4,lstOfMove4]];//make new branch
 
 }
 
 
-module.exports = [Vempty,simpleMove,secondOpening]
+//module.exports = [Vempty,simpleMove,secondOpening]
+module.exports = [Vempty,simpleMove,thirdOpening]
+
+
