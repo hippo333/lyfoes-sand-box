@@ -121,8 +121,8 @@ function simpleMove(lstBranch,columns2,lstOfSolution2){
 		for(j=0;j<lstBranch.length;j++){
 		
 			let [Vcolumn3,lstOfMove3] = lstBranch[j];
-			console.log("Vcolumn",j)
-			console.log(Vcolumn3);
+			//console.log("Vcolumn",j)
+			//console.log(Vcolumn3);
 			
 			
 			let [MoveTo,finishTo] = oneBtl(lstBranch[j],columns2);
@@ -131,13 +131,13 @@ function simpleMove(lstBranch,columns2,lstOfSolution2){
 			if(finishTo.length == 0){continue}
 			
 			if(Vempty(Vcolumn3) == null){
-				console.log("finish to");
+				//console.log("finish to");
 				console.log(finishTo.length);
 				
 				lstBranch2 = lstBranch2.concat(finishTo);
 				continue;			
 			}else{
-				console.log("finish to",finishTo);
+				//console.log("finish to",finishTo);
 				addToList(lstOfSolution2,finishTo);
 				continue
 			}
@@ -147,12 +147,15 @@ function simpleMove(lstBranch,columns2,lstOfSolution2){
 
 
 let macGuffin = [] //if we fail do all Second opening
+let sdOp = 0;
 
-function secondOpening(lstBranch3,columns2){
+function secondOpening(branch2,columns2){
 
-	let [Vcolumn4,lstOfMove4] = lstBranch3[0];
+	let [Vcolumn4,lstOfMove4] = branch2[0];
 	macGuffin = [[...Vcolumn4],[...lstOfMove4]]
+	
 	let sdOpening = bestOpening2(Vcolumn4);
+	sdOp = sdOpening[0];
 	
 	console.log("second opening",sdOpening);
 	
@@ -167,11 +170,20 @@ function secondOpening(lstBranch3,columns2){
 function allSecondOpening(branch2,columns2){
 	
 	let [Vcolumn2,lstOfMove2] = branch2[0];
+	
+	if(macGuffin.length ==0){
+		abstract(columns2);
+		console.log(branch2[0]);
+		console.log("simple moves",lstOfMove2.length);
+		console.log("we ave",branch2.length,"branch");
+		console.log("second Ball return nothing");
+		throw Error;
+	
+	}
 		
 	[Vcolumn2,lstOfMove2] = macGuffin;
-	macGuffin = [];
 	
-	let lstBranch4 = [];
+	let branch3 = [];
 	
 	let emptyBtl = Vempty(Vcolumn2);
 	
@@ -185,6 +197,8 @@ function allSecondOpening(branch2,columns2){
 		
 		if(Vcolumn2[i][1] == Vcolumn2[i][2]){continue}	//color
 		
+		if(i== sdOp){continue}	//dont repeat second opening
+		
 		let Vcolumn3 = [...Vcolumn2];
 		let lstOfMove3 = [...lstOfMove2];
 		
@@ -192,21 +206,12 @@ function allSecondOpening(branch2,columns2){
 		lstOfMove3.push(sdOpening);
 		Vupdate(columns2,Vcolumn3,sdOpening)
 		
-		lstBranch4.push([Vcolumn3,lstOfMove3]);
+		branch3.push([Vcolumn3,lstOfMove3]);
 		console.log("Vcolumn",i,Vcolumn3);
 	}
+	macGuffin = [];		//avoid infinit loop
 	
-	if(lstBranch4.length ==0){
-		abstract(columns2);
-		console.log(branch2[0]);
-		console.log("simple moves",lstOfMove2.length);
-		console.log("we ave",branch2.length,"branch");
-		console.log("second Ball return nothing");
-		throw Error;
-		
-	}
-	
-	return lstBranch4
+	return branch3
 }
 
 

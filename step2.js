@@ -89,12 +89,12 @@ function step(columns2,nbEmptyBotle,branchView){
 			if(!Vempty(branch[0][0])){	//no free botle
 				
 				branch2 = allSecondOpening(branch,columns2);
+				branchView.push("all O");
 				
 			}else{
-		
-				console.log("we ave afree botle");
 				
 				branch2 = secondOpening(branch,columns2);//make new branch
+				branchView.push("sd O");
 			}
 			
 		}
