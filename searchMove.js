@@ -146,7 +146,8 @@ function simpleMove(lstBranch,columns2,lstOfSolution2){
 }
 
 
-let macGuffin = [] //if we fail do allSecond opening
+let macGuffin = [] //if we fail do all Second opening
+
 function secondOpening(lstBranch3,columns2){
 
 	let [Vcolumn4,lstOfMove4] = lstBranch3[0];
@@ -168,6 +169,7 @@ function allSecondOpening(branch2,columns2){
 	let [Vcolumn2,lstOfMove2] = branch2[0];
 		
 	[Vcolumn2,lstOfMove2] = macGuffin;
+	macGuffin = [];
 	
 	let lstBranch4 = [];
 	
@@ -204,7 +206,6 @@ function allSecondOpening(branch2,columns2){
 		
 	}
 	
-	macGuffin = [];
 	return lstBranch4
 }
 
