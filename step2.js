@@ -2,7 +2,7 @@
 var abstract = require('./abstract');
 var [newVcolumn,Vupdate] = require('./Vcolumn');
 var addToList = require('./addToList');
-var [Vempty,simpleMove,secondOpening] = require('./searchMove');
+var [Vempty,simpleMove,secondOpening,allSecondOpening] = require('./searchMove');
 
 
 //abstract(columns);
@@ -87,20 +87,14 @@ function step(columns2,nbEmptyBotle,branchView){
 			
 			
 			if(!Vempty(branch[0][0])){	//no free botle
-				abstract(columns2);
-				console.log(branch[0]);
-				console.log("i",i);
-				console.log("simple moves",lstOfMove.length);
-				console.log("we ave",branch.length,"branch");
-				console.log("largest branch",largestBranch);
-				console.log("second Ball return nothing");
-				throw Error;
+				
+				branch2 = allSecondOpening(branch,columns2);
+				
 			}else{
 		
 				console.log("we ave afree botle");
 				
-				branch = secondOpening(branch,columns2);//make new branch
-				continue;
+				branch2 = secondOpening(branch,columns2);//make new branch
 			}
 			
 		}

@@ -16,7 +16,7 @@ const PINK = 11
 const CYAN = 12;
 const ORANGE = 13;
 
-var level = 3.2;
+var level = 1.1;
 //var level = "tstcc6";
 
 var columns;

@@ -145,9 +145,30 @@ function simpleMove(lstBranch,columns2,lstOfSolution2){
 	return lstBranch2
 }
 
-function thirdOpening(lstBranch3,columns2){
+
+let macGuffin = [] //if we fail do allSecond opening
+function secondOpening(lstBranch3,columns2){
+
+	let [Vcolumn4,lstOfMove4] = lstBranch3[0];
+	macGuffin = [[...Vcolumn4],[...lstOfMove4]]
+	let sdOpening = bestOpening2(Vcolumn4);
 	
-	let [Vcolumn2,lstOfMove2] = lstBranch3[0];
+	console.log("second opening",sdOpening);
+	
+	lstOfMove4.push(sdOpening);
+	Vupdate(columns2,Vcolumn4,sdOpening)
+	
+	return [[Vcolumn4,lstOfMove4]];//make new branch
+
+}
+
+
+function allSecondOpening(branch2,columns2){
+	
+	let [Vcolumn2,lstOfMove2] = branch2[0];
+		
+	[Vcolumn2,lstOfMove2] = macGuffin;
+	
 	let lstBranch4 = [];
 	
 	let emptyBtl = Vempty(Vcolumn2);
@@ -170,26 +191,25 @@ function thirdOpening(lstBranch3,columns2){
 		Vupdate(columns2,Vcolumn3,sdOpening)
 		
 		lstBranch4.push([Vcolumn3,lstOfMove3]);
+		console.log("Vcolumn",i,Vcolumn3);
 	}
+	
+	if(lstBranch4.length ==0){
+		abstract(columns2);
+		console.log(branch2[0]);
+		console.log("simple moves",lstOfMove2.length);
+		console.log("we ave",branch2.length,"branch");
+		console.log("second Ball return nothing");
+		throw Error;
+		
+	}
+	
+	macGuffin = [];
 	return lstBranch4
 }
 
-function secondOpening(lstBranch3,columns2){
 
-	let [Vcolumn4,lstOfMove4] = lstBranch3[0];
-	let sdOpening = bestOpening2(Vcolumn4);
-	
-	console.log("second opening",sdOpening);
-	
-	lstOfMove4.push(sdOpening);
-	Vupdate(columns2,Vcolumn4,sdOpening)
-	
-	return [[Vcolumn4,lstOfMove4]];//make new branch
-
-}
-
-
-//module.exports = [Vempty,simpleMove,secondOpening]
-module.exports = [Vempty,simpleMove,thirdOpening]
+module.exports = [Vempty,simpleMove,secondOpening,allSecondOpening]
+//module.exports = [Vempty,simpleMove,allSecondOpening]
 
 
