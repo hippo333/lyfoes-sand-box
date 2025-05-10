@@ -37,7 +37,7 @@ function doAllMove(state,lstCrissCross){
 
 let nbEmptyBotle = 1;	//how mayn empty botle we use
 
-for(let cycle=0;cycle <3; cycle++ ){
+for(let cycle=0;cycle <4; cycle++ ){
 
 	let lstOfStates2 = [];
 	
@@ -66,13 +66,13 @@ for(let cycle=0;cycle <3; cycle++ ){
    			var time = end - startTime;
    			console.log(time/1000,"s");
 			
-			break;
+			return;
 		}
 		
 		let loop = step(columns2, nbEmptyBotle, branchView);
 		nbEmptyBotle =1;
 
-			abstract(columns3);
+			abstract(columns2);
 		console.log("\n\n\nthe loop");
 		console.log(loop);
 		
@@ -97,6 +97,8 @@ for(let cycle=0;cycle <3; cycle++ ){
 	
 	lstOfStates = lstOfStates2;
 }
+console.log("main Cycle over");
+throw Error
 
 
 

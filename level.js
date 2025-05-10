@@ -16,7 +16,7 @@ const PINK = 11
 const CYAN = 12;
 const ORANGE = 13;
 
-var level = 3.3;
+var level = 1.1;
 //var level = "tstcc6";
 
 var columns;
@@ -292,6 +292,146 @@ var columns = [
 	new Column([WHITE, BRIGHTPINK, BLUE, WHITE]),
 	new Column([WHITE, GREEN, LIGHTBLUE, BRIGHTPINK]),
 	new Column([GREEN, BRIGHTPINK, YELLOW, GREEN]),
+	new Column([]),
+	new Column([]),
+];
+break;
+
+case 3.4:	//3 ball
+var columns = [
+	new Column([RED, RED, YELLOW]),
+	new Column([YELLOW, BRIGHTPINK, BLUE]),
+	new Column([WHITE, BLUE, GREEN]),
+	new Column([BRIGHTPINK, YELLOW, WHITE]),
+	new Column([RED, GREEN, WHITE]),
+	new Column([BRIGHTPINK, BLUE, GREEN]),
+	new Column([]),
+	new Column([]),
+];
+break;
+
+case 3.5:	
+var columns = [
+	new Column([LIGHTBLUE, WHITE, BLUE, YELLOW]),
+	new Column([WHITE, BLUE, LIGHTBLUE, BLUE]),
+	new Column([GREEN, BRIGHTPINK, GREEN, RED]),
+	new Column([GREEN, WHITE, RED, YELLOW]),
+	new Column([LIGHTBLUE, BRIGHTPINK, RED, BRIGHTPINK]),
+	new Column([GREEN , BRIGHTPINK, YELLOW, WHITE]),
+	new Column([LIGHTBLUE, BLUE, YELLOW, RED]),
+	new Column([]),
+	new Column([]),
+];
+break;
+
+case 3.6:	
+var columns = [
+	new Column([GREEN, YELLOW, WHITE, YELLOW]),
+	new Column([LIGHTBLUE, RED, YELLOW, BRIGHTPINK]),
+	new Column([BLUE, WHITE, RED, WHITE]),
+	new Column([LIGHTBLUE, WHITE, BLUE, GREEN]),
+	new Column([GREEN, RED, LIGHTBLUE, BLUE]),
+	new Column([BRIGHTPINK, LIGHTBLUE, BRIGHTPINK, GREEN]),
+	new Column([BLUE, YELLOW, BRIGHTPINK, RED]),
+	new Column([]),
+	new Column([]),
+];
+break;
+
+case 3.7:	//3 ball
+var columns = [
+	new Column([GREEN, BLUE, BLUE]),
+	new Column([RED, YELLOW, RED]),
+	new Column([WHITE, BRIGHTPINK, WHITE]),
+	new Column([BLUE, BRIGHTPINK, GREEN]),
+	new Column([BRIGHTPINK, GREEN, YELLOW]),
+	new Column([RED, WHITE, YELLOW]),
+	new Column([]),
+	new Column([]),
+];
+break;
+
+case 3.8:	
+var columns = [
+	new Column([RED, BRIGHTPINK, WHITE, YELLOW]),
+	new Column([GREEN, WHITE, BLUE, RED]),
+	new Column([LIGHTBLUE, BRIGHTPINK, LIGHTBLUE, BLUE]),
+	new Column([LIGHTBLUE, YELLOW, GREEN, BLUE]),
+	new Column([BRIGHTPINK, GREEN, GREEN, BLUE]),
+	new Column([RED, RED, YELLOW, YELLOW]),
+	new Column([LIGHTBLUE, WHITE, BRIGHTPINK, WHITE]),
+	new Column([]),
+	new Column([]),
+];
+break;
+
+case 3.9:	
+var columns = [
+	new Column([BRIGHTPINK, YELLOW, BRIGHTPINK]),
+	new Column([BRIGHTPINK, YELLOW, RED]),
+	new Column([WHITE, GREEN, BLUE]),
+	new Column([WHITE, GREEN, WHITE]),
+	new Column([BLUE, RED, BLUE]),
+	new Column([YELLOW, RED, GREEN]),
+	new Column([]),
+];
+break;
+
+case 3.10:	
+var columns = [
+	new Column([BLUE, BLUE, RED, WHITE]),
+	new Column([LIGHTBLUE, YELLOW, BRIGHTPINK, BLUE]),
+	new Column([GREEN, LIGHTBLUE, BRIGHTPINK, RED]),
+	new Column([YELLOW, BLUE, LIGHTBLUE, GREEN]),
+	new Column([GREEN, RED, GREEN, WHITE]),
+	new Column([YELLOW, BRIGHTPINK, WHITE, WHITE]),
+	new Column([RED, BRIGHTPINK, LIGHTBLUE, YELLOW]),
+	new Column([]),
+	new Column([]),
+];
+break;
+
+case 3.11:	
+var columns = [
+	new Column([BLUE, RED, LIGHTBLUE, ORANGE]),
+	new Column([RED, YELLOW, BRIGHTPINK, GREEN]),
+	new Column([BLUE, WHITE, WHITE, YELLOW]),
+	new Column([WHITE, YELLOW, GREEN, RED]),
+	new Column([BRIGHTPINK, YELLOW, GREEN, LIGHTBLUE]),
+	new Column([BRIGHTPINK, BRIGHTPINK, ORANGE, ORANGE]),
+	new Column([BLUE, ORANGE, LIGHTBLUE, WHITE]),
+	new Column([RED, GREEN, LIGHTBLUE, BLUE]),
+	new Column([]),
+	new Column([]),
+];
+break;
+
+case 3.12:	
+var columns = [
+	new Column([LIGHTBLUE, RED, WHITE, WHITE]),
+	new Column([RED, RED, BRIGHTPINK, GREEN]),
+	new Column([GREEN, LIGHTBLUE, BLUE, GREEN]),
+	new Column([BLUE, YELLOW, BRIGHTPINK, RED]),
+	new Column([BLUE, YELLOW, BLUE, YELLOW]),
+	new Column([GREEN, WHITE, YELLOW, WHITE]),
+	new Column([BRIGHTPINK, LIGHTBLUE, BRIGHTPINK,LIGHTBLUE]),
+	new Column([]),
+	new Column([]),
+];
+break;
+
+case 4.1:	
+var columns = [
+	new Column([PURPLE, CYAN, YELLOW, WHITE]),
+	new Column([CYAN, YELLOW, GREEN, BLUE]),
+	new Column([BLUE, BRIGHTPINK, GREEN, RED]),
+	new Column([RED, YELLOW, BRIGHTPINK, GREEN]),
+	new Column([CYAN, RED, ORANGE, BRIGHTPINK]),
+	new Column([PURPLE, WHITE, WHITE, ORANGE]),
+	new Column([BLUE, PURPLE, ORANGE, LIGHTBLUE]),
+	new Column([ORANGE, LIGHTBLUE, CYAN, BRIGHTPINK]),
+	new Column([LIGHTBLUE, GREEN, PURPLE, LIGHTBLUE]),
+	new Column([RED, BLUE, YELLOW,WHITE]),
 	new Column([]),
 	new Column([]),
 ];

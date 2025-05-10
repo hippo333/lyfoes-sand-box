@@ -142,6 +142,7 @@ function simpleMove(lstBranch,columns2,lstOfSolution2){
 				continue
 			}
 		}
+	//throw Error(lstBranch2);	//debug
 	return lstBranch2
 }
 
