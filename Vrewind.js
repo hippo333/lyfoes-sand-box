@@ -118,14 +118,14 @@ function Vrewind([Vcolumn2,lstOfMove2],columns2){
 }
 
 var columns0 = [
-	new Column([7,7,2]),
+	new Column([7,7,2,5]),
 	new Column([2,2,5,2]),
 	new Column([5,5,7,7]),
 	new Column([]),
-	new Column([5]),
+	new Column([]),
 ];
 
-let lstOfMove0 =[ [ 1, 0 ],[1, 3], [0, 1] ];
+let lstOfMove0 =[ [0, 4], [ 1, 0 ],[1, 3], [0, 1] ];
 let Vcolumn0 = [ [ 7, 2, 2 ], [ 2, 4, 4 ], [ 7, 2, 4 ], [ 5, 1, 1 ], [ 5, 1, 1 ] ];
 /*
 var columns0 = [
@@ -140,6 +140,9 @@ let lstOfMove0 =[ [ 0, 3 ], [ 2, 0 ], [ 1, 2 ], [ 3, 1 ] ];
 let Vcolumn0 = [ [ 7, 4, 4 ], [ 2, 4, 4 ], [ 5, 4, 4 ], [ 0, 0, 0 ], [ 0, 0, 0 ] ];*/
 
 
+Vrewind([Vcolumn0,lstOfMove0],columns0);
+Vrewind([Vcolumn0,lstOfMove0],columns0);
+Vrewind([Vcolumn0,lstOfMove0],columns0);
 Vrewind([Vcolumn0,lstOfMove0],columns0);
 console.log(Vcolumn0);
 console.log(lstOfMove0);
