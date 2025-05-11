@@ -36,6 +36,11 @@ function WhoCanGoTo(Vcolumn2,col2){
 				if(Vcolumn2[i][1] == Vcolumn2[col2][1] && i>col){continue;}
 			}	//2 ball to 2 ball not count twice 
 		}	//avoid bigBall to single ball	
+		
+		/*if(col2==8 && i ==5){	//debug
+			console.log("Vcolumn",Vcolumn2);
+			throw Error
+		}*/
 				
 		output.push(i);		
 	}
@@ -141,7 +146,7 @@ function simpleMove(lstBranch,columns2,lstOfSolution2){
 				continue
 			}
 		}
-	//throw Error(lstBranch2);	//debug
+	
 	return lstBranch2
 }
 
@@ -155,6 +160,7 @@ function secondOpening(branch2,columns2){
 	macGuffin = [[...Vcolumn4],[...lstOfMove4]];
 	console.log("new macguffin",macGuffin);
 	
+	
 	let sdOpening = bestOpening2(Vcolumn4);
 	sdOp = sdOpening[0];
 	
@@ -167,25 +173,20 @@ function secondOpening(branch2,columns2){
 
 }
 
-let promissingBranch = [];
 
 function allSecondOpening(branch2,columns2){
 	
 	let [Vcolumn2,lstOfMove2] = branch2[0];
 	
 	if(macGuffin.length ==0){
-		if(promissingBranch.length >0){
-			macGuffin = promissingBranch[promissingBranch];
-			promissingBranch.pop();
-			
-		}else{
-			abstract(columns2);
-			console.log(branch2[0]);
-			console.log("simple moves",lstOfMove2.length);
-			console.log("we ave",branch2.length,"branch");
-			console.log("second Ball return nothing");
-			throw Error;
-		}
+	
+		abstract(columns2);
+		console.log(branch2[0]);
+		console.log("simple moves",lstOfMove2.length);
+		console.log("we ave",branch2.length,"branch");
+		console.log("second Ball return nothing");
+		throw Error;
+		
 	}
 	
 	console.log("macGuffin",macGuffin);
@@ -224,7 +225,7 @@ function allSecondOpening(branch2,columns2){
 }
 
 
-module.exports = [Vempty,simpleMove,secondOpening,allSecondOpening,promissingBranch]
+module.exports = [Vempty,simpleMove,secondOpening,allSecondOpening]
 //module.exports = [Vempty,simpleMove,allSecondOpening]
 
 

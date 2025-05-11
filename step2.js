@@ -2,7 +2,7 @@
 var abstract = require('./abstract');
 var [newVcolumn,Vupdate] = require('./Vcolumn');
 var addToList = require('./addToList');
-var [Vempty,simpleMove,secondOpening,allSecondOpening,promissingBranch] = require('./searchMove');
+var [Vempty,simpleMove,secondOpening,allSecondOpening] = require('./searchMove');
 
 
 //abstract(columns);
@@ -86,7 +86,7 @@ function step(columns2,nbEmptyBotle,branchView){
 			if(nbEmptyBotle ==1){break}	//main decide
 			
 			
-			if(Vempty(branch[0][0]  ==null)){	//no free botle
+			if(Vempty(branch[0][0])  ==null){	//no free botle
 				
 				branch2 = allSecondOpening(branch,columns2);
 				branchView.push("all O");
