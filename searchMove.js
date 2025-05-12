@@ -178,6 +178,12 @@ function allSecondOpening(branch2,columns2){
 	
 	let [Vcolumn2,lstOfMove2] = branch2[0];
 	
+	if(branch2.length > 1){
+		console.log("all second branch we ave",branch2.length);
+		//console.log(branch2);
+		//throw Error
+	}
+	
 	if(macGuffin.length ==0){
 	
 		abstract(columns2);

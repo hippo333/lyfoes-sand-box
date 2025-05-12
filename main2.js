@@ -37,7 +37,7 @@ function doAllMove(state,lstCrissCross){
 
 let nbEmptyBotle = 1;	//how mayn empty botle we use
 
-for(let cycle=0;cycle <4; cycle++ ){
+for(let cycle=0;cycle <5; cycle++ ){
 
 	let lstOfStates2 = [];
 	

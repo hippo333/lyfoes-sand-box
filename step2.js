@@ -54,6 +54,21 @@ function opening(branchInit,columns2){
 	return branch
 }
 
+function bestBranch(branch2){	//all branch with empty botle
+	console.log("bestBranch");
+	let lstBest = [];
+	
+	for(let br=0; br< branch2.length; br++){
+		console.log("branch",branch2[br][1]);
+		
+		if(Vempty(branch2[br][0])){
+			console.log("a empty");
+			lstBest.push(branch2[br]);
+		}
+	}
+	return lstBest
+}
+
 
 function step(columns2,nbEmptyBotle,branchView){
 
@@ -85,15 +100,17 @@ function step(columns2,nbEmptyBotle,branchView){
 			
 			if(nbEmptyBotle ==1){break}	//main decide
 			
+			let branchOneBtl = bestBranch(branch);
 			
-			if(Vempty(branch[0][0])  ==null){	//no free botle
+			if(branchOneBtl.length ==0 ){	//no free botle
 				
 				branch2 = allSecondOpening(branch,columns2);
 				branchView.push("all O");
 				
 			}else{
+				console.log("branchOneBtl",branchOneBtl.length);
 				
-				branch2 = secondOpening(branch,columns2);//make new branch
+				branch2 = secondOpening(branchOneBtl,columns2);//make new branch
 				branchView.push("sd O");
 				
 			}
