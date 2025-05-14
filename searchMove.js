@@ -37,10 +37,10 @@ function WhoCanGoTo(Vcolumn2,col2){
 			}	//2 ball to 2 ball not count twice 
 		}	//avoid bigBall to single ball	
 		
-		/*if(col2==8 && i ==5){	//debug
+		if(col2==11 && i ==8){	//debug
 			console.log("Vcolumn",Vcolumn2);
-			throw Error
-		}*/
+			//throw Error
+		}
 				
 		output.push(i);		
 	}
@@ -91,6 +91,7 @@ function oneBtl([Vcolumn2,lstOfMove2],columns2){
 		
 		//add to the list for the next Cycle
 		for(k in lst){
+			//console.log("  k");
 			let Vcolumn4 = [...Vcolumn2];
 			let lstOfMove4 = [...lstOfMove2];
 			colFrom = lst[k];
@@ -101,6 +102,7 @@ function oneBtl([Vcolumn2,lstOfMove2],columns2){
 			
 			//we free a botle
 			if(Vcolumn4[colFrom][1] == 0){
+				
 				endGame.push([Vcolumn4,lstOfMove4]);
 				continue
 			}
@@ -113,7 +115,7 @@ function oneBtl([Vcolumn2,lstOfMove2],columns2){
 		console.log("  i'm stuck");
 		console.log(lstOfMove2);
 	}
-	
+	//console.log("endGame",endGame[0]);
 	return [output,endGame]
 }
 
@@ -125,23 +127,33 @@ function simpleMove(lstBranch,columns2,lstOfSolution2){
 		for(j=0;j<lstBranch.length;j++){
 		
 			let [Vcolumn3,lstOfMove3] = lstBranch[j];
-			//console.log("Vcolumn",j)
-			//console.log(Vcolumn3);
+			console.log("branch",j)
+			console.log(Vcolumn3);
+			
+				/*if(lstOfMove3[lstOfMove3.length-1][0] ==5){//debug
+				if(lstOfMove3[lstOfMove3.length-1][1] ==8){
+					console.log("\n\n\n\n\n\n",lstOfMove3);
+					console.log("Vcolumn3",Vcolumn3)
+					//throw Error
+				}}*/
 			
 			
 			let [MoveTo,finishTo] = oneBtl(lstBranch[j],columns2);
 			lstBranch2 = lstBranch2.concat(MoveTo);
 			
+						
 			if(finishTo.length == 0){continue}
 			
+			//console.log("finishTo of oneBtl",finishTo.length);
+			//console.log(finishTo[0]);
+			
 			if(Vempty(Vcolumn3) == null){
-				//console.log("finish to");
-				console.log(finishTo.length);
+				console.log("finish to");
 				
 				lstBranch2 = lstBranch2.concat(finishTo);
 				continue;			
 			}else{
-				//console.log("finish to",finishTo);
+				console.log("finish to",finishTo);
 				addToList(lstOfSolution2,finishTo);
 				continue
 			}
@@ -230,8 +242,77 @@ function allSecondOpening(branch2,columns2){
 	return branch3
 }
 
+function justOpening(branch0,columns2){
+	let [Vcolumn2,lstOfMove2] = branch0;
+	let output = [];
+	
+	let emptyBtl = Vempty(Vcolumn2);
+	
+	if(emptyBtl == null ){return []}
+	
+	for(let col=0;col<Vcolumn2.length;col++){
+		
+		if(Vcolumn2[col][2] ==0){continue}
+		
+		let Vcolumn3 = [...Vcolumn2];
+		let lstOfMove3 = [...lstOfMove2];
+		let opening = [col,emptyBtl];
+	
+		Vupdate(columns2,Vcolumn3,opening);
+		lstOfMove3.push(opening)
+		output.push([Vcolumn3,lstOfMove3]);
+	}
+	return output
 
-module.exports = [Vempty,simpleMove,secondOpening,allSecondOpening]
-//module.exports = [Vempty,simpleMove,allSecondOpening]
+
+
+}
+
+
+function search2(branch,columns2,lstOfSolution2){
+	console.log("search2");
+	branch2 = [];	
+	
+	for(let br=0; br<branch.length;br++){
+		thisBranch = branch[br];
+		let lastLstOfSolution = lstOfSolution2.length;
+		
+		let branchOne =simpleMove([thisBranch],columns2,lstOfSolution2);
+		
+		if(branchOne.length >0){	
+			branch2 = branch2.concat(branchOne);
+			
+			console.log("\n\n\n\n\nlstOfSolution",lstOfSolution2);
+		}else{
+			if(lstOfSolution2.length > lastLstOfSolution){
+				return []
+			}
+			//if we get a solution
+			
+			if(Vempty(thisBranch[0]) == null){continue}
+			
+			console.log("branchTwo");
+			let branchTwo = justOpening(thisBranch,columns2);
+			
+			console.log("brtwo",branchTwo);
+			
+			branch2 = branch2.concat(branchTwo);
+		}
+	}
+	return branch2
+}
+
+
+
+
+
+
+
+
+
+
+
+module.exports = [Vempty,search2,secondOpening,allSecondOpening]
+//module.exports = [Vempty,simpleMove,secondOpening,allSecondOpening]
 
 

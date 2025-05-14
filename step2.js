@@ -55,14 +55,14 @@ function opening(branchInit,columns2){
 }
 
 function bestBranch(branch2){	//all branch with empty botle
-	console.log("bestBranch");
+	//console.log("bestBranch");
 	let lstBest = [];
 	
 	for(let br=0; br< branch2.length; br++){
-		console.log("branch",branch2[br][1]);
+		//console.log("branch",branch2[br][1]);
 		
 		if(Vempty(branch2[br][0])){
-			console.log("a empty");
+			//console.log("a empty");
 			lstBest.push(branch2[br]);
 		}
 	}
@@ -90,11 +90,14 @@ function step(columns2,nbEmptyBotle,branchView){
 		console.log("\nstep cycle",i);
 		let branch2 = simpleMove(branch,columns2,lstOfSolution);
 		
+			console.log("\n|\n|\n|\n|\nlstOfSolution",lstOfSolution);
+			
+		if(lstOfSolution.length >0){	//if we ave a solution
+			return lstOfSolution
+		}
+			
 		//if we can't do nothing we stop
-		if(branch2.length == 0){	
-			if(lstOfSolution.length >0){	//if we ave a solution
-				return lstOfSolution
-			}
+		if(branch2.length == 0){
 			
 			console.log("\n\n\nstep2,step no move possible");
 			
@@ -108,7 +111,7 @@ function step(columns2,nbEmptyBotle,branchView){
 				branchView.push("all O");
 				
 			}else{
-				console.log("branchOneBtl",branchOneBtl.length);
+				//console.log("branchOneBtl",branchOneBtl.length);
 				
 				branch2 = secondOpening(branchOneBtl,columns2);//make new branch
 				branchView.push("sd O");
