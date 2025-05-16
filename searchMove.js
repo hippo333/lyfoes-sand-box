@@ -114,6 +114,8 @@ function oneBtl([Vcolumn2,lstOfMove2],columns2){
 	if(output == [] && endGame ==[]){
 		console.log("  i'm stuck");
 		console.log(lstOfMove2);
+		
+		
 	}
 	//console.log("endGame",endGame[0]);
 	return [output,endGame]
@@ -143,7 +145,8 @@ function simpleMove(lstBranch,columns2,lstOfSolution2){
 			
 						
 			if(finishTo.length == 0){continue}
-			
+		
+		
 			//console.log("finishTo of oneBtl",finishTo.length);
 			//console.log(finishTo[0]);
 			
@@ -197,7 +200,8 @@ function allSecondOpening(branch2,columns2){
 	}
 	
 	if(macGuffin.length ==0){
-	
+		
+		console.log("\n\nError");
 		abstract(columns2);
 		console.log(branch2[0]);
 		console.log("simple moves",lstOfMove2.length);
@@ -242,6 +246,7 @@ function allSecondOpening(branch2,columns2){
 	return branch3
 }
 
+/*
 function justOpening(branch0,columns2){
 	let [Vcolumn2,lstOfMove2] = branch0;
 	let output = [];
@@ -301,6 +306,7 @@ function search2(branch,columns2,lstOfSolution2){
 	}
 	return branch2
 }
+*/
 
 
 
@@ -311,8 +317,7 @@ function search2(branch,columns2,lstOfSolution2){
 
 
 
-
-module.exports = [Vempty,search2,secondOpening,allSecondOpening]
-//module.exports = [Vempty,simpleMove,secondOpening,allSecondOpening]
+//module.exports = [Vempty,search2,secondOpening,allSecondOpening]
+module.exports = [Vempty,simpleMove,secondOpening,allSecondOpening]
 
 
