@@ -246,38 +246,6 @@ let branch = [
 	]]
 ];
 
-function isDifferent(a,b){
-	if(a[0] != b[0]){return true}
-	if(a[1] != b[1]){return true}
-	
-	return false
-}
-
-let comuneBranch = branch[0][1];
-	
-for(let br =1;br<branch.length;br++){
-	let thisBranch = [...branch[br][1]];
-	
-	console.log(thisBranch);
-	
-	for(mv in comuneBranch){
-	
-		if(isDifferent(comuneBranch[mv],thisBranch[mv])){
-			
-			comuneBranch.splice(mv, comuneBranch.length - mv);
-						
-			continue;
-		}
-	}
-
-}
-
-console.log("comuneBranch",comuneBranch.length);
-console.log(comuneBranch);
-
-
-
-
 
 
 

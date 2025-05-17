@@ -1,6 +1,36 @@
 
 var Column = require('./column');
 
+
+function firstBigBall(col,Vcolumn2,columns2){
+	let firstBB = 0;
+	let Vcol = Vcolumn2[col];
+	let theCol = columns2[col].content;
+	let theBall = Vcol[0];
+	
+	let level = Vcol[2]-Vcol[1];	//level of the first ball
+	
+	
+	for(let ball=level; ball<theCol.length; ball++){
+			if(theCol[ball] ==theBall){
+				firstBB++;
+			}else{
+				break
+			}
+		
+		
+	}
+	console.log("first BB",firstBB);
+	
+	if(firstBB ==0){
+		theBall = 0;
+	}
+	
+	Vcol = [theBall, firstBB, firstBB+ level];
+	
+	return Vcol
+}
+
 function Vrewind([Vcolumn2,lstOfMove2],columns2){
 
 	let lastMove = lstOfMove2[lstOfMove2.length-1];
@@ -51,60 +81,57 @@ function Vrewind([Vcolumn2,lstOfMove2],columns2){
 		colTo[2] -= 1;
 		colTo[1] -= 1;
 		
-		let setFrom = false;
-		let setTo = false;
-		for(let mv=lstOfMove2.length-2;mv >=0;mv--){
-			let thisMv = lstOfMove2[mv];
+		let suspect = [from,to];
+		let suspect2 = [from,to];
+		let unjustified = colTo[1]
+		
+		for(let mv=lstOfMove2.length -2;mv>=0;mv--){
 			
-			console.log("mv",mv);
-			console.log("thismv",thisMv);
-					console.log(from,colFrom);
-					console.log(to,colTo);
-			if(thisMv[0] ==to){
-				setTo = true;
-				console.log("setTo");
-				//one ball for begening
-			}if(thisMv[1] ==to){
-				if(!setTo){
-					console.log("\nfeed to");
-					setTrue = true;
-					
-					
-					console.log(from,colFrom);
-					console.log(to,colTo);
-					
-					
-					break;
-				}
-				//one ball for begening
-			}if(thisMv[0] ==from){
-				setFrom == true;
-				console.log("set from");
-				//one ball for begening
+			if(unjustified == 0 ){break}
+			
+			let thisMove = lstOfMove2[mv];
+			
+			//we ave a ball above
+			let thePlaceOut = suspect.indexOf(thisMove[0]);
+			if(thePlaceOut != -1 ){
+				suspect.splice(thePlaceOut,1);
+			}
+			
+			let thePlaceIn = suspect.indexOf(thisMove[1]);
+			if(thePlaceIn != -1){
+			
+				unjustified--
 				
-			}
-			if(thisMv[1] ==from){
-				if(!setFrom){
-					setFrom = true;
-					console.log("\nfeed from");
+				if(thisMove[1] != to){
+					colTo[1]--;
+					colTo[2]--;
 					
-								
-					colFrom[2] += 1;
-					colFrom[1] += 1;
+					Vcolumn2[thisMove[1]][2]++
 					
-					colTo[2] -= 1;
-					colTo[1] -= 1;
-					//v update col to
-					console.log(from,colFrom);
-					console.log(to,colTo);
+					if(Vcolumn2[thisMove[1]][0] == colFrom[0]){
+						Vcolumn2[thisMove[1]][1]++
+						
+					}else{
+						Vcolumn2[thisMove[1]][0] = colFrom[0];
+						
+						Vcolumn2[thisMove[1]][1] =1;
 					
-					break
+					}
+					
 				}
-				//one ball for begening
 			}
+		
 		}
 		
-		
+		if(unjustified > 0){
+			console.log(colFrom);
+			console.log(colTo);
+			console.log("we ave",unjustified,"unjustified");
+			colTo = firstBigBall(to,Vcolumn2,columns2);
+			
+			//colFrom[1] += unjustified- colTo[1];
+			
+		}
 		
 		lstOfMove2.pop();
 		
@@ -141,9 +168,9 @@ let Vcolumn0 = [ [ 7, 4, 4 ], [ 2, 4, 4 ], [ 5, 4, 4 ], [ 0, 0, 0 ], [ 0, 0, 0 ]
 
 
 Vrewind([Vcolumn0,lstOfMove0],columns0);
+Vrewind([Vcolumn0,lstOfMove0],columns0);/*
 Vrewind([Vcolumn0,lstOfMove0],columns0);
-Vrewind([Vcolumn0,lstOfMove0],columns0);
-Vrewind([Vcolumn0,lstOfMove0],columns0);
+Vrewind([Vcolumn0,lstOfMove0],columns0);*/
 console.log(Vcolumn0);
 console.log(lstOfMove0);
 
