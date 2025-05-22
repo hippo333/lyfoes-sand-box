@@ -129,7 +129,8 @@ function Vrewind([Vcolumn2,lstOfMove2],columns2){
 			console.log("we ave",unjustified,"unjustified");
 			colTo = firstBigBall(to,Vcolumn2,columns2);
 			
-			//colFrom[1] += unjustified- colTo[1];
+			colFrom[1] += unjustified- colTo[1];
+			colFrom[2] += unjustified- colTo[1];
 			
 		}
 		
