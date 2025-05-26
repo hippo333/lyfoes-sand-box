@@ -2,7 +2,7 @@
 var abstract = require('./abstract');
 var [newVcolumn,Vupdate] = require('./Vcolumn');
 var addToList = require('./addToList');
-var [Vempty,simpleMove,secondOpening,allSecondOpening] = require('./searchMove');
+var [Vempty,secondOpening,allSecondOpening,justBranch] = require('./searchMove');
 
 
 //abstract(columns);
@@ -88,7 +88,20 @@ function step(columns2,nbEmptyBotle,branchView){
 			
 	for(let i=0;i<30;i++){
 		console.log("\nstep cycle",i);
-		let branch2 = simpleMove(branch,columns2,lstOfSolution);
+		
+		//
+		let branch2 = [];
+		for(let br=0;br<branch.length;br++){
+			let nextBranch = justBranch(branch[br],columns2,lstOfSolution);
+			
+			branch2 = branch2.concat(nextBranch);
+			
+			
+		}
+		//break;
+		//
+		
+		
 		
 			console.log("\n|\n|\n|\n|\nlstOfSolution",lstOfSolution);
 			
@@ -117,9 +130,7 @@ function step(columns2,nbEmptyBotle,branchView){
 				branchView.push("sd O");
 				
 			}
-			
 		}
-
 
 		branch = branch2;	//for the next cycle
 		console.log("step2",branch.length,"branch");

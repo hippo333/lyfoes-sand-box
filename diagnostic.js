@@ -52,18 +52,18 @@ function isColor(col2){
 function smolestColor(branch,columns2){
 	let [Vcolumn2,lstOfMove2] = branch[0];
 	
-	let smolestCol = [-1,4];	//[col,bigBall]
+	let smolestColor = [-1,4];	//[col,bigBall]
 	
 	for(let col=0;col <Vcolumn2.length;col++){
 		let thisCol = Vcolumn2[col];
 				
 		if(!isColor(thisCol)){continue}
 		
-		if(thisCol[2] < smolestCol[1]){
-			smolestCol = [col,thisCol[2]];
+		if(thisCol[2] < smolestColor[1]){
+			smolestColor = [col,thisCol[2]];
 		}
 	}
-	console.log("smolestCol",smolestCol);
+	console.log("smolestColor",smolestColor);
 }
 
 smolestColor(branch0,columns0);

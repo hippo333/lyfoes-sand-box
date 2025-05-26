@@ -122,50 +122,6 @@ function oneBtl([Vcolumn2,lstOfMove2],columns2){
 }
 
 
-function simpleMove(lstBranch,columns2,lstOfSolution2){
-	let lstBranch2 = [];
-
-		
-		for(j=0;j<lstBranch.length;j++){
-		
-			let [Vcolumn3,lstOfMove3] = lstBranch[j];
-			console.log("branch",j)
-			console.log(Vcolumn3);
-			
-				/*if(lstOfMove3[lstOfMove3.length-1][0] ==5){//debug
-				if(lstOfMove3[lstOfMove3.length-1][1] ==8){
-					console.log("\n\n\n\n\n\n",lstOfMove3);
-					console.log("Vcolumn3",Vcolumn3)
-					//throw Error
-				}}*/
-			
-			
-			let [MoveTo,finishTo] = oneBtl(lstBranch[j],columns2);
-			lstBranch2 = lstBranch2.concat(MoveTo);
-			
-						
-			if(finishTo.length == 0){continue}
-		
-		
-			//console.log("finishTo of oneBtl",finishTo.length);
-			//console.log(finishTo[0]);
-			
-			if(Vempty(Vcolumn3) == null){
-				console.log("finish to");
-				
-				lstBranch2 = lstBranch2.concat(finishTo);
-				continue;			
-			}else{
-				console.log("finish to",finishTo);
-				addToList(lstOfSolution2,finishTo);
-				continue
-			}
-		}
-	
-	return lstBranch2
-}
-
-
 let macGuffin = [] //if we fail do all Second opening
 let sdOp = 0;
 
@@ -246,68 +202,45 @@ function allSecondOpening(branch2,columns2){
 	return branch3
 }
 
-/*
-function justOpening(branch0,columns2){
+function justBranch(branch0,columns2,lstOfSolution2){
+
 	let [Vcolumn2,lstOfMove2] = branch0;
-	let output = [];
-	
-	let emptyBtl = Vempty(Vcolumn2);
-	
-	if(emptyBtl == null ){return []}
-	
-	for(let col=0;col<Vcolumn2.length;col++){
+	let branch3 = [];
 		
-		if(Vcolumn2[col][2] ==0){continue}
-		
-		let Vcolumn3 = [...Vcolumn2];
-		let lstOfMove3 = [...lstOfMove2];
-		let opening = [col,emptyBtl];
+	console.log(Vcolumn2);
 	
-		Vupdate(columns2,Vcolumn3,opening);
-		lstOfMove3.push(opening)
-		output.push([Vcolumn3,lstOfMove3]);
+	/*if(lstOfMove2[lstOfMove2.length-1][0] ==5){//debug
+	if(lstOfMove2[lstOfMove2.length-1][1] ==8){
+		console.log("\n\n\n\n\n\n",lstOfMove2);
+		console.log("Vcolumn2",Vcolumn2)
+		//throw Error
+	}}*/
+			
+			
+	let [MoveTo,finishTo] = oneBtl(branch0,columns2);
+	branch3 = branch3.concat(MoveTo);
+			
+						
+	if(finishTo.length == 0){return branch3}
+		
+		
+	//console.log("finishTo of oneBtl",finishTo.length);
+	//console.log(finishTo[0]);
+			
+			
+			
+	//branch 3 or branch 3b
+	if(Vempty(Vcolumn2) == null){
+		console.log("finish to");
+		
+		branch3 = branch3.concat(finishTo);
+	}else{
+		console.log("finish to",finishTo);
+		addToList(lstOfSolution2,finishTo);
 	}
-	return output
-
-
-
-}
-
-
-function search2(branch,columns2,lstOfSolution2){
-	console.log("search2");
-	branch2 = [];	
 	
-	for(let br=0; br<branch.length;br++){
-		thisBranch = branch[br];
-		let lastLstOfSolution = lstOfSolution2.length;
-		
-		let branchOne =simpleMove([thisBranch],columns2,lstOfSolution2);
-		
-		if(branchOne.length >0){	
-			branch2 = branch2.concat(branchOne);
-			
-			console.log("\n\n\n\n\nlstOfSolution",lstOfSolution2);
-		}else{
-			if(lstOfSolution2.length > lastLstOfSolution){
-				return []
-			}
-			//if we get a solution
-			
-			if(Vempty(thisBranch[0]) == null){continue}
-			
-			console.log("branchTwo");
-			let branchTwo = justOpening(thisBranch,columns2);
-			
-			console.log("brtwo",branchTwo);
-			
-			branch2 = branch2.concat(branchTwo);
-		}
-	}
-	return branch2
+	return branch3
 }
-*/
-
 
 
 
@@ -318,6 +251,6 @@ function search2(branch,columns2,lstOfSolution2){
 
 
 //module.exports = [Vempty,search2,secondOpening,allSecondOpening]
-module.exports = [Vempty,simpleMove,secondOpening,allSecondOpening]
+module.exports = [Vempty,secondOpening,allSecondOpening,justBranch]
 
 
