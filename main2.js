@@ -96,6 +96,7 @@ for(let cycle=0;cycle <5; cycle++ ){
 	}
 	
 	lstOfStates = lstOfStates2;
+	console.log("cycle",cycle);
 }
 console.log("main Cycle over");
 throw Error

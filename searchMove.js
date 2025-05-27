@@ -145,6 +145,7 @@ function secondOpening(branch2,columns2){
 }
 
 
+
 function allSecondOpening(branch2,columns2){
 	
 	let [Vcolumn2,lstOfMove2] = branch2[0];
@@ -157,17 +158,26 @@ function allSecondOpening(branch2,columns2){
 	
 	if(macGuffin.length ==0){
 		
-		console.log("\n\nError");
-		abstract(columns2);
-		console.log(branch2[0]);
-		console.log("simple moves",lstOfMove2.length);
-		console.log("we ave",branch2.length,"branch");
-		console.log("second Ball return nothing");
-		throw Error;
+		if(lastChance.length ==0){
 		
+			console.log("\n\nError");
+			abstract(columns2);
+			console.log(branch2[0]);
+			console.log("simple moves",lstOfMove2.length);
+			console.log("we ave",branch2.length,"branch");
+			console.log("second Ball return nothing");
+			throw Error;
+		}else{
+		
+			macGuffin = lastChance;
+			lastChance = [];
+			console.log("lastChance",lastChance);
+		}
+		
+	}else{
+		console.log("macGuffin",macGuffin);
 	}
 	
-	console.log("macGuffin",macGuffin);
 		
 	[Vcolumn2,lstOfMove2] = macGuffin;
 	
@@ -242,6 +252,29 @@ function justBranch(branch0,columns2,lstOfSolution2){
 	return branch3
 }
 
+let lastChance = [];
+function simpleMove(branch,columns2,lstOfSolution){
+	let branch2 = [];
+	
+	for(let br=0;br<branch.length;br++){
+		let nextBranch = justBranch(branch[br],columns2,lstOfSolution);
+		
+		branch2 = branch2.concat(nextBranch);
+		
+		
+		//all second opening
+		if(nextBranch.length ==0){
+			let thisBranch = branch[br];
+			
+			if(!Vempty(thisBranch[0])){continue}
+			lastChance = thisBranch;	
+			
+		}
+		
+		
+	}
+	return branch2
+}
 
 
 
@@ -249,8 +282,7 @@ function justBranch(branch0,columns2,lstOfSolution2){
 
 
 
-
-//module.exports = [Vempty,search2,secondOpening,allSecondOpening]
-module.exports = [Vempty,secondOpening,allSecondOpening,justBranch]
+//module.exports = [Vempty,simpleMove,secondOpening,allSecondOpening]
+module.exports = [Vempty,secondOpening,allSecondOpening,simpleMove]
 
 
