@@ -34,6 +34,8 @@ function WhoCanGoTo(Vcolumn2,col2){
 			if(Vcolumn2[i][1] == Vcolumn2[i][2]){	//from is mono
 				if(Vcolumn2[i][1] > Vcolumn2[col2][1]){continue;}//3->1
 				if(Vcolumn2[i][1] == Vcolumn2[col2][1] && i>col){continue;}
+				
+				
 			}	//2 ball to 2 ball not count twice 
 		}	//avoid bigBall to single ball	
 		
@@ -83,6 +85,7 @@ function oneBtl([Vcolumn2,lstOfMove2],columns2){
 	//console.log("  oneBtl");
 	let output = [];
 	let endGame = [];
+	let lastMove = lstOfMove2[lstOfMove2.length -1];
 	
 	for(colTo in Vcolumn2){	
 		let lst = WhoCanGoTo(Vcolumn2,colTo);
@@ -91,7 +94,14 @@ function oneBtl([Vcolumn2,lstOfMove2],columns2){
 		
 		//add to the list for the next Cycle
 		for(k in lst){
-			//console.log("  k");
+		
+			//kill dublon
+			if(colTo == lastMove[1]){
+				if(lst[k] < lastMove[0]){
+					continue;	
+				}	
+			}
+			
 			let Vcolumn4 = [...Vcolumn2];
 			let lstOfMove4 = [...lstOfMove2];
 			colFrom = lst[k];
@@ -245,7 +255,7 @@ function justBranch(branch0,columns2,lstOfSolution2){
 		
 		branch3 = branch3.concat(finishTo);
 	}else{
-		console.log("finish to",finishTo);
+		//console.log("finish to",finishTo);
 		addToList(lstOfSolution2,finishTo);
 	}
 	

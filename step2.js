@@ -86,14 +86,14 @@ function step(columns2,nbEmptyBotle,branchView){
 	let largestBranch = 0 ;	//mesure the largest branch
 	
 			
-	for(let i=0;i<40;i++){
+	for(let i=0;i<45;i++){
 		console.log("\nstep cycle",i);
 		
 		//
 		let branch2 = simpleMove(branch,columns2,lstOfSolution);
 			
 		
-		console.log("\n|\n|\n|\n|\nlstOfSolution",lstOfSolution);
+		//console.log("\n|\n|\n|\n|\nlstOfSolution",lstOfSolution);
 			
 		if(lstOfSolution.length >0){	//if we ave a solution
 			return lstOfSolution
@@ -130,6 +130,17 @@ function step(columns2,nbEmptyBotle,branchView){
 			largestBranch = branch.length
 		}
 		branchView.push(branch.length);
+		
+		//debug
+		if(branch.length == 28){
+			console.log("\n|\n|\n|\n|\n|\n28 branch");
+			for(br of branch){
+				console.log(br[1]);	
+				
+			}
+			//throw Error
+		}
+		
 	}
 	console.log("Step loop is over");
 	throw Error

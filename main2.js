@@ -72,9 +72,9 @@ for(let cycle=0;cycle <5; cycle++ ){
 		let loop = step(columns2, nbEmptyBotle, branchView);
 		nbEmptyBotle =1;
 
-			abstract(columns2);
+			abstract(columns2);/*
 		console.log("\n\n\nthe loop");
-		console.log(loop);
+		console.log(loop);*/
 		
 		let newState = doAllMove(thisState,loop);
 		lstOfStates2 = lstOfStates2.concat(newState);	//add to the next cycle
