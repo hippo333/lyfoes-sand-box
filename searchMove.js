@@ -1,7 +1,7 @@
 
-var addToList = require('./addToList');
-var abstract = require('./abstract');
-var [newVcolumn,Vupdate] = require('./Vcolumn');
+var addToList = require('./tools/addToList');
+var abstract = require('./tools/abstract');
+var [newVcolumn,Vupdate] = require('./tools/Vcolumn');
 
 
 function Vempty(Vcolumn2){
@@ -19,6 +19,7 @@ function Vempty(Vcolumn2){
 function WhoCanGoTo(Vcolumn2,col2){		
 	//console.log("    who can go to ",col2);
 	let output = [];
+	
 	//console.log("    the ball",Vcolumn2[col2][0]);
 	
 	for(let i=0;i<Vcolumn2.length;i++){
@@ -35,6 +36,7 @@ function WhoCanGoTo(Vcolumn2,col2){
 				if(Vcolumn2[i][1] > Vcolumn2[col2][1]){continue;}//3->1
 				if(Vcolumn2[i][1] == Vcolumn2[col2][1] && i>col){continue;}
 				
+				return [i]	//inevitable move
 				
 			}	//2 ball to 2 ball not count twice 
 		}	//avoid bigBall to single ball	
@@ -91,6 +93,7 @@ function oneBtl([Vcolumn2,lstOfMove2],columns2){
 		let lst = WhoCanGoTo(Vcolumn2,colTo);
 		//console.log("  lst",lst);
 		//console.log(" ",colTo)
+		
 		
 		//add to the list for the next Cycle
 		for(k in lst){

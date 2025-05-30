@@ -1,7 +1,7 @@
 
-var abstract = require('./abstract');
-var [newVcolumn,Vupdate] = require('./Vcolumn');
-var addToList = require('./addToList');
+var abstract = require('./tools/abstract');
+var [newVcolumn,Vupdate] = require('./tools/Vcolumn');
+var addToList = require('./tools/addToList');
 var [Vempty,secondOpening,allSecondOpening,simpleMove] = require('./searchMove');
 
 

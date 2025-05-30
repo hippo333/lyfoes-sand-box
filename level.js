@@ -1,4 +1,4 @@
-var Column = require('./column');
+var Column = require('./tools/column');
 let lstColor = [ "DEPTH" ,"WHITE" ,"blue" ,"lightblue" ,"lightgreen" ,"yellow" ,"brightpink" ,"red" ,"green","grey" ,"purple" ,"pink" ,"cyan" ,"orange" ];
 
 const DEPTH = false;
@@ -16,7 +16,7 @@ const PINK = 11
 const CYAN = 12;
 const ORANGE = 13;
 
-var level = 4.1;
+var level = 4.58;
 //var level = "tst1";
 
 var columns;

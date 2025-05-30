@@ -1,5 +1,5 @@
 var Column = require('./column');
-var columns = require('./level');
+var columns = require('../level');
 
 function coppyColumns(columns3){
 	let output = [];

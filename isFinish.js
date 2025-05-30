@@ -1,5 +1,5 @@
 var columns = require('./level');
-var abstract = require('./abstract');
+var abstract = require('./tools/abstract');
 
 function isMonochrome(col2){
 	let differentBallInCol = [... new Set(col2.content)];

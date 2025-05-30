@@ -1,9 +1,9 @@
 var startTime = new Date().getTime();
-var Column = require('./column');
+var Column = require('./tools/column');
 var columns = require('./level');
-var doTheMove = require('./doTheMove');
-var coppy = require('./coppy');
-var abstract = require('./abstract');
+var doTheMove = require('./tools/doTheMove');
+var coppy = require('./tools/coppy');
+var abstract = require('./tools/abstract');
 var isFinish = require('./isFinish');
 var step = require('./step2')
 
