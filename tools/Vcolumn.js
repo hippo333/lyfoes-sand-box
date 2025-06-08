@@ -1,3 +1,4 @@
+var abstract = require('./abstract');
 
 //easy way to calcul
 function newVcolumn(columns2){
@@ -35,7 +36,7 @@ function Vupdate(columns2,VColumn2,[from,to]){
 	let sizeTo = VColumn2[to][2];
 	
 	if(bllFrom != bllTo && bBTo != 0){
-		console.log("      virtual update");
+		console.log("\n      virtual update");
 		console.log("  ____error ");
 		console.log("      the ball are different");
 		console.log(`      virtual update from:${from} to:${to}`);
@@ -54,7 +55,7 @@ function Vupdate(columns2,VColumn2,[from,to]){
 		bllFrom =0;
 		bBFrom = 0;
 	}if(sizeTo >4){
-		console.log("error VColumn over feed, from",from,"to",to,"ball",bllTo);
+		console.log("\nerror VColumn over feed, from",from,"to",to,"ball",bllTo);
 		console.log("Vcolumn",VColumn2);
 		abstract(columns2);
 		throw Error();
