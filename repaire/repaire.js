@@ -99,6 +99,116 @@ oversizeColor(listColor);
 
 
 
+let begeningOfSolution = [
+[4,13],
+[9,13],
+[2,9],
+[1,14],
+[6,14],
+[6,4],
+[0,6],
+[3,0],
+[12,3],
+[2,12],
+//[1,2],
+//[0,1]
+]
+
+let theFinalMove = [13,0,1];	//from, to, levelOfTarget
+
+let finalLstMv = [theFinalMove]
+
+let Vcolumn3 = newVcolumn(columns);
+let lstOfMove3 = [];
+
+for(move of begeningOfSolution){	
+	Vupdate(columns,Vcolumn3,move);
+}
+console.log("Vcolumn",Vcolumn3);
+
+
+let maxCycle = Vcolumn3.length	//arbitrary
+
+for(let cycle =0; cycle< maxCycle;cycle++){
+	
+	let [idSource,idTarget, levelOfTarget] = finalLstMv[finalLstMv.length -1];
+	source = Vcolumn3[idSource];
+	target = Vcolumn3[idTarget];
+	
+	if(target[2]-1 < levelOfTarget){
+		console.log("error with target level",target,levelOfTarget);
+		throw Error
+		
+	}if(target[2]-1 == levelOfTarget){
+		console.log("source, target",idSource,idTarget);
+		lstOfMove3.push([idSource,idTarget]);
+		Vupdate(columns,Vcolumn3,[idSource,idTarget])
+		finalLstMv.pop();
+		
+		if(finalLstMv.length ==0){
+		console.log("it's over",Vcolumn3)
+		break		
+		}
+		
+	}else{
+		console.log("find source for",target);
+		
+		let nextMove = getNewTarget(columns,Vcolumn3,idTarget);
+		
+		if(nextMove.length == 0){
+			console.log("no move posible");
+			console.log("final list of move",finalLstMv);
+			throw Error
+		}
+		finalLstMv.push(nextMove[0]);
+		//break
+	}
+}
+
+
+function getNewTarget(columns2,Vcolumn2,idSource2){
+	
+	let source2= Vcolumn2[idSource2];
+	let theBall = source2[0];
+	let output = [];
+	
+	for(col of columns2){
+			
+		if(col.content.length ==0){continue}	//empty column
+		if(columns2.indexOf(col) == idSource2){continue}
+		
+		
+		let levelsTarget = col.content.indexOf(theBall);
+		
+		if(levelsTarget == -1){continue}//the ball is not in this column
+		if(col.content[levelsTarget+1] == theBall){	//bigball of target
+			levelsTarget ++;
+		}
+		
+		
+		if(levelsTarget+ Vcolumn[idSource2][1] > 4){continue}
+			//we can move source2 to col
+			
+		let idCol = columns2.indexOf(col);
+		console.log("idCol",idCol);
+		console.log("Vcol",Vcolumn2[idCol][2]);
+		console.log("level of target",levelsTarget,"\n");
+		
+		if(levelsTarget == Vcolumn2[idCol][2] -1){
+			output = [[idSource2,idCol,levelsTarget]];
+			break
+		}else{
+			output.push([idSource2,idCol, levelsTarget]);
+		}
+		
+		
+		
+		
+	}
+	console.log("all place were",idSource2,"can go");
+	console.log(output);
+	return output
+}
 
 
 
