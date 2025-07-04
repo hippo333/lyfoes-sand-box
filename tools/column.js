@@ -28,6 +28,14 @@ var Column = function(contents) {
   	}return false
   }
   
+  obj.isMonochrome = function(){
+  	let withoutDuplicate = new Set(this.content);
+  	console.log(withoutDuplicate);
+  	if(	withoutDuplicate.length == 1){
+  		return true
+  	}return false
+  }
+  
   obj.newBigBall = function(){
   	if(this.isEmpty()){this.bigBall =0; return};
   	
