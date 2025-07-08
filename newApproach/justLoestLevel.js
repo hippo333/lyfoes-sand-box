@@ -1,28 +1,73 @@
 var column = require('../tools/column');
-var columns = require('../level');
+var columns999 = require('../level');
 var [newVcolumn,Vupdate] = require('../tools/Vcolumn');
 var abstract = require('../tools/abstract');
 var move = require('../tools/move');
+var raining = require('./raining');
 
+
+
+function emptyBotle(columns2){
+	
+	for(let col=0 ; col<columns2.length; col++){
+		if(columns2[col].isEmpty()){return col}
+		
+	}
+	//else
+	return null
+}
 
 let groundLevel = [];
 let columns0 = [];
 
-for(col of columns){
-	let groundOfCol = col.content.splice(1,1);
-	groundLevel.push(groundOfCol);
+
+for(col of columns999){
+	let groundOfCol = col.content.splice(0,2);
+	let firstBall = groundOfCol[0];
+	
+	if(firstBall == undefined){
+		firstBall = null
+	}
+	groundLevel.push(firstBall);
 	columns0.push(new column(groundOfCol));
 }
 
 console.log(groundLevel);
-//abstract(columns0);
+abstract(columns0);
 
-let Vcolumn0 = newVcolumn(columns0);
-console.log(Vcolumn0);
+//let Vcolumn0 = newVcolumn(columns0);
+//console.log(Vcolumn0);
 
 //set up
 
-let columns1 = groundLevel;
+
+
+//manual solution
+let lstOfMove = [];
+let state = [columns0,lstOfMove];
+
+let mySolution = [
+	[8,13],[10,13],[11,13],
+	[9,8],[12,8],[10,6],[1,11],[4,9],[4,12],[7,1],
+	[0,4],[0,13],
+	[2,0],[2,7],
+	[3,2],[5,10],[5,3]
+];
+
+function mySol(){
+	
+	for(mv of mySolution){
+		move(state,mv[0],mv[1]);
+	}
+}	
+/*
+mySol();
+abstract(columns0)
+
+throw Error*/
+
+
+
 
 
 
@@ -54,26 +99,157 @@ function firstLevel(col2,columns2){
 	return -1 //no move
 }
 
-let lstOfMove = [];
-let state = [columns0,lstOfMove];
+let lstOfFirstMove = [];
 
 for(let col =0; col< columns0.length; col++){
 	let newMove = firstLevel(col,columns0)
 	
 	if(newMove ==-1){continue}
 	
-	console.log("new move",newMove);
-	move(state, newMove[0], newMove[1]);
+	//console.log("new move",newMove);
+	//move(state, newMove[0], newMove[1]);
+	lstOfFirstMove.push(newMove);
 	
 }
 
-
-abstract(columns0);
-
-
+//abstract(columns0);
+console.log("lst of move for the first level",lstOfFirstMove,"\n");
 
 
 
+
+//second level
+
+
+raining(state);
+
+
+let lstOfFirstMove2 = [];
+
+//remove all column already solved
+for(mv of lstOfFirstMove){
+	let colFrom = columns0[mv[0]];
+	let colTo = columns0[mv[1]];
+	
+	if(colFrom.isMonochrome() || colFrom.isEmpty()){
+		if(colTo.isMonochrome() || colTo.isEmpty()){
+			continue
+		}	
+	}
+	
+	lstOfFirstMove2.push(mv);
+	
+}
+
+console.log("lst of first move2",lstOfFirstMove2);
+
+
+
+//addapte
+function theOtherCol(col2){
+	let thisCol = columns0[col2];
+	let theBall = thisCol.top();
+	
+	let otherCol = columns0.findIndex(
+		oCol => columns0.indexOf(oCol) != col2
+		&& !oCol.isEmpty()
+		&& oCol.top() == theBall
+	);
+	
+	if(otherCol ==-1){
+		otherCol = emptyBotle(columns0)
+	}
+	
+	return otherCol
+}
+
+//addapte
+function free(col2,level2){
+	console.log("free",col2,columns0[col2].content,"level",level2);
+	
+	if(columns0[col2].isMonochrome()){return}
+	
+	let otherCol = theOtherCol(col2);
+	
+	if(otherCol ==-1){
+	
+		console.log("Error Free",col2,"no empty botle");
+		abstract(columns0);
+		throw Error;
+	}
+	
+	console.log("move from",col2, columns0[col2].content);
+	console.log("to",otherCol, columns0[otherCol].content)
+	move(state,col2,otherCol);
+}
+
+
+
+function addapte(mv2,level){
+	let colFrom = columns0[mv2[0]];
+	let colTo = columns0[mv2[1]];
+	let newMove = [];
+	
+	
+	if(colFrom.content.length -1 == level){
+		free(mv2[0],level);
+	}if(colFrom.content.length -1 > level){
+		
+		console.log("Error addapte",mv[0],colFrom.content,"level",level);
+		throw Error
+	}
+	
+	
+	
+	if(colFrom.content.length -1 == level){
+		free(mv2[1],level);
+	}if(colFrom.content.length -1 > level){
+		
+		console.log("Error addapte",mv[1],colTo.content,"level",level);
+		throw Error
+	}
+	
+	move(state,mv2[0],mv2[1])
+}
+
+for(mv of lstOfFirstMove2){
+	addapte(mv,1);
+
+	abstract(columns0);
+}
+
+
+
+let finishList = [];
+function finish(){
+	
+	for(let col=0; col<columns0.length; col++){
+		let thisCol = columns0[col];
+		
+		if(thisCol.isEmpty()){
+			finishList.push(-1);
+				
+		}else if(thisCol.isMonochrome()){
+			finishList.push(-1)
+			
+		}else{
+			finishList.push(0);
+			free(col,1);
+			
+			
+			let otherCol = theOtherCol(col);
+			if(!columns0[otherCol].isEmpty()){
+				move(state,col,otherCol);
+			}
+			
+			
+		}
+	}
+	console.log("finish list",finishList);
+}
+
+finish();
+abstract(columns0)
 
 
 
