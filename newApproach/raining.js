@@ -16,23 +16,9 @@ function emptyBotle(columns2){
 	return null
 }
 
-let groundLevel = [];
+
 let columns0 = [];
 
-
-for(col of columns999){
-	let groundOfCol = col.content.splice(0,2);
-	let firstBall = groundOfCol[0];
-	
-	if(firstBall == undefined){
-		firstBall = null
-	}
-	groundLevel.push(firstBall);
-	columns0.push(new column(groundOfCol));
-}
-
-console.log(groundLevel);
-abstract(columns0);
 
 //set up
 

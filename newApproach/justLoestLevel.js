@@ -17,26 +17,22 @@ function emptyBotle(columns2){
 	return null
 }
 
-let groundLevel = [];
-let columns0 = [];
+function makeColumns(){
+	let columns2 = [];
 
-
-for(col of columns999){
-	let groundOfCol = col.content.splice(0,2);
-	let firstBall = groundOfCol[0];
-	
-	if(firstBall == undefined){
-		firstBall = null
+	for(col of columns999){
+		let thisCol = [...col.content];
+		let groundOfCol = thisCol.splice(0,2);
+		let firstBall = groundOfCol[0];
+		
+		if(firstBall == undefined){
+			firstBall = null
+		}
+		columns2.push(new column(groundOfCol));
 	}
-	groundLevel.push(firstBall);
-	columns0.push(new column(groundOfCol));
+
+	return columns2;
 }
-
-console.log(groundLevel);
-abstract(columns0);
-
-//let Vcolumn0 = newVcolumn(columns0);
-//console.log(Vcolumn0);
 
 //set up
 
@@ -44,6 +40,7 @@ abstract(columns0);
 
 //manual solution
 let lstOfMove = [];
+let columns0 = [];
 let state = [columns0,lstOfMove];
 
 let mySolution = [
@@ -59,12 +56,13 @@ function mySol(){
 	for(mv of mySolution){
 		move(state,mv[0],mv[1]);
 	}
+	
+	abstract(columns0);
+	console.log("i ave finish");
+	throw Error
 }	
-/*
-mySol();
-abstract(columns0)
 
-throw Error*/
+//mySol();
 
 
 
@@ -99,49 +97,52 @@ function firstLevel(col2,columns2){
 	return -1 //no move
 }
 
-let lstOfFirstMove = [];
+function lstOfFirstMove(){
+	let lst = [];
 
-for(let col =0; col< columns0.length; col++){
-	let newMove = firstLevel(col,columns0)
+	for(let col =0; col< columns0.length; col++){
+		let newMove = firstLevel(col,columns0)
+		
+		if(newMove ==-1){continue}
+		
+		//console.log("new move",newMove);
+		//move(state, newMove[0], newMove[1]);
+		lst.push(newMove);
+		
+	}
+	//abstract(columns0);
+	console.log("lst of move for the first level",lst,"\n");
 	
-	if(newMove ==-1){continue}
-	
-	//console.log("new move",newMove);
-	//move(state, newMove[0], newMove[1]);
-	lstOfFirstMove.push(newMove);
-	
+	return lst
 }
-
-//abstract(columns0);
-console.log("lst of move for the first level",lstOfFirstMove,"\n");
-
 
 
 
 //second level
 
 
-raining(state);
 
 
-let lstOfFirstMove2 = [];
 
-//remove all column already solved
-for(mv of lstOfFirstMove){
-	let colFrom = columns0[mv[0]];
-	let colTo = columns0[mv[1]];
-	
-	if(colFrom.isMonochrome() || colFrom.isEmpty()){
-		if(colTo.isMonochrome() || colTo.isEmpty()){
-			continue
-		}	
+function cleanFirstLst(){
+	//remove all column already solved
+	let lstOfFirstMove2 = [];
+	for(mv of lstOfFirstMove()){
+		let colFrom = columns0[mv[0]];
+		let colTo = columns0[mv[1]];
+		
+		if(colFrom.isMonochrome() || colFrom.isEmpty()){
+			if(colTo.isMonochrome() || colTo.isEmpty()){
+				continue
+			}	
+		}
+		lstOfFirstMove2.push(mv);
+		
 	}
+	console.log("lst of first move2",lstOfFirstMove2);
 	
-	lstOfFirstMove2.push(mv);
-	
+	return lstOfFirstMove2
 }
-
-console.log("lst of first move2",lstOfFirstMove2);
 
 
 
@@ -165,7 +166,7 @@ function theOtherCol(col2){
 
 //addapte
 function free(col2,level2){
-	console.log("free",col2,columns0[col2].content,"level",level2);
+	//console.log("free",col2,columns0[col2].content,"level",level2);
 	
 	if(columns0[col2].isMonochrome()){return}
 	
@@ -178,8 +179,8 @@ function free(col2,level2){
 		throw Error;
 	}
 	
-	console.log("move from",col2, columns0[col2].content);
-	console.log("to",otherCol, columns0[otherCol].content)
+	//console.log("move from",col2, columns0[col2].content);
+	//console.log("to",otherCol, columns0[otherCol].content);
 	move(state,col2,otherCol);
 }
 
@@ -190,34 +191,28 @@ function addapte(mv2,level){
 	let colTo = columns0[mv2[1]];
 	let newMove = [];
 	
+	//free from
+	//console.log("free from",mv2[0]);
+	free(mv2[0],level);
 	
-	if(colFrom.content.length -1 == level){
-		free(mv2[0],level);
-	}if(colFrom.content.length -1 > level){
-		
-		console.log("Error addapte",mv[0],colFrom.content,"level",level);
-		throw Error
-	}
-	
+	//free to
+	//console.log("free to",mv[1]);
+	free(mv2[1],level);
 	
 	
-	if(colFrom.content.length -1 == level){
-		free(mv2[1],level);
-	}if(colFrom.content.length -1 > level){
-		
-		console.log("Error addapte",mv[1],colTo.content,"level",level);
-		throw Error
-	}
 	
 	move(state,mv2[0],mv2[1])
 }
 
-for(mv of lstOfFirstMove2){
-	addapte(mv,1);
-
-	abstract(columns0);
+function addaptAll(){
+	console.log("addapt all move");
+	
+	let lstOfFirstMove2 = cleanFirstLst();
+	for(mv of lstOfFirstMove2){
+		addapte(mv,1);
+	
+	}
 }
-
 
 
 let finishList = [];
@@ -245,13 +240,31 @@ function finish(){
 			
 		}
 	}
-	console.log("finish list",finishList);
+	//console.log("finish list",finishList);
 }
 
-finish();
-abstract(columns0)
+function main(){
+	
+	
+	columns0 = makeColumns();
+	abstract(columns0);
+	state = [columns0,lstOfMove];
+	
+	//mySol();	//debug
+	raining(state);
+	//abstract(columns0);
+	
+	addaptAll();
+	//abstract(columns0);
+	
+	finish();
+	abstract(columns0)
+}
 
 
+
+
+main();
 
 
 
