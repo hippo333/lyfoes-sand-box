@@ -132,7 +132,10 @@ function moveToColor(col2){
 		
 		if(col == col2){continue}
 		if(topBall == theColor){
-		
+			
+			//dont Over feed
+			if(thisCol.bigBall + columns0[col2].content.length > 4){continue}
+			
 			move(state,col,col2);
 			newTarget2.push(col);
 			//console.log("add col",col);
@@ -179,6 +182,8 @@ function afterRaining(){
 		nextTarget2 = nextTarget2.concat(newTarget)
 	}
 	nextTarget = nextTarget2;
+	
+	console.log("after raining over");
 }
 
 function cleanAfterRaining(){

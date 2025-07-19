@@ -15,10 +15,59 @@ function emptyBotle(columns2){
 	}
 	//else
 	console.log("Error no empty botle");
-	abstract(columns2);
-	console.log("list Of Move",state[1]);
-	return null
+	let newEmptyBotle =fixIt();
+	
+	if(newEmptyBotle != -1){
+		return newEmptyBotle;
+	}
+	
+	return -1
+	//throw Error
 }
+
+//fixIt
+function AllMonochrome(){
+	let [columns2,lstOfMove2] = state;
+	let lstOfMonochrome = [];
+	
+	columns2.filter(function (col2, index) {
+	    if (col2.isMonochrome()) {
+	        lstOfMonochrome.push(index);
+	        return true;	//filter
+	    }
+	});
+
+	console.log("lst of monochrome",lstOfMonochrome);
+	return lstOfMonochrome
+
+}
+
+//empty botle
+function fixIt(){
+	console.log("fix It");
+	let [columns2,lstOfMove2] = state;
+	let newEmptyBotle = -1;
+	
+	abstract(columns2);
+	console.log("lstOfMove2",lstOfMove2);
+	
+	//get all col monochrome
+	let lstOfMonochrome = AllMonochrome();
+	
+	for(col2 of lstOfMonochrome){
+		let otherCol =theOtherCol(col2)
+		
+		if(otherCol != -1){
+			console.log("move",col2,otherCol);
+			move(state,col2,otherCol);
+			newEmptyBotle = col2;
+		}
+	}
+	console.log("new empty botle",newEmptyBotle);
+	return newEmptyBotle
+}
+
+
 
 function makeColumns(){
 	let columns2 = [];
@@ -163,7 +212,17 @@ function theOtherCol(col2){
 		oCol => columns2.indexOf(oCol) != col2
 		&& !oCol.isEmpty()
 		&& oCol.top() == theBall
+		&& columns2[col2].bigBall + oCol.content.length <5
 	);
+	
+	
+	return otherCol
+}
+
+function otherBotle(col2){
+	let [columns2,lstOfMove2] = state;
+	
+	let otherCol = theOtherCol(col2);
 	
 	if(otherCol ==-1){
 		otherCol = emptyBotle(columns2)
@@ -171,6 +230,8 @@ function theOtherCol(col2){
 	
 	return otherCol
 }
+
+
 
 //addapte
 function free(col2,level2){
@@ -188,13 +249,14 @@ function free(col2,level2){
 	}
 	
 	
-	let otherCol = theOtherCol(col2);
+	let otherCol = otherBotle(col2);
 	
 	if(otherCol ==-1){
 	
-		console.log("Error Free",col2,"no empty botle");
-		abstract(columns0);
-		throw Error;
+		console.log("Error Free",col2,"no other column");
+		abstract(columns2);
+		
+		return;
 	}
 	
 	//console.log("move from",col2, columns2[col2].content);
@@ -231,25 +293,66 @@ function addapte(mv2,level){
 	
 	}
 	
-	if(colFrom.top() != colTo.top() && !colTo.isEmpty()){
+	if(colFrom.top() != colTo.top() && !colTo.isEmpty() ){
 		abstract(columns2);
 		console.log("Error addapte, the ball are diferent",mv2);
-		return
-		//throw Error
+		
+		if(colFrom.isEmpty()){
+			console.log("in the move",mv2,"col from is empty")
+			return true
+		}
+		
+		//get new second column
+		let otherCol = otherBotle(mv2[0]);
+		console.log("the col",mv2[0],"can go to",otherCol);
+		//return
+		if(otherCol == -1){
+			console.log("Error addapte ",mv2[0],"can go nowhere");
+			
+			return false
+			//throw Error
+		}else{
+			mv2[1] = otherCol;
+		}
 	}
 	
 	move(state,mv2[0],mv2[1])
+	
+	return true
 }
 
 function addaptAll(lastLstOfMove,level){
-	console.log("addapt all move");
+	console.log("\n\naddapt all move");
 	console.log("last lst of move",lastLstOfMove);
 	
+	let lstAddaptLater = [];
+	let succes = false;	//recursive killer
 	
 	for(mv of lastLstOfMove){
 		console.log("move",mv);
-		addapte(mv,level);
+		console.log("last lst of move",lastLstOfMove);
+		
+		//try to addapt
+		let failToAddapt = addapte(mv,level);
+		
+		if(failToAddapt != true){
+			console.log("we can't addapt",mv);
+			lstAddaptLater.push(mv);
+			
+		}else{
+			succes = true;
+		}
+	}
 	
+	if(lstAddaptLater.length !=0){
+		console.log("|\nsucces",succes);
+		if(succes){
+			addaptAll(lstAddaptLater,level);
+		}else{
+			abstract(state[0]);
+			console.log("move we ave skiped",lstAddaptLater);
+			throw Error	
+		}
 	}
 }
 
@@ -271,7 +374,7 @@ function finish(){
 			free(col,1);
 			
 			
-			let otherCol = theOtherCol(col);
+			let otherCol = otherBotle(col);
 			if(!columns0[otherCol].isEmpty()){
 				move(state,col,otherCol);
 			}
