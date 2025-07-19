@@ -14,24 +14,30 @@ function emptyBotle(columns2){
 		
 	}
 	//else
+	console.log("Error no empty botle");
+	abstract(columns2);
+	console.log("list Of Move",state[1]);
 	return null
 }
 
 function makeColumns(){
 	let columns2 = [];
+	let columns3 = [];
 
 	for(col of columns999){
 		let thisCol = [...col.content];
 		let groundOfCol = thisCol.splice(0,2);
-		let firstBall = groundOfCol[0];
 		
-		if(firstBall == undefined){
-			firstBall = null
-		}
 		columns2.push(new column(groundOfCol));
+		
+		let thisCol3 = [...col.content];
+		let mediumOfCol = thisCol3.splice(0,3);
+		
+		columns3.push(new column(mediumOfCol));
 	}
-
-	return columns2;
+	
+	
+	return [columns2,columns3];
 }
 
 //set up
@@ -148,17 +154,19 @@ function cleanFirstLst(){
 
 //addapte
 function theOtherCol(col2){
-	let thisCol = columns0[col2];
+	let [columns2,lstOfMove2] = state;
+
+	let thisCol = columns2[col2];
 	let theBall = thisCol.top();
 	
-	let otherCol = columns0.findIndex(
-		oCol => columns0.indexOf(oCol) != col2
+	let otherCol = columns2.findIndex(
+		oCol => columns2.indexOf(oCol) != col2
 		&& !oCol.isEmpty()
 		&& oCol.top() == theBall
 	);
 	
 	if(otherCol ==-1){
-		otherCol = emptyBotle(columns0)
+		otherCol = emptyBotle(columns2)
 	}
 	
 	return otherCol
@@ -166,9 +174,19 @@ function theOtherCol(col2){
 
 //addapte
 function free(col2,level2){
-	//console.log("free",col2,columns0[col2].content,"level",level2);
+	let [columns2,lstOfMove2] = state;
+	console.log("free",col2,columns2[col2].content,"level",level2);
 	
-	if(columns0[col2].isMonochrome()){return}
+	if(columns2[col2].isMonochrome()){return}
+	if(columns2[col2].isEmpty()){
+		console.log("skip for emptyness");
+		return
+	}
+	if(columns2[col2].bigBall >1){
+		console.log("skip for the bigBall");
+		return
+	}
+	
 	
 	let otherCol = theOtherCol(col2);
 	
@@ -179,37 +197,58 @@ function free(col2,level2){
 		throw Error;
 	}
 	
-	//console.log("move from",col2, columns0[col2].content);
-	//console.log("to",otherCol, columns0[otherCol].content);
+	//console.log("move from",col2, columns2[col2].content);
+	//console.log("to",otherCol, columns2[otherCol].content);
 	move(state,col2,otherCol);
 }
 
 
 
 function addapte(mv2,level){
-	let colFrom = columns0[mv2[0]];
-	let colTo = columns0[mv2[1]];
+	let [columns2,lstOfMove2] = state;
+	
+	let colFrom = columns2[mv2[0]];
+	let colTo = columns2[mv2[1]];
 	let newMove = [];
 	
 	//free from
 	//console.log("free from",mv2[0]);
 	free(mv2[0],level);
+	if(colFrom.content.length -colFrom.bigBall -1 > level){
+		abstract(columns2);
+		console.log("Error fail to free from",mv2[0],colFrom.content);
+		throw Error
+	
+	}
 	
 	//free to
 	//console.log("free to",mv[1]);
 	free(mv2[1],level);
+	if(colTo.content.length -colTo.bigBall -1 > level){
+		abstract(columns2);
+		console.log("Error fail to free from",mv2[1],colTo.content);
+		throw Error
 	
+	}
 	
+	if(colFrom.top() != colTo.top() && !colTo.isEmpty()){
+		abstract(columns2);
+		console.log("Error addapte, the ball are diferent",mv2);
+		return
+		//throw Error
+	}
 	
 	move(state,mv2[0],mv2[1])
 }
 
-function addaptAll(){
+function addaptAll(lastLstOfMove,level){
 	console.log("addapt all move");
+	console.log("last lst of move",lastLstOfMove);
 	
-	let lstOfFirstMove2 = cleanFirstLst();
-	for(mv of lstOfFirstMove2){
-		addapte(mv,1);
+	
+	for(mv of lastLstOfMove){
+		console.log("move",mv);
+		addapte(mv,level);
 	
 	}
 }
@@ -246,7 +285,7 @@ function finish(){
 function main(){
 	
 	
-	columns0 = makeColumns();
+	[columns0,columns3] = makeColumns();
 	abstract(columns0);
 	state = [columns0,lstOfMove];
 	
@@ -254,11 +293,28 @@ function main(){
 	raining(state);
 	//abstract(columns0);
 	
-	addaptAll();
+	let firstList = cleanFirstLst()
+	addaptAll(firstList,1);
 	//abstract(columns0);
 	
 	finish();
 	abstract(columns0)
+	console.log("lstOfMove",lstOfMove);
+	//finish second ball
+	
+	
+	//third ball
+	console.log("\n\n third ball");
+	abstract(columns3);
+	let lstOfMove3 = [];
+	state = [columns3,lstOfMove3];
+	
+	raining(state);
+	abstract(columns3);
+	
+	addaptAll(lstOfMove,2);
+	abstract(columns3);
+	console.log("lst of move 3",lstOfMove3);
 }
 
 

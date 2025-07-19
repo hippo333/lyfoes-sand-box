@@ -1,6 +1,6 @@
 
 var column = require('../tools/column');
-var columns999 = require('../level');
+//var columns999 = require('../level');
 var abstract = require('../tools/abstract');
 var move = require('../tools/move');
 
@@ -18,15 +18,14 @@ function emptyBotle(columns2){
 
 
 let columns0 = [];
+let lstOfMove = [];
+let state = [columns0,lstOfMove];
 
 
 //set up
 
 
 
-//manual solution
-let lstOfMove = [];
-let state = [columns0,lstOfMove];
 
 
 
@@ -56,11 +55,11 @@ function addToTheList(col,color){
 }
 
 //newColor
-function mostPresentBall(level){
+function mostPresentBall(){
 	
 	for(let col=0; col< columns0.length; col++){
 		let theCol = columns0[col];
-		let theColor = theCol.content[level];
+		let theColor = theCol.top();
 		
 		if(theColor == undefined){continue}
 		
@@ -78,9 +77,10 @@ let nextTarget = [];
 
 function newColor(){
 	let lstCol = mostPresent[1]
-	if(lstCol.length <3){return}
+	//if(lstCol.length <3){return}
 	
 	let emptyBtl= emptyBotle(columns0);
+	console.log("emptyBtl",emptyBtl);
 	
 	if(emptyBtl ==-1){return}
 	
@@ -182,6 +182,8 @@ function afterRaining(){
 }
 
 function cleanAfterRaining(){
+
+	//max 10 ball /column
 	for(let i=0; i<10; i++){
 		if(nextTarget.length ==0 ){break}
 		if(i ==9){
@@ -197,8 +199,13 @@ function main(state2){
 	state = state2;
 	[columns0,lstOfMove]= state
 	
+	
+	//reset
+	lstByColor = [];
+	mostPresent = [-1,[]];
+	
 	//console.log("mostPresent Ball");
-	mostPresentBall(1);
+	mostPresentBall();
 	
 	//console.log("new Color");
 	newColor();
@@ -206,13 +213,13 @@ function main(state2){
 	//console.log("raining all color");
 	rainingAllColor()
 
-	abstract(columns0);
-	console.log(lstOfMove);
+	//abstract(columns0);
+	//console.log(lstOfMove);
 	
 	//console.log("clean after raining");
 	cleanAfterRaining();
 	
-	abstract(columns0);
+	//abstract(columns0);
 	console.log(lstOfMove);
 }
 
