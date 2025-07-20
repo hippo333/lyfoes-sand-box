@@ -24,23 +24,6 @@ function emptyBotle(columns2){
 	return -1
 }
 
-//fixIt
-//get index of all column monochrome
-function AllMonochrome(){
-	let [columns2,lstOfMove2] = state2;
-	let lstOfMonochrome = [];
-	
-	columns2.filter(function (col2, index) {
-	    if (col2.isMonochrome()) {
-	        lstOfMonochrome.push(index);
-	        return true;	//filter
-	    }
-	});
-
-	console.log("lst of monochrome",lstOfMonochrome);
-	return lstOfMonochrome
-
-}
 
 
 //empty botle
@@ -53,10 +36,8 @@ function fixIt(){
 	abstract(columns2);
 	console.log("lstOfMove2",lstOfMove2);
 	
-	//get all col monochrome
-	let lstOfMonochrome = AllMonochrome();
 	
-	for(col2 of lstOfMonochrome){
+	for(let col2=0; col2<columns2.length; col2++){
 		let otherCol =theOtherCol(col2)
 		
 		if(otherCol != -1){
@@ -64,7 +45,9 @@ function fixIt(){
 			move(state2,col2,otherCol);
 			
 			//the botle we ave free
-			newEmptyBotle = col2;
+			if(columns2[col2].isEmpty()){
+				newEmptyBotle = col2;
+			}
 		}
 	}
 	console.log("new empty botle",newEmptyBotle);
@@ -207,6 +190,7 @@ function finish(){
 			
 		}else{
 			finishList.push(0);
+			
 			free(col,1);
 			
 			
@@ -220,6 +204,7 @@ function finish(){
 	}
 	//console.log("finish list",finishList);
 }
+
 
 function addaptAll(lastLstOfMove,level,state){
 	console.log("\n\naddapt all move");
@@ -255,8 +240,8 @@ function addaptAll(lastLstOfMove,level,state){
 		}else{	//if this loop adapte nothing we are stuck
 		
 			abstract(state2[0]);
-			console.log("move we ave skiped",lstAddaptLater);
-			throw Error	
+			console.log("move we ave skiped",lstAddaptLater,"\n\n\n");
+			//throw Error	
 		}
 	}
 	

@@ -25,22 +25,6 @@ function emptyBotle(columns2){
 	//throw Error
 }
 
-//fixIt
-function AllMonochrome(){
-	let [columns2,lstOfMove2] = state;
-	let lstOfMonochrome = [];
-	
-	columns2.filter(function (col2, index) {
-	    if (col2.isMonochrome()) {
-	        lstOfMonochrome.push(index);
-	        return true;	//filter
-	    }
-	});
-
-	console.log("lst of monochrome",lstOfMonochrome);
-	return lstOfMonochrome
-
-}
 
 //empty botle
 function fixIt(){
@@ -51,16 +35,17 @@ function fixIt(){
 	abstract(columns2);
 	console.log("lstOfMove2",lstOfMove2);
 	
-	//get all col monochrome
-	let lstOfMonochrome = AllMonochrome();
 	
-	for(col2 of lstOfMonochrome){
+	for(let col2=0; col2<columns2.length; col2++){
 		let otherCol =theOtherCol(col2)
 		
 		if(otherCol != -1){
 			console.log("move",col2,otherCol);
 			move(state,col2,otherCol);
-			newEmptyBotle = col2;
+			
+			if(columns2[col2].isEmpty()){
+				newEmptyBotle = col2;
+			}
 		}
 	}
 	console.log("new empty botle",newEmptyBotle);
