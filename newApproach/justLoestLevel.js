@@ -54,58 +54,22 @@ function fixIt(){
 
 
 //make coppy of columns999 with only ground ball
-function makeColumns(){
+function makeColumns(level){
 	let columns2 = [];
-	let columns3 = [];
 
 	for(col of columns999){
 		let thisCol = [...col.content];
-		let groundOfCol = thisCol.splice(0,2);
+		let groundOfCol = thisCol.splice(0,level);
 		
 		columns2.push(new column(groundOfCol));
 		
-		let thisCol3 = [...col.content];
-		let mediumOfCol = thisCol3.splice(0,3);
-		
-		columns3.push(new column(mediumOfCol));
 	}
 	
 	
-	return [columns2,columns3];
+	return columns2;
 }
 
 //set up
-
-
-
-//manual solution
-let lstOfMove = [];
-let columns0 = [];
-let state = [columns0,lstOfMove];
-
-let mySolution = [
-	[8,13],[10,13],[11,13],
-	[9,8],[12,8],[10,6],[1,11],[4,9],[4,12],[7,1],
-	[0,4],[0,13],
-	[2,0],[2,7],
-	[3,2],[5,10],[5,3]
-];
-
-function mySol(){
-	
-	for(mv of mySolution){
-		move(state,mv[0],mv[1]);
-	}
-	
-	abstract(columns0);
-	console.log("i ave finish");
-	throw Error
-}	
-
-//mySol();
-
-
-
 
 
 
@@ -137,11 +101,11 @@ function firstLevel(col2,columns2){
 	return -1 //no move
 }
 
-function lstOfFirstMove(){
+function lstOfFirstMove(columns2){
 	let lst = [];
 
-	for(let col =0; col< columns0.length; col++){
-		let newMove = firstLevel(col,columns0)
+	for(let col =0; col< columns2.length; col++){
+		let newMove = firstLevel(col,columns2)
 		
 		if(newMove ==-1){continue}
 		
@@ -150,7 +114,7 @@ function lstOfFirstMove(){
 		lst.push(newMove);
 		
 	}
-	//abstract(columns0);
+	//abstract(columns2);
 	console.log("lst of move for the first level",lst,"\n");
 	
 	return lst
@@ -164,12 +128,12 @@ function lstOfFirstMove(){
 
 
 
-function cleanFirstLst(){
+function cleanFirstLst(columns2){
 	//remove all column already solved
 	let lstOfFirstMove2 = [];
-	for(mv of lstOfFirstMove()){
-		let colFrom = columns0[mv[0]];
-		let colTo = columns0[mv[1]];
+	for(mv of lstOfFirstMove(columns2)){
+		let colFrom = columns2[mv[0]];
+		let colTo = columns2[mv[1]];
 		
 		if(colFrom.isMonochrome() || colFrom.isEmpty()){
 			if(colTo.isMonochrome() || colTo.isEmpty()){
@@ -206,33 +170,42 @@ function theOtherCol(col2){
 
 function main(){
 	
+	let lastLevel = cleanFirstLst(columns999)
+	let columns0 = [];
+	let lstOfMove = [];
 	
-	[columns0,columns3] = makeColumns();
-	abstract(columns0);
-	state = [columns0,lstOfMove];
+	for(let level=2; level<4; level++){
+		columns0 = makeColumns(level);
+		lstOfMove = [];
+		abstract(columns0);
+		state = [columns0,lstOfMove];
+		
+		
+		raining(state);
+		//abstract(columns0);
+		
+		addaptAll(lastLevel,level,state);
+		//abstract(columns0);
+		
+		lastLevel = lstOfMove;
+	}
 	
-	//mySol();	//debug
-	raining(state);
-	//abstract(columns0);
-	
-	let firstList = cleanFirstLst()
-	addaptAll(firstList,1,state);
-	//abstract(columns0);
-	
-	
-	
+	/*
 	//third ball
 	console.log("\n\n third ball");
-	abstract(columns3);
+	
+	let columns3 = makeColumns(3)
 	let lstOfMove3 = [];
+	abstract(columns3);
 	state = [columns3,lstOfMove3];
 	
 	raining(state);
-	abstract(columns3);
+	//abstract(columns3);
 	
-	addaptAll(lstOfMove,2,state);
-	abstract(columns3);
-	console.log("lst of move 3",lstOfMove3);
+	addaptAll(lstOfMove,2,state);*/
+	abstract(columns0);
+	console.log("lst of move ",lstOfMove);
+	
 }
 
 
