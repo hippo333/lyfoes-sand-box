@@ -137,23 +137,24 @@ function addapte(mv2,level){
 	let newMove = [];
 	
 	//free from
-	//console.log("free from",mv2[0]);
+	console.log("free from",mv2[0]);
 	free(mv2[0],level);
 	
 	//free to
-	//console.log("free to",mv[1]);
+	console.log("free to",mv[1]);
 	free(mv2[1],level);
 	
 	
 	
+		
+	if(colFrom.isEmpty()){
+		console.log("in the move",mv2,"col from is empty")
+		return true
+	}
+		
 	if(colFrom.top() != colTo.top() && !colTo.isEmpty() ){
 		abstract(columns2);
 		console.log("Error addapte, the ball are diferent",mv2);
-		
-		if(colFrom.isEmpty()){
-			console.log("in the move",mv2,"col from is empty")
-			return true
-		}
 		
 		//get new second column
 		let otherCol = otherBotle(mv2[0]);
