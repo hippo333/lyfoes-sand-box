@@ -119,7 +119,7 @@ function free(col2,level2){
 	move(state2,col2,otherCol);
 	
 	
-	if(colFrom.content.length -colFrom.bigBall -1 > level2){
+	if(colFrom.content.length -colFrom.bigBall > level2){
 		abstract(columns2);
 		console.log("Error fail to free from",mv2[0],colFrom.content);
 		throw Error
