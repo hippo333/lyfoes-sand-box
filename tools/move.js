@@ -7,7 +7,8 @@ function move(state,from,to){
 	let [columns3,lstOfMove3] = state;
 	
 	if(from ==-1 || to ==-1){
-		throw Error("error from",from,"to",to);
+		console.log("error from",from,"to",to);
+		throw Error
 	}
 	
 	let colFrom = columns3[from].content;
@@ -29,13 +30,14 @@ function move(state,from,to){
 		}
 	}
 	if(ballFrom == undefined){
-		console.log("error no ball From",from,colFrom);
-		throw Error(`from ${from}, to ${to}`);
+		console.log("\nerror no ball From",from,colFrom);
+		console.log(`from ${from}, to ${to}`);
+		throw Error;
 	}
 	if(colTo.length + columns3[from].bigBall >4){
 		console.log("\nerror lstBigBall from",columns3[from].bigBall);
 		abstract(columns3);
-		throw Error();
+		throw Error;
 	}
 	
 	//we can do the move
