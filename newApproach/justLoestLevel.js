@@ -40,6 +40,7 @@ function fixIt(){
 		let otherCol =theOtherCol(col2)
 		
 		if(otherCol != -1){
+			
 			console.log("move",col2,otherCol);
 			move(state,col2,otherCol);
 			
@@ -48,6 +49,8 @@ function fixIt(){
 			}
 		}
 	}
+	
+	
 	console.log("new empty botle",newEmptyBotle);
 	return newEmptyBotle
 }
@@ -174,7 +177,7 @@ function main(){
 	let columns0 = [];
 	let lstOfMove = [];
 	
-	for(let level=2; level<4; level++){
+	for(let level=2; level<5; level++){
 		columns0 = makeColumns(level);
 		lstOfMove = [];
 		abstract(columns0);
@@ -190,19 +193,7 @@ function main(){
 		lastLevel = lstOfMove;
 	}
 	
-	/*
-	//third ball
-	console.log("\n\n third ball");
 	
-	let columns3 = makeColumns(3)
-	let lstOfMove3 = [];
-	abstract(columns3);
-	state = [columns3,lstOfMove3];
-	
-	raining(state);
-	//abstract(columns3);
-	
-	addaptAll(lstOfMove,2,state);*/
 	abstract(columns0);
 	console.log("lst of move ",lstOfMove);
 	

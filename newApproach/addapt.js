@@ -2,9 +2,15 @@
 
 var abstract = require('../tools/abstract');
 var move = require('../tools/move');
+var redcon = require('./redCon');
 
 
 let state2 =[];
+
+//for redcon
+let oldLstOfMove =[];
+let remainingMove = [];
+let lastMove = [];
 
 
 function emptyBotle(columns2){
@@ -29,7 +35,7 @@ function emptyBotle(columns2){
 //empty botle
 //try to free a botle
 function fixIt(){
-	console.log("fix It");
+	console.log("fix It(addapt)");
 	let [columns2,lstOfMove2] = state2;
 	let newEmptyBotle = -1;
 	
@@ -40,7 +46,16 @@ function fixIt(){
 	for(let col2=0; col2<columns2.length; col2++){
 		let otherCol =theOtherCol(col2)
 		
+		
 		if(otherCol != -1){
+			
+			//simplest Move
+			let firstCol = columns2[col2];
+			let secondCol = columns2[otherCol];
+			if(firstCol.length +  secondCol.bigBall){
+			if(firstCol.content.length > secondCol.content.length){continue}
+			}
+			
 			console.log("move",col2,otherCol);
 			move(state2,col2,otherCol);
 			
@@ -50,10 +65,10 @@ function fixIt(){
 			}
 		}
 	}
+	
 	console.log("new empty botle",newEmptyBotle);
 	return newEmptyBotle
 }
-
 
 //addapte
 //botle who can recive topBall of col2
@@ -94,14 +109,14 @@ function free(col2,level2){
 	let colFrom = columns2[col2];
 	console.log("free",col2,colFrom.content,"level",level2);
 	
-	if(colFrom.isMonochrome()){return}
+	if(colFrom.isMonochrome()){return true}
 	if(colFrom.isEmpty()){
 		console.log("skip for emptyness");
-		return
+		return true
 	}
 	if(colFrom.bigBall >1){	//the ball change nothing
 		console.log("skip for the bigBall");
-		return
+		return true
 	}
 	
 	
@@ -111,12 +126,15 @@ function free(col2,level2){
 	
 		console.log("Error Free",col2,"no other column");
 		abstract(columns2);
-		return;
+		return false;
+		
+		
 	}
 	
 	//console.log("move from",col2, colFrom.content);
 	//console.log("to",otherCol, columns2[otherCol].content);
 	move(state2,col2,otherCol);
+	
 	
 	
 	if(colFrom.content.length -colFrom.bigBall > level2){
@@ -125,7 +143,9 @@ function free(col2,level2){
 		throw Error
 	
 	}
+	return true
 }
+
 
 
 //free the ball above the level of the last cycle
@@ -136,14 +156,20 @@ function addapte(mv2,level){
 	let colTo = columns2[mv2[1]];
 	let newMove = [];
 	
+	
+	
+	
+	
+	
+	
 	//free from
 	console.log("free from",mv2[0]);
-	free(mv2[0],level);
+	let freeFrom = free(mv2[0],level);
+	
 	
 	//free to
 	console.log("free to",mv[1]);
-	free(mv2[1],level);
-	
+	let freeTo = free(mv2[1],level);
 	
 	
 		
@@ -168,6 +194,10 @@ function addapte(mv2,level){
 		}else{
 			mv2[1] = otherCol;
 		}
+	}
+	if(colTo.content.length + colFrom.bigBall > 4){
+		console.log("the move",mv2,"overFeed");
+		return false
 	}
 	
 	move(state2,mv2[0],mv2[1])
@@ -196,6 +226,19 @@ function finish(){
 			
 			
 			let otherCol = otherBotle(col);
+			
+			if(otherCol ==-1){
+				console.log("\n\nerror finish no col to",col);
+				abstract(columns2);
+				console.log(lstOfMove2);
+		
+				//for redcon
+				redcon(state, oldLstOfMove, remainingMove);
+		
+				throw Error
+				continue
+			}
+			console.log("otherCol",otherCol);
 			if(!columns2[otherCol].isEmpty()){
 				move(state2,col,otherCol);
 			}
@@ -204,6 +247,18 @@ function finish(){
 		}
 	}
 	//console.log("finish list",finishList);
+	
+	//kill doublon on finish list
+	let finishList2 = new Set(finishList);
+	
+	//if one col is not finish
+	if(finishList2.length > 1 ){
+		
+		console.log("finish list",finishList2);
+		console.log("\n Error finish (addapt)"); 
+		
+		throw Error	
+	}
 }
 
 
@@ -213,12 +268,19 @@ function addaptAll(lastLstOfMove,level,state){
 	
 	state2 = state;	//use the same state from main module
 	
+	//for redcon
+	oldLstOfMove = [...lastLstOfMove];
+	
 	let lstAddaptLater = [];
 	let succes = false;	//recursive killer
 	
 	for(mv of lastLstOfMove){
 		//console.log("move",mv);
 		//console.log("last lst of move",lastLstOfMove);
+		
+		//for redcon
+		lastMove = mv;
+		
 		
 		//try to addapt
 		let failToAddapt = addapte(mv,level);
