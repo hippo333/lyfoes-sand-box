@@ -11,6 +11,7 @@ let state2 =[];
 let oldLstOfMove =[];
 let remainingMove = [];
 let lastMove = [];
+let newLst =[];
 
 
 function emptyBotle(columns2){
@@ -206,9 +207,9 @@ function addapte(mv2,level){
 }
 
 
-let finishList = [];
 function finish(){
 	let [columns2,lstOfMove2] = state2;
+	let finishList = [];
 	
 	for(let col=0; col<columns2.length; col++){
 		let thisCol = columns2[col];
@@ -233,9 +234,12 @@ function finish(){
 				console.log(lstOfMove2);
 		
 				//for redcon
-				redcon(state, oldLstOfMove, remainingMove);
-		
-				throw Error
+				state2 = redcon(state, oldLstOfMove, remainingMove);
+				
+				let level = 4 //arbitrary
+				addaptAll(newLst,level,state2);
+				
+				//throw Error
 				continue
 			}
 			console.log("otherCol",otherCol);
@@ -246,7 +250,7 @@ function finish(){
 			
 		}
 	}
-	//console.log("finish list",finishList);
+	console.log("finish list",finishList);
 	
 	//kill doublon on finish list
 	let finishList2 = new Set(finishList);
@@ -304,6 +308,8 @@ function addaptAll(lastLstOfMove,level,state){
 		
 			abstract(state2[0]);
 			console.log("move we ave skiped",lstAddaptLater,"\n\n\n");
+			
+			newLst = lstAddaptLater;
 			//throw Error	
 		}
 	}
