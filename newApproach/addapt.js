@@ -98,8 +98,10 @@ function otherBotle(col2){
 	
 	if(otherCol ==-1){
 		otherCol = emptyBotle(columns2)
-	}
-	
+	}/*
+	if(otherCol == col2){
+		throw Error //debug
+	}*/
 	return otherCol
 }
 
@@ -185,6 +187,10 @@ function addapte(mv2,level){
 		
 		//get new second column
 		let otherCol = otherBotle(mv2[0]);
+		if(otherCol == mv2[0]){
+			return false
+		}
+		
 		console.log("the col",mv2[0],"can go to",otherCol);
 		//return
 		if(otherCol == -1){
