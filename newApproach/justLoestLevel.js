@@ -1,3 +1,4 @@
+var startTime = new Date().getTime();
 var column = require('../tools/column');
 var columns999 = require('../level');
 var abstract = require('../tools/abstract');
@@ -205,6 +206,13 @@ function main(){
 
 
 main();
+
+
+var end = new Date().getTime();	//timer
+var time = end - startTime;
+console.log(time/1000,"s");
+
+
 
 
 
