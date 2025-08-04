@@ -108,7 +108,7 @@ function otherBotle(col2){
 function free(col2,level2){
 	let [columns2,lstOfMove2] = state2;
 	let colFrom = columns2[col2];
-	console.log("free",col2,colFrom.content,"level",level2);
+	//console.log("free",col2,colFrom.content,"level",level2);
 	
 	if(colFrom.isMonochrome()){return true}
 	if(colFrom.isEmpty()){
@@ -239,10 +239,11 @@ function finish(){
 				let level = 4 //arbitrary
 				addaptAll(newLst,level,state2);
 				
+				
 				//throw Error
 				continue
 			}
-			console.log("otherCol",otherCol);
+			//console.log("otherCol",otherCol);
 			if(!columns2[otherCol].isEmpty()){
 				move(state2,col,otherCol);
 			}
@@ -250,7 +251,7 @@ function finish(){
 			
 		}
 	}
-	console.log("finish list",finishList);
+	//console.log("finish list",finishList);
 	
 	//kill doublon on finish list
 	let finishList2 = new Set(finishList);
@@ -318,6 +319,7 @@ function addaptAll(lastLstOfMove,level,state){
 	//abstract(state2[0])
 	//console.log("lstOfMove",state2[1]);
 	finish();
+	return state2
 }
 
 module.exports = addaptAll

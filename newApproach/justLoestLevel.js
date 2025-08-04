@@ -187,12 +187,14 @@ function main(){
 		raining(state);
 		//abstract(columns0);
 		
-		addaptAll(lastLevel,level,state);
+		state = addaptAll(lastLevel,level,state);
+		console.log("c");
 		//abstract(columns0);
 		
 		lastLevel = lstOfMove;
 	}
 	
+	[columns0,lstOfMove] =state;
 	
 	abstract(columns0);
 	console.log("lst of move ",lstOfMove);
