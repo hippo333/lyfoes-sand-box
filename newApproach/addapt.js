@@ -174,11 +174,14 @@ function addapte(mv2,level){
 	console.log("free to",mv[1]);
 	let freeTo = free(mv2[1],level);
 	
-	
 		
 	if(colFrom.isEmpty()){
 		console.log("in the move",mv2,"col from is empty")
-		return true
+		return false
+	}if(colFrom.isFinish()){
+		console.log("in the move",mv2,"col from is finish");
+		
+		return false
 	}
 		
 	if(colFrom.top() != colTo.top() && !colTo.isEmpty() ){
