@@ -7,7 +7,7 @@ function move(state,from,to){
 	let [columns3,lstOfMove3] = state;
 	
 	if(from ==-1 || to ==-1){
-		console.log("error from",from,"to",to);
+		console.log("error Move, from",from,"to",to);
 		throw Error
 	}
 	
@@ -19,23 +19,25 @@ function move(state,from,to){
 	
 	
 	if(columns3[to].isFull()){
-		throw Error("error col is overfeeding",to,colTo);
+		console.log("error Move, col is overfeeding",to,colTo);
+		throw Error
+		
 		//the botle to is not empty
 	}else if(ballTo != undefined){
 		if(ballFrom != ballTo){
-			console.log("error the ball are diferent");
+			console.log("error Move, the ball are diferent");
 			console.log("  from",from,"col from",colFrom);
 			console.log("  to",to,"col to",colTo);
 			throw Error
 		}
 	}
 	if(ballFrom == undefined){
-		console.log("\nerror no ball From",from,colFrom);
+		console.log("\nerror Move, no ball From",from,colFrom);
 		console.log(`from ${from}, to ${to}`);
 		throw Error;
 	}
 	if(colTo.length + columns3[from].bigBall >4){
-		console.log("\nerror lstBigBall from",columns3[from].bigBall);
+		console.log("\nerror Move, overFeed ",from,to);
 		abstract(columns3);
 		throw Error;
 	}
