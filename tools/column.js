@@ -28,9 +28,19 @@ var Column = function(contents) {
   	}return false
   }
   
+  obj.isFinish = function(){
+  	if(!this.isFull()){
+  		return false
+  	}if(this.isMonochrome()){
+  		return true
+  	}
+  	return false  	
+  }
+  
   obj.isMonochrome = function(){
-  	let withoutDuplicate = new Set(this.content);
-  	console.log(withoutDuplicate);
+  	if(this.isEmpty()){return false}
+  	
+  	let withoutDuplicate = [...new Set(this.content)];
   	if(	withoutDuplicate.length == 1){
   		return true
   	}return false
