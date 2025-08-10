@@ -2,13 +2,15 @@ var column = require('../tools/column');
 var columns999 = require('../level');
 var abstract = require('../tools/abstract');
 var move = require('../tools/move');
-var raining = require('./raining');
-
+var fixTwin = require('./fixTwin');
 
 let columns = [];
 let lstOfMove = [];
 let state = [columns,lstOfMove];
-let alreadyTry = false
+let alreadyTry = false;
+
+let idLastEmpty = -1;	//for second way
+let lastEmptyTaken = [];//for secondWay
 
 function whatIsTheProblem(state,oldLstOfMove,remainingMove){
 	console.log("\n\n\n\n\nredcon");
@@ -22,153 +24,37 @@ function whatIsTheProblem(state,oldLstOfMove,remainingMove){
 	//console.log("old lst of move",oldLstOfMove);
 	//console.log("remaining move",remainingMove);
 	
+	//throw Error //debug
+	
 	if(alreadyTry){
 		console.log("Error What is the problem, already try");
 		throw Error	
 		
 	}
-	
-	let lstTwins = findError();	
-	
-	
-	let state3 = recreateTheSet(lstTwins);
-	//replace old state by the new one
-	state = state3;
-	
 	alreadyTry = true;
-	//throw Error
-	return state3;
-}
-
-//get all column who ave the same top than an other
-function findTwinColumn(){
-	console.log("find twinsColumn");
-	let output = [];
 	
-	for(let col=0;col<columns.length; col++){
-		let thisCol = columns[col];
-		
-		let secondCol = otherCol(col);
-		
-		if(secondCol ==-1){continue}
-		
-		output.push([col,secondCol]);
-		
-		
+	
+	let state3 = recreateTheSet();
+	
+	let twinFixed = fixTwin(state,state3);
+	console.log("twin fixed",twinFixed);
+	
+	if(twinFixed){
+		return state3
 	}
-
-	return output
-}
-
-function findError(){
-	console.log("\nfind error");
+	console.log("i can't fix the twin");
 	
-	let lstTwin = findTwinColumn();
-		
-	console.log("lst twin",lstTwin);	
-		
-	let theMove = [];
-	let theIndex = -1;
-		
-	for(let i=0; i< lstTwin.length; i++){
-		let thisTwin = lstTwin[i]; //lstTwin[1];
-		let thisFrom = thisTwin[0];
-		let thisTo = thisTwin[1];
-		//theIndex = thisTwin[2];
-		
-		let beforFrom = lastMoveTo(thisFrom);	
-		console.log("index of last move from",thisTwin,beforFrom);
-		
-		let beforTo = lastMoveTo(thisTo);
-		console.log("index of last move To",thisTwin,beforTo);
-		
-		if(beforTo !=-1){
-			//not sur about that
-			if(thisFrom == lstOfMove[beforTo][0]){continue}//the same move
-			
-			console.log("we can move to from",thisFrom);
-			theIndex = beforTo;
-			thisTwin.push(theIndex)
-			
-		}else if(beforFrom !=-1){
-			console.log("we can move to To",thisTo);
-			theIndex = beforFrom;
-			thisTwin.push(theIndex)
-			
-		}
-	}
+	state3 = recreateTheSet();
 	
-	theMove = lstOfMove[theIndex];
-	console.log("lst twins",lstTwin);	
-	console.log("the move",theMove,"at",theIndex);
+	console.log("id last empty",idLastEmpty);
 	
-	let lstSorted = sortTwin(lstTwin);
-	
-	return lstSorted
-}
-
-//sort twin by cronological last move
-function sortTwin(lstTwin2){
-	console.log("\nsort twin");
-	
-	let lstSorted = [];
-	
-	for(twin of lstTwin2){
-		
-		let indexSupp = lstSorted.findIndex(
-			id => id[2] > twin[2]			
-		)
-		
-		if(indexSupp ==-1){
-			lstSorted.push(twin);
-			
-		}else{
-			lstSorted.splice(1,0,twin);
-		}
-		
-	}
-	console.log("lst sorted",lstSorted);
-	
-	return lstSorted
-}
-
-function otherCol(col2){
-	//console.log("otherCol",col2);
-	
-	let theCol = columns[col2];
-	let theBall = theCol.top();
-	
-	let secondCol = columns.findIndex(
-		sdCl => columns.indexOf(sdCl) > col2	//anty dublon anty col2
-		&& sdCl.top() == theBall
-		
-	)
-	
-	//console.log("secondCol",secondCol);
-	return secondCol
-}
-
-function lastMoveTo(col2){
-	
-	for(let mv=lstOfMove.length -1; mv >=0; mv--){
-		let thisMove = lstOfMove[mv];
-		
-		if(thisMove[0] == col2){
-			return -1
-		
-		}else if(thisMove[1] == col2){
-			return mv
-		}
-		
-		
-		
-	}
-	
-	return -1
+	console.log("\n Error, redCon nothing work");
+	throw Error
 }
 
 
-function recreateTheSet(lstOfTwin2){
+
+function recreateTheSet(){
 	console.log("\nrecreate the set");
 	
 	
@@ -181,133 +67,12 @@ function recreateTheSet(lstOfTwin2){
 		
 		columns3.push(new column(thecol.content));
 		
-		
 	}	
 	console.log("columns999");
 	abstract(columns3);
-	console.log("lst of twin2",lstOfTwin2);
 	
-	let indexOfTwin = 0;
-	let theTwin = lstOfTwin2[indexOfTwin];	//the first twin
-	let theIndex = theTwin[theTwin.length-1];
-	
-	//do the move untile the error
-	for(let mv=0; mv<lstOfMove.length; mv++){
-		
-		let theMove = lstOfMove[mv];
-		let [from,to] = theMove;
-		
-		if(theTwin == undefined){
-			throw Error //i ave try all twin
-		}
-		theIndex = theTwin[theTwin.length -1];	
-		if(mv < theIndex){
-			move(state3,from,to);
-			console.log(mv,"theMove",theMove);
-			continue;
-		}
-		
-		console.log("\nStop the move",theMove,"is suspect");
-		console.log("at index",theIndex);
-		abstract(columns3)	
-		console.log("lst of move3",lstOfMove3);
-		
-		//next twin for the next loop
-		indexOfTwin++;	
-		theTwin = lstOfTwin2[indexOfTwin];
-		
-		
-		let otherWay = studyPosibility(state3,theMove);
-		
-		console.log("the other way",otherWay);
-		
-		if(otherWay ==-1){
-			console.log("no col compatible with",theMove);
-			
-			move(state3,from,to);
-			continue
-		}
-		
-		let priceTo = price(state3,to);
-		console.log("for the col",to,"price to",priceTo);
-		
-		
-		if(priceTo != 0){
-			console.log("\nError recreateSet,i can't free",from);
-			console.log("priceTo",priceTo);
-			console.log("you must finish this program");
-			
-			move(state3,from,to);
-			continue;
-		}
-		let firstTo = columns3[to]
-		let otherBigBall = columns3[otherWay].bigBall
-		
-		if(firstTo.content.length + otherBigBall > 4){
-			console.log("Error recreateSet, we overFeed",wrongMove[1]);
-			console.log("firstTo",firstTo.content,"otherBigBall",otherBigBall);
-			console.log("you must finish this program");
-			
-			throw Error
-		}
-		
-		break
-	}
-		
-		
-	abstract(columns3);
-	console.log("lstOfMove3",lstOfMove3);
-	
-	return state3
+	return state3	
 }
-
-
-
-function price(state2,col2){
-	console.log("price col",col2);
-	
-	let [columns3,lstOfMove3] = state2;
-	
-	let theCol = columns3[col2].content;
-	
-	for(let bll=theCol.length -2; bll >=0; bll--){
-		console.log("level",bll,"ball",theCol[bll]);
-		
-		let otherCol = otherBotle(state2,col2,theCol[bll]);
-		
-		if(otherCol ==-1){return -1}
-	}
-	
-	return 0
-}
-
-//other move than the wrong
-function studyPosibility(state2,wrongMove){
-	console.log("study posibility");
-	
-	let [columns3,lstOfMove3] = state2;
-	
-	let [from,to] = wrongMove;
-	let theCol = columns3[from];
-	let theBall = theCol.top();
-	
-	let otherWay = columns3.findIndex(
-		othw => columns3.indexOf(othw) != from
-		&& columns3.indexOf(othw) != to
-		&& othw.content.indexOf(theBall) != -1
-	)
-	
-	console.log("other Way",otherWay);
-	if(otherWay == -1 ){return -1}
-	
-	let levelOfBall = columns3[otherWay].content.indexOf(theBall);
-	if(columns3[otherWay].top() == theBall){return -1}
-	
-	free(state2,otherWay,levelOfBall);
-	
-	return otherWay
-}
-
 
 //studyposibility
 //remove the ball above level2
@@ -353,6 +118,18 @@ function free(state2,col2,level2){
 	}
 	return true
 }
+
+//otherBotle
+function emptyBotle(columns2){
+	
+	for(let col=0 ; col<columns2.length; col++){
+		if(columns2[col].isEmpty()){return col}
+		
+	}
+	
+	
+	return -1
+}
 //free
 //botle who can recive the topBall of col2
 function otherBotle(state2,col2,ball2){
@@ -360,6 +137,10 @@ function otherBotle(state2,col2,ball2){
 	
 	let otherCol = theOtherCol(state2,col2,ball2);
 	
+	if(otherCol ==-1){
+		//it's complcated
+		//otherCol = emptyBotle(columns2)
+	}
 	
 	return otherCol
 }
