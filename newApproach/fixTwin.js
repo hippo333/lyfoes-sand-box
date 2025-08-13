@@ -11,6 +11,9 @@ let columns3 = [];
 let lstOfMove3 = [];
 let state3 = [];
 
+let lastEmptyUsed = -1;	//for second Way
+let theFulestTwin = [];
+let scoreFulest = -1;
 
 function main(oldState,newState){
 	console.log("fixTwin");
@@ -29,9 +32,9 @@ function main(oldState,newState){
 	
 	
 	if(twinFixed){
-		return true
+		return [true,0,0]
 	}
-	return false
+	return [false,lastEmptyUsed,theFulestTwin]
 	
 }
 
@@ -48,6 +51,14 @@ function findTwinColumn(){
 		if(secondCol ==-1){continue}
 		
 		output.push([col,secondCol]);
+		
+		let score = columns[col].bigBall	//how many ball cumulate
+		score += columns[col].bigBall
+		
+		if(score > scoreFulest){
+			scoreFulest = score;
+			theFulestTwin = [col,secondCol];
+		}
 		
 		
 	}
@@ -121,6 +132,7 @@ function sortTwin(lstTwin2){
 			lstSorted.splice(1,0,twin);
 		}
 		
+		
 	}
 	console.log("lst sorted",lstSorted);
 	
@@ -145,11 +157,15 @@ function fixTwin(state2,lstOfTwin2){
 		let [from,to] = theMove;
 		
 		if(theTwin == undefined){
+			findLastEmptyUsed(state2,mv);	//for second Way
 			return false //i ave try all twin
 		}
 		
 		theIndex = theTwin[theTwin.length -1];	
 		if(mv < theIndex){
+			if(columns2[to].isEmpty() && mv>0){
+				lastEmptyUsed = mv;//for second way
+			}
 			
 			move(state2,from,to);
 			console.log(mv,"theMove",theMove);
@@ -208,6 +224,25 @@ function fixTwin(state2,lstOfTwin2){
 	console.log("lstOfMove2",lstOfMove2);
 	
 	return true
+}
+
+//find last move to an empty botle
+function findLastEmptyUsed(state2,mv2){
+	console.log("findLastEmptyUsed, mv2",mv2);
+	
+	
+	let [columns2,lstOfMove2] = state2;
+	
+	for(let mv=mv2; mv< lstOfMove.length; mv++){
+		let [from,to] = lstOfMove[mv];
+			
+		if(columns2[to].isEmpty()){
+			lastEmptyUsed = mv;//for second way
+		}
+		move(state2,from,to);
+		
+	}	
+	console.log("lastEmptyUsed",lastEmptyUsed);
 }
 
 

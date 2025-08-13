@@ -36,7 +36,7 @@ function whatIsTheProblem(state,oldLstOfMove,remainingMove){
 	
 	let state3 = recreateTheSet();
 	
-	let twinFixed = fixTwin(state,state3);
+	let [twinFixed,idLastEmpty,theFulestTwin] = fixTwin(state,state3);
 	console.log("twin fixed",twinFixed);
 	
 	if(twinFixed){
@@ -46,12 +46,65 @@ function whatIsTheProblem(state,oldLstOfMove,remainingMove){
 	
 	state3 = recreateTheSet();
 	
-	console.log("id last empty",idLastEmpty);
+	//secondWay(state3,idLastEmpty,theFulestTwin);
+	thirdWay(state3);
+	
+	return state3
 	
 	console.log("\n Error, redCon nothing work");
 	throw Error
 }
 
+function thirdWay(state2){
+	console.log("third way");
+	
+	let [columns2,lstOfMove2] = state2;
+	
+	let mySol = [
+	[0,10], [9,10], [9,11], [0,11], 
+	[1,9], [3,1], [7,3], [7,0], [6,7], [5,6], [5,10], [8,7], [8,5], [1,8], [1,11], [0,1], [0,5], [6,0], [6,5], [6,9], [8,6], [7,8], [7,0], [2,7], [2,6], [3,2], [3,11], [3,7], [2,3], [4,3], [4,0], [4,7], [4,1], [9,2], [9,7]
+	];
+	
+	for(let mv=0; mv< mySol.length; mv++){
+		console.log("mv",mv);
+		let [from,to] = mySol[mv];
+		
+		move(state2,from,to);
+		
+		
+	}
+	
+	
+	
+	
+}
+
+
+function secondWay(state2,id,theTwin){
+	console.log("secondWay, id",id,"theTwin",theTwin);
+	
+	let [columns2,lstOfMove2] = state2;
+	
+	for(let mv=0; mv<id; mv++){
+		let [from,to] = lstOfMove[mv];
+		
+		move(state2,from,to);
+	}
+	
+	let to = lstOfMove[id][1];
+	console.log("to",to);
+	
+	for(let twin=0; twin<theTwin.length; twin++){
+		
+		let from = theTwin[twin];
+		move(state2,from,to);
+		
+	}
+	
+	abstract(columns2);
+	console.log("lstOfMove2",lstOfMove2,"\n\n\n\n\n\n");
+	
+}
 
 
 function recreateTheSet(){
