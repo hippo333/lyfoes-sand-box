@@ -109,8 +109,10 @@ function otherBotle(col2){
 //remove the ball above level2
 function free(col2,level2){
 	let [columns2,lstOfMove2] = state2;
+	
 	let colFrom = columns2[col2];
-	//console.log("free",col2,colFrom.content,"level",level2);
+	console.log("free",col2,colFrom.content,"level",level2);
+	
 	
 	if(colFrom.isMonochrome()){return true}
 	if(colFrom.isEmpty()){
@@ -121,7 +123,6 @@ function free(col2,level2){
 		console.log("skip for the bigBall");
 		return true
 	}
-	
 	
 	let otherCol = otherBotle(col2);
 	
@@ -216,12 +217,28 @@ function addapte(mv2,level){
 }
 
 
+function isFinish(){
+	let [columns2,lstOfMove2] = state2;
+
+	let unFinishedCol = columns2.findIndex(
+		col => !col.isFinish()
+		&& !col.isEmpty		
+	);
+	
+	if(unFinishedCol ==-1){
+		return true
+	}
+	return false
+}
+
+
 function finish(){
 	let [columns2,lstOfMove2] = state2;
 	let finishList = [];
 	
 	for(let col=0; col<columns2.length; col++){
 		let thisCol = columns2[col];
+		//console.log("finish",col,thisCol.content);
 		
 		if(thisCol.isEmpty()){
 			finishList.push(-1);
@@ -245,9 +262,12 @@ function finish(){
 				//for redcon
 				state2 = redcon(state, oldLstOfMove, remainingMove);
 				
+				if(isFinish()){
+					return state2
+				}
+				
 				let level = 4 //arbitrary
 				addaptAll(newLst,level,state2);
-				
 				
 				//throw Error
 				continue
@@ -273,6 +293,8 @@ function finish(){
 		
 		throw Error	
 	}
+	
+	return state2
 }
 
 
