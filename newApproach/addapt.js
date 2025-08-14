@@ -217,13 +217,16 @@ function addapte(mv2,level){
 }
 
 
-function isFinish(){
+function isFinished(){
+	console.log("isFinished");
+	
 	let [columns2,lstOfMove2] = state2;
 
 	let unFinishedCol = columns2.findIndex(
 		col => !col.isFinish()
-		&& !col.isEmpty		
 	);
+	
+	console.log("un finished col",unFinishedCol);
 	
 	if(unFinishedCol ==-1){
 		return true
@@ -233,6 +236,8 @@ function isFinish(){
 
 
 function finish(){
+	console.log("finish1");
+	
 	let [columns2,lstOfMove2] = state2;
 	let finishList = [];
 	
@@ -262,7 +267,7 @@ function finish(){
 				//for redcon
 				state2 = redcon(state, oldLstOfMove, remainingMove);
 				
-				if(isFinish()){
+				if(isFinished()){
 					return state2
 				}
 				
@@ -270,7 +275,7 @@ function finish(){
 				addaptAll(newLst,level,state2);
 				
 				//throw Error
-				continue
+				break;
 			}
 			//console.log("otherCol",otherCol);
 			if(!columns2[otherCol].isEmpty()){
