@@ -328,7 +328,7 @@ function studyPosibility(state2,wrongMove){
 function free(state2,col2,level2){
 	let [columns2,lstOfMove2] = state2;
 	let colFrom = columns2[col2];
-	console.log("free",col2,colFrom.content,"level",level2);
+	console.log("free (FixTwin)",col2,colFrom.content,"level",level2);
 	
 	if(colFrom.isMonochrome()){return true}
 	if(colFrom.isEmpty()){

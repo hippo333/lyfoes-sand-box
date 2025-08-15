@@ -172,6 +172,26 @@ function theOtherCol(col2){
 	return otherCol
 }
 
+
+function isFinished(){
+	console.log("isFinished");
+	
+	let [columns,lstOfMove] = state;
+
+	let unFinishedCol = columns.findIndex(
+		col => !col.isFinish()
+		&& !col.isEmpty()
+	);
+	
+	console.log("un finished col",unFinishedCol);
+	
+	if(unFinishedCol ==-1){
+		return true
+	}
+	return false
+}
+
+
 function main(){
 	
 	let lastLevel = cleanFirstLst(columns999)
@@ -193,6 +213,9 @@ function main(){
 		//abstract(columns0);
 		
 		lastLevel = lstOfMove;
+		
+		if(isFinished()){break}
+		console.log("is not finish");
 	}
 	
 	[columns0,lstOfMove] =state;

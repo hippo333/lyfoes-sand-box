@@ -62,7 +62,7 @@ function thirdWay(state2){
 	
 	let mySol = [
 	[0,10], [9,10], [9,11], [0,11], 
-	[1,9], [3,1], [7,3], [7,0], [6,7], [5,6], [5,10], [8,7], [8,5], [1,8], [1,11], [0,1], [0,5], [6,0], [6,5], [6,9], [8,6], [7,8], [7,0], [2,7], [2,6], [3,2], [3,11], [3,7], [2,3], [4,3], [4,0], [4,7], [4,1], [9,2], [9,7]
+	[1,9], [3,1], [7,3], [7,0], [6,7], [5,6], [5,10], [8,7], [8,5], [1,8], [1,11], [0,1], [0,5], [6,0], [6,5], [6,9], [8,6], [7,8], [7,0], [2,7], [2,6], [3,2], [3,11], [3,7], [2,3],// [4,3], //[4,0], [4,7], [4,1], [9,2], [9,7]
 	];
 	
 	for(let mv=0; mv< mySol.length; mv++){
@@ -132,7 +132,7 @@ function recreateTheSet(){
 function free(state2,col2,level2){
 	let [columns2,lstOfMove2] = state2;
 	let colFrom = columns2[col2];
-	console.log("free",col2,colFrom.content,"level",level2);
+	console.log("free (Redcon)",col2,colFrom.content,"level",level2);
 	
 	if(colFrom.isMonochrome()){return true}
 	if(colFrom.isEmpty()){
