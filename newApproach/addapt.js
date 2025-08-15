@@ -329,6 +329,8 @@ function neutralMove(){
 		if(thisCol.isEmpty()){continue}
 		if(thisCol.isFinish()){continue}
 		if(thisCol.isMonochrome()){continue};
+		if(thisCol.content.length < 4){continue}
+		
 		//one ball under the bigBall
 		if(thisCol.content.length > thisCol.bigBall +1){continue}
 		
