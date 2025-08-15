@@ -268,13 +268,10 @@ function finish(){
 				state = redcon(state, oldLstOfMove, remainingMove);
 				[columns,lstOfMove] = state;	//update the var
 								
-				
 				let level = 4 //arbitrary
 				addaptAll(newLst,level,state);
+				return
 				
-				//throw Error
-				//break;
-				continue;
 			}
 			//console.log("otherCol",otherCol);
 			if(!columns[otherCol].isEmpty()){
