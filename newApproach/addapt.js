@@ -73,17 +73,25 @@ function fixIt(){
 
 //addapte
 //botle who can recive topBall of col2
-function theOtherCol(col2){
+function theOtherCol(col2,theBall){
 	let [columns,lstOfMove] = state;
 
 	let thisCol = columns[col2];
-	let theBall = thisCol.top();
+	let bigBll = -1;
+	
+	if(theBall == undefined){
+		theBall = thisCol.top();
+		bigBll = thisCol.bigBall;
+	}else{
+		bigBll =1;	//if theBall is not on the top
+	}
+	
 	
 	let otherCol = columns.findIndex(
 		oCol => columns.indexOf(oCol) != col2
 		&& !oCol.isEmpty()
 		&& oCol.top() == theBall
-		&& thisCol.bigBall + oCol.content.length <5
+		&& bigBll + oCol.content.length <5
 	);
 	
 	
@@ -241,6 +249,7 @@ function finish(){
 	let [columns,lstOfMove] = state;
 	let finishList = [];
 	
+	
 	for(let col=0; col<columns.length; col++){
 		let thisCol = columns[col];
 		//console.log("\nfinish",col,thisCol.content);
@@ -266,8 +275,9 @@ function finish(){
 		
 				//for redcon
 				state = redcon(state, oldLstOfMove, remainingMove);
-				[columns,lstOfMove] = state;	//update the var
-								
+						
+				neutralMove();
+			
 				let level = 4 //arbitrary
 				addaptAll(newLst,level,state);
 				return
@@ -296,6 +306,62 @@ function finish(){
 		throw Error	
 	}
 	
+}
+
+function neutralMove(){
+	console.log("neutral move (addapt)");
+	
+	let [columns,lstOfMove] = state;
+	let lstThirdUp = [];	//only one ball under the BigBall
+	
+	abstract(columns);
+	let emptyBtl = emptyBotle(columns);
+	
+	if(emptyBtl ==-1){
+		console.log("no empty botle");
+		throw Error
+	
+	}
+	
+	for(let col=0; col<columns.length; col++){
+		let thisCol = columns[col];
+		
+		if(thisCol.isEmpty()){continue}
+		if(thisCol.isFinish()){continue}
+		if(thisCol.isMonochrome()){continue};
+		//one ball under the bigBall
+		if(thisCol.content.length > thisCol.bigBall +1){continue}
+		
+		lstThirdUp.push(col);		
+	}
+	
+	console.log("lstThirdUp",lstThirdUp);
+	
+	for(let id=0; id<lstThirdUp.length; id++){
+		let col = lstThirdUp[id];
+		
+		let theBall = columns[col].content[0];//ball under the bigball
+		console.log("the ball",theBall);
+		
+		let otherCol = theOtherCol(col,theBall)
+		
+		if(otherCol != -1){
+		
+			move(state,col,emptyBtl);
+			
+			move(state,col,otherCol);
+			
+			emptyBtl = col;
+		
+		}
+	}
+	
+	
+	abstract(columns);
+	
+	
+	
+	//throw Error
 }
 
 
