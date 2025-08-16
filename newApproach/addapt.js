@@ -250,6 +250,8 @@ function finish(){
 	let finishList = [];
 	
 	
+	neutralMove();
+	
 	for(let col=0; col<columns.length; col++){
 		let thisCol = columns[col];
 		//console.log("\nfinish",col,thisCol.content);
@@ -276,7 +278,7 @@ function finish(){
 				//for redcon
 				state = redcon(state, oldLstOfMove, remainingMove);
 						
-				neutralMove();
+				//neutralMove();
 			
 				let level = 4 //arbitrary
 				addaptAll(newLst,level,state);
@@ -318,8 +320,10 @@ function neutralMove(){
 	let emptyBtl = emptyBotle(columns);
 	
 	if(emptyBtl ==-1){
-		console.log("no empty botle");
-		throw Error
+		console.log("\nError neutralMove, no empty botle");
+		
+		return
+		//throw Error
 	
 	}
 	
@@ -358,10 +362,7 @@ function neutralMove(){
 		}
 	}
 	
-	
 	abstract(columns);
-	
-	
 	
 	//throw Error
 }
@@ -372,6 +373,8 @@ function addaptAll(lastLstOfMove,level,state2){
 	console.log("last lst of move",lastLstOfMove);
 	
 	state = state2;	//use the same state from main module
+	
+	let [columns2,lstOfMove2] = state;
 	
 	//for redcon
 	oldLstOfMove = [...lastLstOfMove];
@@ -387,12 +390,19 @@ function addaptAll(lastLstOfMove,level,state2){
 		lastMove = mv;
 		
 		
+		
+		
 		//try to addapt
 		let failToAddapt = addapte(mv,level);
 		
 		//if we can't skip it and do it on the next loop
 		if(failToAddapt != true){
 			//console.log("we can't addapt",mv);
+			let lastFr = mv[0];
+			let lastFrom = columns2[lastFr]
+			
+			if(lastFrom.isFinish()){continue}//the move is pointless
+		
 			lstAddaptLater.push(mv);
 			
 		}else{
