@@ -8,6 +8,7 @@ var addaptAll = require('./addapt');
 
 
 
+
 function emptyBotle(columns2){
 	
 	for(let col=0 ; col<columns2.length; col++){
@@ -209,7 +210,6 @@ function main(){
 		//abstract(columns0);
 		
 		state = addaptAll(lastLevel,level,state);
-		console.log("c");
 		//abstract(columns0);
 		
 		lastLevel = lstOfMove;
@@ -221,7 +221,7 @@ function main(){
 	[columns0,lstOfMove] =state;
 	
 	abstract(columns0);
-	console.log("lst of move ",lstOfMove);
+	console.log("lst of move ",lstOfMove.map(([from,to,bb]) => [from,to]));
 	
 }
 
