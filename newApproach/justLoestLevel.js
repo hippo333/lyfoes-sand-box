@@ -6,6 +6,8 @@ var move = require('../tools/move');
 var raining = require('./raining');
 var addaptAll = require('./addapt');
 
+abstract(columns999)
+//throw
 
 
 

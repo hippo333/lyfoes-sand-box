@@ -7,9 +7,6 @@ var redcon = require('./redCon');
 
 let state =[];
 
-//for redcon
-let oldLstOfMove =[];
-let remainingMove = [];
 let lastMove = [];
 let newLst =[];
 
@@ -36,7 +33,7 @@ function emptyBotle(columns2){
 //empty botle
 //try to free a botle
 function fixIt(){
-	console.log("fix It(addapt)");
+	console.log("\nfix It(addapt)");
 	let [columns,lstOfMove] = state;
 	let newEmptyBotle = -1;
 	
@@ -58,11 +55,16 @@ function fixIt(){
 			}
 			
 			console.log("move",col2,otherCol);
+			
+			
 			move(state,col2,otherCol);
 			
 			//the botle we ave free
-			if(columns[col2].isEmpty()){
+			if(firstCol.isEmpty()){
 				newEmptyBotle = col2;
+				
+			}else if(firstCol.content.length ==1){	//to specific
+				col2--;//if we can free the ball under
 			}
 		}
 	}
@@ -119,7 +121,7 @@ function free(col2,level2){
 	let [columns,lstOfMove] = state;
 	
 	let colFrom = columns[col2];
-	//console.log("free (addapt)",col2,colFrom.content,"level",level2);
+	console.log("free (addapt)",col2,colFrom.content,"level",level2);
 	
 	
 	if(colFrom.isMonochrome()){return true}
@@ -135,18 +137,14 @@ function free(col2,level2){
 	let otherCol = otherBotle(col2);
 	
 	if(otherCol ==-1){
-	
 		console.log("Error Free",col2,"no other column");
-		abstract(columns);
+		//abstract(columns);
 		return false;
-		
-		
 	}
 	
 	//console.log("move from",col2, colFrom.content);
 	//console.log("to",otherCol, columns[otherCol].content);
 	move(state,col2,otherCol);
-	
 	
 	
 	if(colFrom.content.length -colFrom.bigBall > level2){
@@ -215,8 +213,10 @@ function addapte(mv2,level){
 	}
 	if(colTo.content.length + colFrom.bigBall > 4){
 		console.log("the move",mv2,"overFeed");
+				
 		return false
 	}
+	
 	
 	move(state,mv2[0],mv2[1])
 	
@@ -276,9 +276,9 @@ function finish(){
 				console.log(lstOfMove);
 		
 				//for redcon
-				state = redcon(state, oldLstOfMove, remainingMove);
+				redcon(state);
 						
-				//neutralMove();
+				neutralMove();
 			
 				let level = 4 //arbitrary
 				addaptAll(newLst,level,state);
@@ -376,8 +376,6 @@ function addaptAll(lastLstOfMove,level,state2){
 	
 	let [columns2,lstOfMove2] = state;
 	
-	//for redcon
-	oldLstOfMove = [...lastLstOfMove];
 	
 	let lstAddaptLater = [];
 	let succes = false;	//recursive killer
@@ -395,6 +393,7 @@ function addaptAll(lastLstOfMove,level,state2){
 		//try to addapt
 		let failToAddapt = addapte(mv,level);
 		
+		
 		//if we can't skip it and do it on the next loop
 		if(failToAddapt != true){
 			//console.log("we can't addapt",mv);
@@ -402,6 +401,9 @@ function addaptAll(lastLstOfMove,level,state2){
 			let lastFrom = columns2[lastFr]
 			
 			if(lastFrom.isFinish()){continue}//the move is pointless
+			if(lastFrom.isMonochrome()){
+				if(lastFrom.content.length >2){continue}//not sure about that
+			}
 		
 			lstAddaptLater.push(mv);
 			
@@ -417,7 +419,7 @@ function addaptAll(lastLstOfMove,level,state2){
 		
 		}else{	//if this loop adapte nothing we are stuck
 		
-			abstract(state[0]);
+			abstract(columns2);
 			console.log("move we ave skiped",lstAddaptLater,"\n\n\n");
 			
 			newLst = lstAddaptLater;
