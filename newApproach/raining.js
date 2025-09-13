@@ -121,7 +121,7 @@ function getAllColor(){
 //rainAllColor
 //move all top ball who can go to col2
 function moveToColor(col2){
-	//console.log("move to color",col2);
+	console.log("move to color",col2);
 	
 	let newTarget2 = []; //after raining
 	let theColor = columns0[col2].top();
@@ -132,6 +132,28 @@ function moveToColor(col2){
 		
 		if(col == col2){continue}
 		if(topBall == theColor){
+			
+			//if the invers move free a column
+			//move the second ball to the color
+			if(columns0[col2].content.length ==2){
+				if(thisCol.content.length < 4){
+					if(columns0[col2].content[0] == mostPresent[0]){
+						let theColor = columns0.findIndex(
+							clr => clr.top() == mostPresent[0]	
+						)
+						console.log(" the color",theColor,"\n");
+						move(state,col2,col);
+						move(state,col2,theColor);
+						
+						abstract(columns0)
+						console.log("lstOfMove",state[1]);
+						//throw Error
+						continue
+					}
+				}				
+			}//*/
+					
+			
 			
 			//dont Over feed
 			if(thisCol.bigBall + columns0[col2].content.length > 4){continue}
