@@ -139,18 +139,23 @@ function moveToColor(col2){
 				if(thisCol.content.length < 4){
 					if(columns0[col2].content[0] == mostPresent[0]){
 						let theColor = columns0.findIndex(
-							clr => clr.top() == mostPresent[0]	
+							clr => clr.top() == mostPresent[0]
+							&& clr.content.length <4	
 						)
-						console.log(" the color",theColor,"\n");
-						move(state,col2,col);
-						move(state,col2,theColor);
-						
-						abstract(columns0)
-						console.log("lstOfMove",state[1]);
-						//throw Error
-						continue
+						if(theColor != -1){
+							//console.log("colFrom",col2,"colTo",col);
+							//console.log(" the color",theColor,"\n");
+							move(state,col2,col);
+							console.log("colFrom",col2,"colTo",theColor);
+							move(state,col2,theColor);
+							
+							abstract(columns0)
+							console.log("lstOfMove",state[1]);
+							//throw Error
+							continue
+						}
 					}
-				}				
+				}	//messy			
 			}//*/
 					
 			
@@ -218,7 +223,10 @@ function cleanAfterRaining(){
 			console.log("nextTarget",nextTaret);
 		}
 		afterRaining();
-		//console.log(lstOfMove);
+		
+		//debug
+		abstract(columns0);
+		console.log(lstOfMove);
 	}
 }
 
