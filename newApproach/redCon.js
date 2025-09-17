@@ -8,17 +8,34 @@ let columns = [];
 let lstOfMove = [];
 let state = [columns,lstOfMove];
 
-let alreadyTry = false;
+
+let countOfTry =0;
+let lastLength = -1;
+let lstPreviousTry = [];
+
+let lstTwinCol =[];
 
 
 function tstMatch(col2,from2,to2){
-	//console.log("tstMatch, col2",col2,"from2",from2,"to2",to2);
+	console.log("tstMatch, col2",col2,"from2",from2,"to2",to2);
 	let twinCol = [];
 	
 	let colFrom2 = columns[from2];
 	let colTo2 = columns[to2];
 	let theCol2 = columns[col2];
 	
+	//to empty
+	if(theCol2.isEmpty()){
+		for(let col=0; col<columns.length; col++){
+			if(col == from2){continue}
+			if(col == to2){continue}
+			if(columns[col].isEmpty()){continue}
+			
+			twinCol.push([col,col2]);
+		}
+		return twinCol
+		
+	}
 	//from
 	if(col2 != from2){
 		if(theCol2.bigBall + colFrom2.content.length <= 4){
@@ -43,32 +60,73 @@ function tstMatch(col2,from2,to2){
 
 
 function alternativeMove(lastMove2){
-	//console.log("alternativeMove, lastMove",lastMove2)
+	console.log("alternativeMove, lastMove",lastMove2)
 	
 	let [from2,to2,bb999] = lastMove2;
 	
 	let colFrom2 = columns[from2];
 	let colTo2 = columns[to2];
 	let theBall = colFrom2.top();
+	console.log("theBall",theBall);
 	
-	let lstTwinCol =[];
+	//continue with the remaining move
+	let previousId = lstPreviousTry.indexOf(lstOfMove.join());
+	if(previousId ==-1){
+		console.log("i never see ths lstOfMove");
+		lstTwinCol = [];
+		lstPreviousTry.push(lstOfMove.join());
+	}else{
+		console.log("this lstOfMove seems familiar");
+		let previousLst = lstPreviousTry[previousId+1];
+		
+		if(typeof(previousLst) == "string"){
+			console.log("bad track")
+			lstTwinCol = [];
+			return lstTwinCol
+		}else{
+			console.log("last time we left this move",previousLst);
+			
+			
+			lstTwinCol = previousLst.slice(1)//nextMove
+			lstPreviousTry[previousId+1] = lstTwinCol
+			return lstTwinCol
+		}
+		
+	}
 	
+	if(colTo2.isEmpty()){
+		for(let col=0; col<columns.length;col++){
+			if(col == from2){continue}
+			if(col == to2){continue}
+			lstTwinCol.push([col,to2]);
+		}
+		lstPreviousTry.push(lstTwinCol);
+		return lstTwinCol
+	}
+		
 	for(let col=0; col<columns.length; col++){
 		let thisCol = columns[col];
 		
-		if(thisCol.isEmpty()){continue}
-		if(thisCol.top() != theBall){continue}
+		//if(thisCol.isEmpty()){continue} // tst
+		if(thisCol.top() != theBall){
+			if(!thisCol.isEmpty()){continue}
+			
+			console.log("col",col,"isEmpty");
+		}
 		
 		lstTwinCol = lstTwinCol.concat(tstMatch(col,from2,to2))
 		
 	}
 	
-	//console.log("lstTwinCol",lstTwinCol);
+	lstPreviousTry.push(lstTwinCol);
+	
+	console.log("lstTwinCol",lstTwinCol);
 	return lstTwinCol
 }
 
 
 function undoLastMove(){
+	console.log("undoLastMove");
 	
 	let lastMove = lstOfMove[lstOfMove.length -1];
 	
@@ -77,6 +135,7 @@ function undoLastMove(){
 	let colTo = columns[to];
 	
 	let theBall = colTo.top();
+	
 	
 	colTo.content = colTo.content.slice(0,-bigBll);
 	colFrom.content = colFrom.content.concat(Array(bigBll).fill(theBall));
@@ -92,6 +151,14 @@ function undoLastMove(){
 	
 	let alternativeMv = alternativeMove(lastMove);
 	
+	if(from ==0 && to== 5  && lstOfMove.length > 3){	//debug
+		console.log("lstOfMove",lstOfMove);
+		console.log("lastMove from",from,"to",to)
+		console.log("alternative move",alternativeMv);
+		//console.log("lstPreviousTry",lstPreviousTry);
+		throw Error("debug");
+	}//*/
+	
 	if(alternativeMv.length == 0){
 		undoLastMove()
 	}else{
@@ -106,19 +173,22 @@ function undoLastMove(){
 }
 
 
+let countRedcon = 0;
 
 function redcon(state2){
 	console.log("\n\n\nRedcon");
+	console.log("countRedcon",++countRedcon);
 	
 	state = state2;//global var
 	[columns,lstOfMove] = state;
 	
-	if(alreadyTry){
-		throw Error("i need to make redcon");
+	if(countOfTry >30){
+		console.log("lstPreviousTry",lstPreviousTry);
+		throw Error("too many try try");
 	}
-	alreadyTry = true
 	
 	undoLastMove()
+	countOfTry++;
 	
 }
 
