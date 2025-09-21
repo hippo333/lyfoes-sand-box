@@ -10,6 +10,9 @@ let state =[];
 let lastMove = [];
 let newLst =[];
 
+let lstTimeRedcon = [];
+
+
 
 function emptyBotle(columns2){
 	
@@ -58,6 +61,7 @@ function fixIt(){
 			
 			
 			move(state,col2,otherCol);
+			//col2--;	//do it for the same column
 			
 			//the botle we ave free
 			if(firstCol.isEmpty()){
@@ -121,7 +125,7 @@ function free(col2,level2){
 	let [columns,lstOfMove] = state;
 	
 	let colFrom = columns[col2];
-	console.log("free (addapt)",col2,colFrom.content,"level",level2);
+	//console.log("free (addapt)",col2,colFrom.content,"level",level2);
 	
 	
 	if(colFrom.isMonochrome()){return true}
@@ -157,7 +161,7 @@ function free(col2,level2){
 }
 
 
-
+let toForget = false;
 //free the ball above the level of the last cycle
 function addapte(mv2,level){
 	let [columns,lstOfMove] = state;
@@ -166,8 +170,7 @@ function addapte(mv2,level){
 	let colTo = columns[mv2[1]];
 	let newMove = [];
 	
-	
-	
+	toForget = false;
 	
 	
 	
@@ -184,9 +187,11 @@ function addapte(mv2,level){
 		
 	if(colFrom.isEmpty()){
 		//console.log("in the move",mv2,"col from is empty")
+		toFroget = true;
 		return false
 	}if(colFrom.isFinish()){
 		//console.log("in the move",mv2,"col from is finish");
+		toForget = true
 		return false
 	}
 		
@@ -209,10 +214,12 @@ function addapte(mv2,level){
 			//throw Error
 		}else{
 			mv2[1] = otherCol;
+			colTo = columns[mv2[1]];
 		}
 	}
 	if(colTo.content.length + colFrom.bigBall > 4){
 		console.log("the move",mv2,"overFeed");
+		console.log("col to",mv[1],colTo.content);
 				
 		return false
 	}
@@ -275,8 +282,14 @@ function finish(){
 				abstract(columns);
 				console.log(lstOfMove);
 		
+								
 				//for redcon
+				let start = new Date().getTime();
 				redcon(state);
+				
+				let end = new Date().getTime();	//timer
+				let time = end - start;
+				lstTimeRedcon.push(time);
 						
 				neutralMove();
 			
@@ -310,13 +323,44 @@ function finish(){
 	
 }
 
+
+function isSoluble(col2,emptyBtl2){
+	console.log("is Soluble",col2);
+	
+	let [columns,lstOfMove] = state;
+	let lstMv = [[col2,emptyBtl2]];
+	
+	let lstTopBall = columns.map(x => x.top());
+	
+	let thisCol = columns[col2];
+	thisCol = thisCol.content.slice(0,-thisCol.bigBall);
+	
+	console.log("thisCol",thisCol);
+	
+	for(let level=thisCol.length-1 ; level>=0; level--){
+		let secondCol = lstTopBall.indexOf(thisCol[level])
+		
+		if(secondCol ==-1){return []}
+		
+		//bigball
+		if(columns[secondCol].bigBall ==4){return []}
+		
+		lstMv.push([col2,secondCol])
+	}
+	
+	console.log("lst of move",lstMv);
+	return lstMv
+}
+
+
 function neutralMove(){
 	console.log("neutral move (addapt)");
 	
 	let [columns,lstOfMove] = state;
 	let lstThirdUp = [];	//only one ball under the BigBall
 	
-	abstract(columns);
+	
+	//abstract(columns);
 	let emptyBtl = emptyBotle(columns);
 	
 	if(emptyBtl ==-1){
@@ -331,16 +375,24 @@ function neutralMove(){
 		let thisCol = columns[col];
 		
 		if(thisCol.isEmpty()){continue}
-		if(thisCol.isFinish()){continue}
 		if(thisCol.isMonochrome()){continue};
 		if(thisCol.content.length < 4){continue}
 		
 		//one ball under the bigBall
-		if(thisCol.content.length > thisCol.bigBall +1){continue}
+		//if(thisCol.content.length > thisCol.bigBall +1){continue}
+		//lstThirdUp.push(col);
 		
-		lstThirdUp.push(col);		
+		//is soluble
+		let lstMv = isSoluble(col,emptyBtl);
+		
+		if(lstMv.length ==0){continue};
+				
+		for(mv of lstMv){
+			move(state,mv[0],mv[1]);
+		}
+		return
 	}
-	
+	/*
 	console.log("lstThirdUp",lstThirdUp);
 	
 	for(let id=0; id<lstThirdUp.length; id++){
@@ -361,8 +413,9 @@ function neutralMove(){
 		
 		}
 	}
-	
-	abstract(columns);
+	if(lstThirdUp.length > 0){
+		abstract(columns);
+	}//*/
 	
 	//throw Error
 }
@@ -404,12 +457,15 @@ function addaptAll(lastLstOfMove,level,state2){
 			if(lastFrom.isMonochrome()){
 				if(lastFrom.content.length >2){continue}//not sure about that
 			}
-		
-			lstAddaptLater.push(mv);
+			
+			if(!toForget){
+				lstAddaptLater.push(mv);
+			}
 			
 		}else{
 			succes = true;
 		}	//at least we ave addapt one
+		
 	}
 	
 	if(lstAddaptLater.length !=0){
@@ -430,7 +486,10 @@ function addaptAll(lastLstOfMove,level,state2){
 	
 	//abstract(state[0])
 	//console.log("lstOfMove",state[1]);
+	
 	finish();
+	
+	//console.log("lst time redcon",lstTimeRedcon);
 	
 	return state
 }
