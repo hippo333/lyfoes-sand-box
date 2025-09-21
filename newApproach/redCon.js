@@ -24,18 +24,7 @@ function tstMatch(col2,from2,to2){
 	let colTo2 = columns[to2];
 	let theCol2 = columns[col2];
 	
-	//to empty
-	if(theCol2.isEmpty()){
-		for(let col=0; col<columns.length; col++){
-			if(col == from2){continue}
-			if(col == to2){continue}
-			if(columns[col].isEmpty()){continue}
-			
-			twinCol.push([col,col2]);
-		}
-		return twinCol
-		
-	}
+	
 	//from
 	if(col2 != from2){
 		if(theCol2.bigBall + colFrom2.content.length <= 4){
@@ -95,10 +84,20 @@ function alternativeMove(lastMove2){
 	}
 	
 	if(colTo2.isEmpty()){
+		let lstTopBall = columns.map(x => x.top());
+		console.log("lst top ball",lstTopBall);
+			
 		for(let col=0; col<columns.length;col++){
 			if(col == from2){continue}
 			if(col == to2){continue}
-			lstTwinCol.push([col,to2]);
+			
+			let secondBall = columns[col].secondBall()
+			
+			if(lstTopBall.includes(secondBall)){
+				lstTwinCol.push([col,to2]);
+			}
+			//throw Error("debug second Ball");
+			
 		}
 		lstPreviousTry.push(lstTwinCol);
 		return lstTwinCol
@@ -107,11 +106,9 @@ function alternativeMove(lastMove2){
 	for(let col=0; col<columns.length; col++){
 		let thisCol = columns[col];
 		
-		//if(thisCol.isEmpty()){continue} // tst
 		if(thisCol.top() != theBall){
-			if(!thisCol.isEmpty()){continue}
-			
-			console.log("col",col,"isEmpty");
+			//if(!thisCol.isEmpty()){continue}
+			continue
 		}
 		
 		lstTwinCol = lstTwinCol.concat(tstMatch(col,from2,to2))
@@ -119,6 +116,7 @@ function alternativeMove(lastMove2){
 	}
 	
 	lstPreviousTry.push(lstTwinCol);
+	//lstPreviousTry.push(lstTwinCol);	//untouched lst
 	
 	console.log("lstTwinCol",lstTwinCol);
 	return lstTwinCol
@@ -151,7 +149,7 @@ function undoLastMove(){
 	
 	let alternativeMv = alternativeMove(lastMove);
 	
-	if(from ==0 && to== 5  && lstOfMove.length > 3){	//debug
+	/*if(from ==0 && to== 5  && lstOfMove.length > 3){	//debug
 		console.log("lstOfMove",lstOfMove);
 		console.log("lastMove from",from,"to",to)
 		console.log("alternative move",alternativeMv);
@@ -178,11 +176,12 @@ let countRedcon = 0;
 function redcon(state2){
 	console.log("\n\n\nRedcon");
 	console.log("countRedcon",++countRedcon);
+	let start = new Date().getTime();	//timer
 	
 	state = state2;//global var
 	[columns,lstOfMove] = state;
 	
-	if(countOfTry >30){
+	if(countOfTry >100){
 		console.log("lstPreviousTry",lstPreviousTry);
 		throw Error("too many try try");
 	}
@@ -190,6 +189,15 @@ function redcon(state2){
 	undoLastMove()
 	countOfTry++;
 	
+	let end = new Date().getTime();	//timer
+	let time = end - start;
+	lstPreviousTry.push(time);
+	
+	/*if(countOfTry >10){
+		console.log("lstPreviousTry",lstPreviousTry);
+		throw Error("debug");
+	}//*/
+	console.log("lstPreviousTry",lstPreviousTry);
 }
 
 
