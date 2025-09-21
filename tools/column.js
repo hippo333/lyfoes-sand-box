@@ -14,6 +14,11 @@ var Column = function(contents) {
   	return this.content[this.content.length -1];
   }
   
+  obj.secondBall = function (){
+  	if(this.content.length == this.bigBall){return -1}
+  	return this.content[this.content.length -2];
+  }
+  
   obj.isFull = function(){
   	if(this.content.length == 0){
   		return false
