@@ -343,7 +343,7 @@ function isSoluble(col2,emptyBtl2){
 		if(secondCol ==-1){return []}
 		
 		//bigball
-		if(columns[secondCol].bigBall ==4){return []}
+		if(columns[secondCol].content.length ==4){return []}
 		
 		lstMv.push([col2,secondCol])
 	}
