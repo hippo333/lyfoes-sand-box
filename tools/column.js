@@ -16,7 +16,7 @@ var Column = function(contents) {
   
   obj.secondBall = function (){
   	if(this.content.length == this.bigBall){return -1}
-  	return this.content[this.content.length -2];
+  	return this.content.slice(-this.bigBall -1)[0];
   }
   
   obj.isFull = function(){
