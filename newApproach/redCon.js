@@ -128,29 +128,39 @@ function alternativeMove(lastMove2){
 }
 
 
+function undoNbMove(nb){
+	console.log("undo",nb,"move");
+	
+	let lastMove = [];
+	for(let i=0; i<nb; i++){
+		lastMove = lstOfMove[lstOfMove.length -1];
+		
+		let [from,to,bigBll] = lastMove;
+		let colFrom = columns[from];
+		let colTo = columns[to];
+		
+		let theBall = colTo.top();
+		
+		
+		colTo.content = colTo.content.slice(0,-bigBll);
+		colFrom.content = colFrom.content.concat(Array(bigBll).fill(theBall));
+		
+		colTo.newBigBall();
+		colFrom.newBigBall();
+		
+		lstOfMove.pop();
+		
+		//abstract(columns);
+	}
+	return lastMove	
+}
+
+
 function undoLastMove(){
 	console.log("undoLastMove");
 	
-	let lastMove = lstOfMove[lstOfMove.length -1];
+	let lastMove = undoNbMove(1);
 	
-	let [from,to,bigBll] = lastMove;
-	let colFrom = columns[from];
-	let colTo = columns[to];
-	
-	let theBall = colTo.top();
-	
-	
-	colTo.content = colTo.content.slice(0,-bigBll);
-	colFrom.content = colFrom.content.concat(Array(bigBll).fill(theBall));
-	
-	colTo.newBigBall();
-	colFrom.newBigBall();
-	
-	lstOfMove.pop();
-	
-	abstract(columns);
-	//console.log("lstOfMove",lstOfMove);
-	//console.log("lastMove",lastMove);
 	
 	let alternativeMv = alternativeMove(lastMove);
 	
@@ -175,8 +185,51 @@ function undoLastMove(){
 	
 }
 
+//if we make a big ball af 3 to soon it block to many posibility
+//it is arbitrary and gona improve
+function removeLastBigBallOfThree(){
+	console.log("remove last bigBall of three");
+	
+	let lstIdBBThree = [];
+	
+	columns.forEach(
+		function(col,index){ 
+			if(col.bigBall ==3){
+				if(col.content.length ==4){
+					lstIdBBThree.push(index)
+		}	}	}
+	)
+	console.log("lstIdBBTree",lstIdBBThree);
+	
+	let suspectMove =-1;
+	let space = 2; //avoid suspectMove who affect only few last branch(random)
+	
+	for(mv = lstOfMove.length -1 -space ; mv>=0; mv--){
+		let to = lstOfMove[mv][1];
+		
+		if(lstIdBBThree.includes(to)){
+			suspectMove = mv;
+			break;
+		}
+	}
+	
+	if(suspectMove ==-1){return}
+	console.log("suspectMove",suspectMove,lstOfMove[suspectMove]);
+	console.log("nb of move",lstOfMove.length);
+	
+	let nbMoveToDelet = lstOfMove.length - suspectMove
+	
+	console.log("nbMoveToDelet",nbMoveToDelet);
+	
+	undoNbMove(nbMoveToDelet);
+	abstract(columns)
+	console.log("lstOfMove",lstOfMove);
+	//throw Error("debug")
+
+}
 
 let countRedcon = 0;
+let countOfBBThree = 0;
 
 function redcon(state2){
 	console.log("\n\n\nRedcon");
@@ -190,6 +243,11 @@ function redcon(state2){
 		console.log("lstPreviousTry",lstPreviousTry);
 		throw Error("too many try try");
 	}
+	
+	if(countOfTry > 10 && countOfBBThree <2){
+		removeLastBigBallOfThree()
+		countOfBBThree++
+	}//*/
 	
 	undoLastMove()
 	countOfTry++;
