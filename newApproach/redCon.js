@@ -3,6 +3,7 @@ var columns999 = require('../level');
 var abstract = require('../tools/abstract');
 var move = require('../tools/move');
 var fixTwin = require('./fixTwin');
+var writeOnFile = require('./writeOnFile');
 
 let columns = [];
 let lstOfMove = [];
@@ -87,19 +88,23 @@ function alternativeMove(lastMove2){
 		let lstTopBall = columns.map(x => x.top());
 		console.log("lst top ball",lstTopBall);
 			
-		for(let col=0; col<columns.length;col++){
-			if(col == from2){continue}
-			if(col == to2){continue}
+		for(let col66=0; col66<columns.length;col66++){
+			if(col66 == from2){continue}
+			if(col66 == to2){continue}
 			
-			let secondBall = columns[col].secondBall()
+			let secondBall = columns[col66].secondBall()
+			console.log("second ball",secondBall);
+			console.log("col66",col66);
 			
 			if(lstTopBall.includes(secondBall)){
-				lstTwinCol.push([col,to2]);
+				lstTwinCol.push([col66,to2]);
+				console.log("lst top ball contain second ball");
 			}
 			//throw Error("debug second Ball");
 			
 		}
 		lstPreviousTry.push(lstTwinCol);
+		//lstPreviousTry.push(lstTwinCol);	//untouched lst
 		return lstTwinCol
 	}
 		
@@ -116,7 +121,7 @@ function alternativeMove(lastMove2){
 	}
 	
 	lstPreviousTry.push(lstTwinCol);
-	//lstPreviousTry.push(lstTwinCol);	//untouched lst
+	lstPreviousTry.push(lstTwinCol);	//untouched lst
 	
 	console.log("lstTwinCol",lstTwinCol);
 	return lstTwinCol
@@ -193,11 +198,13 @@ function redcon(state2){
 	let time = end - start;
 	lstPreviousTry.push(time);
 	
-	/*if(countOfTry >10){
+	/*if(countOfTry >3){
 		console.log("lstPreviousTry",lstPreviousTry);
+		abstract(columns);
 		throw Error("debug");
 	}//*/
 	console.log("lstPreviousTry",lstPreviousTry);
+	writeOnFile(lstPreviousTry);
 }
 
 
