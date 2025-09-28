@@ -55,7 +55,7 @@ var Column = function(contents) {
   	if(this.isEmpty()){this.bigBall =0; return};
   	
   	this.bigBall =1;
-  	let lastball = this.content[this.content.length -1];
+  	let lastball = this.content[this.content.length-1];
   	
   	
   	for(let i=this.content.length-2;i>=0;i--){

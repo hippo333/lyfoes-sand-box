@@ -53,16 +53,18 @@ function move(state,from,to){
 	
 	//we can do the move
 	
+	
 	colFrom.pop();
 	colTo.push(ballFrom);
 	for ( let ball =1;ball < bigBallFrom;ball++){
 		colFrom.pop();
 		colTo.push(ballFrom);
-	}
+	}//*/
 	//console.log("__move: from:",from,columns2[from].content);	
 	
+	columns2[to].bigBall += bigBallFrom;
 	columns2[from].newBigBall();
-	columns2[to].newBigBall();
+	//columns2[to].newBigBall();
 	
 	lstOfMove2.push([from,to,bigBallFrom]);//add the move into the history
 }
