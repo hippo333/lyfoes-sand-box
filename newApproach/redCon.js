@@ -152,10 +152,24 @@ function undoNbMove(nb){
 		
 		//abstract(columns);
 	}
-	return lastMove	
+	
+	let alternativeMv = alternativeMove(lastMove);
+	
+	
+	if(alternativeMv.length == 0){
+		undoNbMove(1)
+	}else{
+		let theMv = alternativeMv[0];
+		console.log("theMv",theMv,"\n");
+		let [newFrom,newTo] = theMv;
+		
+		abstract(columns);
+		move(state,newFrom,newTo);
+	}
+	
 }
 
-
+/*
 function undoLastMove(){
 	console.log("undoLastMove");
 	
@@ -164,13 +178,6 @@ function undoLastMove(){
 	
 	let alternativeMv = alternativeMove(lastMove);
 	
-	/*if(from ==0 && to== 5  && lstOfMove.length > 3){	//debug
-		console.log("lstOfMove",lstOfMove);
-		console.log("lastMove from",from,"to",to)
-		console.log("alternative move",alternativeMv);
-		//console.log("lstPreviousTry",lstPreviousTry);
-		throw Error("debug");
-	}//*/
 	
 	if(alternativeMv.length == 0){
 		undoLastMove()
@@ -183,7 +190,7 @@ function undoLastMove(){
 		move(state,newFrom,newTo);
 	}
 	
-}
+}//*/
 
 //if we make a big ball af 3 to soon it block to many posibility
 //it is arbitrary and gona improve
@@ -244,12 +251,12 @@ function redcon(state2){
 		throw Error("too many try try");
 	}
 	
-	if(countOfTry > 10 && countOfBBThree <2){
+	if(countOfTry > 10 && countOfBBThree <1){
 		removeLastBigBallOfThree()
 		countOfBBThree++
 	}//*/
 	
-	undoLastMove()
+	undoNbMove(1)
 	countOfTry++;
 	
 	let end = new Date().getTime();	//timer
