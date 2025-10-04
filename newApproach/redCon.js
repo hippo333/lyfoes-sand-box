@@ -153,11 +153,19 @@ function undoNbMove(nb){
 		//abstract(columns);
 	}
 	
+	return lastMove
+}
+
+
+function undoLastMove(nb){
+	
+	let lastMove = undoNbMove(nb);
+	
 	let alternativeMv = alternativeMove(lastMove);
 	
 	
 	if(alternativeMv.length == 0){
-		undoNbMove(1)
+		undoLastMove(1)
 	}else{
 		let theMv = alternativeMv[0];
 		console.log("theMv",theMv,"\n");
@@ -166,77 +174,69 @@ function undoNbMove(nb){
 		abstract(columns);
 		move(state,newFrom,newTo);
 	}
+	
 	
 }
 
-/*
-function undoLastMove(){
-	console.log("undoLastMove");
-	
-	let lastMove = undoNbMove(1);
-	
-	
-	let alternativeMv = alternativeMove(lastMove);
-	
-	
-	if(alternativeMv.length == 0){
-		undoLastMove()
-	}else{
-		let theMv = alternativeMv[0];
-		console.log("theMv",theMv,"\n");
-		let [newFrom,newTo] = theMv;
-		
-		abstract(columns);
-		move(state,newFrom,newTo);
-	}
-	
-}//*/
 
-//if we make a big ball af 3 to soon it block to many posibility
-//it is arbitrary and gona improve
-function removeLastBigBallOfThree(){
-	console.log("remove last bigBall of three");
+
+//growUpToSoon
+function backToFreeBotle(){
+	console.log("back to free Botle");
 	
-	let lstIdBBThree = [];
-	
-	columns.forEach(
-		function(col,index){ 
-			if(col.bigBall ==3){
-				if(col.content.length ==4){
-					lstIdBBThree.push(index)
-		}	}	}
+	let emptyBtl = columns.findIndex(
+		btl => btl.isEmpty()
 	)
-	console.log("lstIdBBTree",lstIdBBThree);
+	if(emptyBtl !=-1){return}
 	
-	let suspectMove =-1;
-	let space = 2; //avoid suspectMove who affect only few last branch(random)
-	
-	for(mv = lstOfMove.length -1 -space ; mv>=0; mv--){
-		let to = lstOfMove[mv][1];
+	for(let mv=lstOfMove.length-1; mv>=0; mv--){
 		
-		if(lstIdBBThree.includes(to)){
-			suspectMove = mv;
-			break;
-		}
+		let lastMove = lstOfMove[mv];
+		let [from,to,theBb] = lastMove;
+		let colFrom = columns[from];
+		let colTo = columns[to];
+		if(colFrom.isEmpty()){break}
+		
+		undoNbMove(1);
+		
 	}
+	abstract(columns);
 	
-	if(suspectMove ==-1){return}
-	console.log("suspectMove",suspectMove,lstOfMove[suspectMove]);
-	console.log("nb of move",lstOfMove.length);
-	
-	let nbMoveToDelet = lstOfMove.length - suspectMove
-	
-	console.log("nbMoveToDelet",nbMoveToDelet);
-	
-	undoNbMove(nbMoveToDelet);
-	abstract(columns)
-	console.log("lstOfMove",lstOfMove);
-	//throw Error("debug")
-
 }
+
+
+function growUpToSoon(){
+	console.log("growUp to soon");
+	
+	backToFreeBotle();//necessary for the move
+	
+	for(let col =0; col < columns.length; col++){
+		let theCol = columns[col];
+		let theBall = theCol.top();
+		
+		let target = columns.findIndex(
+			tgt => !tgt.isEmpty()
+			&& columns.indexOf(tgt) != col
+			&& tgt.top() != theBall
+			&& tgt.content.indexOf(theBall) != -1
+			&& tgt.content.indexOf(theBall) + theCol.bigBall >3
+		)
+		
+		if(target !=-1){
+		
+			console.log("col",col,"target",target);
+		}
+		
+	}
+
+
+
+
+	throw Error("experimental");
+}
+
 
 let countRedcon = 0;
-let countOfBBThree = 0;
 
 function redcon(state2){
 	console.log("\n\n\nRedcon");
@@ -251,12 +251,12 @@ function redcon(state2){
 		throw Error("too many try try");
 	}
 	
-	if(countOfTry > 10 && countOfBBThree <1){
-		removeLastBigBallOfThree()
-		countOfBBThree++
+	if(countOfTry == 5 ){
+		growUpToSoon()
+		lstPreviousTry.push("grow up to soon");
 	}//*/
 	
-	undoNbMove(1)
+	undoLastMove(1)
 	countOfTry++;
 	
 	let end = new Date().getTime();	//timer
