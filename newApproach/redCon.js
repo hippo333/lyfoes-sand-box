@@ -198,22 +198,84 @@ function backToFreeBotle(){
 		if(colFrom.isEmpty()){break}
 		
 		undoNbMove(1);
-		
 	}
 	abstract(columns);
+}//it work
+
+
+//grow up to soon
+//it must improve
+function aveAWay(col2,ball2,nbCycle){
+	console.log("ave a Way col",col2,"ball",ball2);
 	
+	if(nbCycle > 5){
+		throw Error("to many cycles")
+	}
+	
+	for(let col=0; col<columns.length; col++){
+		if(col == col2){continue}
+		let theCol = columns[col];
+		
+		if(theCol.isEmpty()){continue}
+		
+		let level = theCol.content.indexOf(ball2);
+		if(level ==-1){continue}
+		if(level ==3){continue}//no place for the ball
+		
+		//arbitrary
+		if(level ==0){continue}
+	
+		if(theCol.top() == ball2){
+			return [[col2,col]]
+		}
+		if(theCol.secondBall() == ball2){
+			let secondMove = aveAWay(col,theCol.top(),++nbCycle);
+			if(secondMove == null){continue}
+			
+			let theMv = [col2,col]
+			secondMove.push(theMv);
+			return secondMove
+		}
+		
+		
+		
+	}
+	
+	return null	//no way
 }
+
+
+//grow up to soon
+function rewindUntil(col2){
+	
+	for(let mv=lstOfMove.length -1; mv>=0; mv--){
+		
+		let theMove = lstOfMove[mv];
+		let to = theMove[1];
+		
+		if(to == col2){
+			undoLastMove(1);
+			break;
+		}else{
+			undoNbMove(1)		
+		}
+	}
+}
+
 
 
 function growUpToSoon(){
 	console.log("growUp to soon");
 	
 	backToFreeBotle();//necessary for the move
+	let lstColStuck = [];
 	
 	for(let col =0; col < columns.length; col++){
 		let theCol = columns[col];
 		let theBall = theCol.top();
+		if(theCol.content.length == theCol.bigBall){continue}
 		
+		//i forgot other way
 		let target = columns.findIndex(
 			tgt => !tgt.isEmpty()
 			&& columns.indexOf(tgt) != col
@@ -223,16 +285,25 @@ function growUpToSoon(){
 		)
 		
 		if(target !=-1){
-		
+			lstColStuck.push(col);
 			console.log("col",col,"target",target);
 		}
-		
 	}
-
-
-
-
-	throw Error("experimental");
+	if(lstColStuck.length ==0){return}
+	
+	let theCol = lstColStuck[0];
+	
+	let secondBl = columns[theCol].secondBall();
+	
+	let theWay = aveAWay(theCol,secondBl);
+	console.log("theWay",theWay);
+	if(theWay == null){
+		rewindUntil(theCol)
+		abstract(columns)
+		console.log("lstOfMove",lstOfMove);
+	}
+	
+	//throw Error("experimental");
 }
 
 
