@@ -33,6 +33,30 @@ function badMove(col2,level2,previousTry2){
 	return false
 }
 
+//find if it get an specific solution
+function doAveThisSol(lst,solution,previous){
+	let solution0 = solution.map(x => {return [...x]});
+	let first = solution.reverse().pop().join();
+	let lst2 = [...lst].join();
+	solution = solution.join();
+	console.log("first",first);
+	console.log("solution",solution);
+	
+	if(!lst2.includes(first)){return}
+	
+	//a string who containeach first element
+	let previous2 =previous.map(x => {return x[0]}).join();
+	if(previous2 != solution){return}
+	
+	
+	console.log("\ndo ave this sol succes");
+	console.log("lst",lst)
+	console.log("previous2",previous2);
+	console.log("previous",previous);
+	console.log("the solution",solution0);
+	throw Error("the solution apear on aveAWay");
+	
+}
 
 function aveAWay(col2,ball2,nbCycle,previousTry){
 	console.log("ave a Way col",col2,"ball",ball2);
@@ -52,15 +76,17 @@ function aveAWay(col2,ball2,nbCycle,previousTry){
 		
 		if(badMove(col,level,previousTry)){continue}
 		
+		
 		if(theCol.top() == ball2){
 			outputLst.push([[col2,col]]);
 			console.log("outputList add top",outputLst);
 			continue;
 		}
 		
-		previousTry2 = [...previousTry,[col,level]];
+		let previousTry2 = [...previousTry,[col,level]];
 		
-		if(level >=1){
+		
+		if(level >=0){
 			let thisList =[]
 			for(let bll=theCol.content.length-1;bll >1;bll--){
 				let secondMove = aveAWay(col,theCol.content[bll],++nbCycle,previousTry2);
@@ -79,7 +105,9 @@ function aveAWay(col2,ball2,nbCycle,previousTry){
 			outputLst.push(...thisList);
 		}
 	}
-	console.log("outputLst",outputLst,"\n");
+	doAveThisSol(outputLst,[[1,3],[2,1]],previousTry);
+	console.log("outputLst",outputLst);
+	console.log("previousTry",previousTry,"\n");
 	return outputLst
 	//return outputLst[0]	//
 }
@@ -92,6 +120,7 @@ let firstCol = 2;
 let firstLevel = columns[firstCol].content.length-1;
 let theBall = columns[firstCol].top();	//top
 
+//let theSolution = aveAWay(firstCol,theBall,0,[[firstCol,firstLevel]]);
 let theSolution = aveAWay(firstCol,theBall,0,[[firstCol,-1]]);
 
 console.log("the solution",...theSolution);
