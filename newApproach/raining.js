@@ -146,8 +146,10 @@ function moveToColor(col2){
 							//console.log("colFrom",col2,"colTo",col);
 							//console.log(" the color",theColor,"\n");
 							move(state,col2,col);
-							console.log("colFrom",col2,"colTo",theColor);
-							move(state,col2,theColor);
+							if(theColor != col2){
+								console.log("colFrom",col2,"colTo",theColor);
+								move(state,col2,theColor);
+							}
 							
 							abstract(columns0)
 							console.log("lstOfMove",state[1]);
