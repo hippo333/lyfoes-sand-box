@@ -4,7 +4,8 @@ var columns999 = require('../level');
 var abstract = require('../tools/abstract');
 var move = require('../tools/move');
 var raining = require('./raining');
-var addaptAll = require('./addapt');
+//var addaptAll = require('./addapt');
+var addaptAll = require('./addapt2');
 
 abstract(columns999)
 //throw
@@ -211,7 +212,7 @@ function main(){
 		raining(state);
 		//abstract(columns0);
 		
-		state = addaptAll(lastLevel,level,state);
+		addaptAll(lastLevel,level,state);
 		//abstract(columns0);
 		
 		lastLevel = lstOfMove;
