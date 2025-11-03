@@ -79,15 +79,22 @@ function newColor(){
 	let lstCol = mostPresent[1]
 	//if(lstCol.length <3){return}
 	
-	let emptyBtl= emptyBotle(columns0);
-	console.log("emptyBtl",emptyBtl);
+	let target = columns0.findIndex(
+		x => x.isMonochrome()
+		&& x.top() == mostPresent[0]
+	);
+	if(target ==-1){
+		target= emptyBotle(columns0);
+	}
+	console.log("target",target);
 	
-	if(emptyBtl ==-1){return}
+	if(target ==-1){return}
 	
-	for(let col=0; col<lstCol.length; col++){
-		move(state,lstCol[col],emptyBtl);
+	for(thisCol of lstCol){
+		if(thisCol == target){continue}
+		move(state,thisCol,target);
 		
-		nextTarget.push(lstCol[col]);
+		nextTarget.push(thisCol);
 	}
 	
 	
@@ -195,42 +202,6 @@ function rainingAllColor(){
 }
 
 	
-	
-//after raining we ave new top ball so we do rain to the new	
-function afterRaining(){
-	console.log("after raining, for the cols",nextTarget)
-	let nextTarget2 = [];
-	
-	for(col =0; col<nextTarget.length; col++){
-		let thisCol = nextTarget[col];
-		
-		if(columns0[thisCol].isEmpty()){continue}
-		
-		let newTarget = moveToColor(thisCol);
-		
-		nextTarget2 = nextTarget2.concat(newTarget)
-	}
-	nextTarget = nextTarget2;
-	
-	console.log("after raining over");
-}
-
-function cleanAfterRaining(){
-
-	//max 10 ball /column
-	for(let i=0; i<10; i++){
-		if(nextTarget.length ==0 ){break}
-		if(i ==9){
-			console.log("infinit raining");
-			console.log("nextTarget",nextTaret);
-		}
-		afterRaining();
-		
-		//debug
-		abstract(columns0);
-		console.log(lstOfMove);
-	}
-}
 
 function main(state2){
 	state = state2;
@@ -253,8 +224,6 @@ function main(state2){
 	//abstract(columns0);
 	//console.log(lstOfMove);
 	
-	//console.log("clean after raining");
-	cleanAfterRaining();
 	
 	//abstract(columns0);
 	console.log(lstOfMove);
