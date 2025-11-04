@@ -55,14 +55,23 @@ function isNotFinish(){
 
 //addapt all
 let ballToMove = [];
+let newEmptyBotle = -1;
 function showWhatWeNeed(mv2,level2){
-	//console.log("showWhatWeNeed",mv2);
+	console.log("showWhatWeNeed",mv2);
 	let [from,to] = mv2;
+	
+	let lastEmptyBtl = lstOfMove[0][1];
+	if(from == lastEmptyBtl){from = newEmptyBtl; mv2[0] = from}
+	if(to == lastEmptyBtl){to = newEmptyBtl; mv2[1] = to}
+	
 	let colFrom = columns[from];
 	let colTo = columns[to];
 	
 	if(colFrom.isEmpty()){
 		console.log("the colFrom is empty");
+		return false
+	}if(colFrom.content.length < level2-1){
+		console.log("the Move is corupt");
 		return false
 	}if(colTo.isFinish()){
 		console.log("colTo is finish");
@@ -70,12 +79,14 @@ function showWhatWeNeed(mv2,level2){
 	}
 	
 	let thisMove = [mv];
-	let bllAboveFrom = colFrom.content[level2-1];
-	if(bllAboveFrom != undefined){thisMove.push(["colFrom",from,bllAboveFrom])}
-	
-	let bllAboveTo = colTo.content[level2-1];
-	if(bllAboveTo != undefined){thisMove.push(["colTo",to,bllAboveTo])}
-	
+	let bllAboveFrom = colFrom.content[level2-2];
+	if(bllAboveFrom != undefined && bllAboveFrom !=colFrom.content[level2-3]){
+		thisMove.push(["colFrom",from,bllAboveFrom])
+	}	
+	let bllAboveTo = colTo.content[level2-2];
+	if(bllAboveTo != undefined && bllAboveTo != colTo.content[level2-3]){
+		thisMove.push(["colTo",to,bllAboveTo])
+	}
 	ballToMove.push(thisMove);
 	
 	return true
@@ -105,23 +116,39 @@ function develop(){
 }
 
 //addaptAll
+function inventoryOfBall(ball2){
+	//console.log("inventoryOfBall");
+	let inventory = columns.map(x => x.content);
+	inventory = [].concat(...inventory);
+	let count = inventory.filter(
+		x => x==ball2
+	);
+	return count.length
+}
+
+//addaptAll
 function finish(level2){
 	console.log("finish");
 	
+	
 	let firstCol = -1;
 	let secondCol = -1;
+	let lstColOver = [];
 	for(i in columns){
+		firstCol = columns.findIndex(
+			x => !x.isEmpty()
+			//&& x.content.length < level2-1 //here
+			&& x.content.length < inventoryOfBall(x.content[0])
+			&& !lstColOver.includes(columns.indexOf(x))
+		);
 		if(firstCol ==-1){
-			firstCol = columns.findIndex(
-				x => x.content.length == level2-1
-			);
-		}if(firstCol ==-1){
 			firstCol = columns.findIndex(
 				x => !x.isMonochrome()
 				&& !x.isEmpty()
 			)
 			if(firstCol ==-1){return}
 			secondCol = emptyBotle()
+			console.log("we free place",firstCol,secondCol);
 			move(state,firstCol,secondCol);
 		}
 		let theBall = columns[firstCol].top();
@@ -129,6 +156,12 @@ function finish(level2){
 			x=> columns.indexOf(x) != firstCol
 			&& x.top() == theBall
 		);
+		if(secondCol == -1){
+			lstColOver.push(firstCol);
+			console.log("no one can go to",firstCol);
+			continue;
+		}
+		console.log("feed hole",secondCol,firstCol);
 		move(state,secondCol,firstCol)
 		firstCol = -1
 		
@@ -146,6 +179,7 @@ function addaptAll(lastLevel,level,state2){
 	abstract(columns);
 	
 	let lastLevel2 = [];
+	newEmptyBtl = emptyBotle();
 	for(mv of lastLevel){
 		let thisMoveIsPosible = showWhatWeNeed(mv,level);
 		if(thisMoveIsPosible){lastLevel2.push(mv);}
