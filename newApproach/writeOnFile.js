@@ -5,4 +5,7 @@ var writeOnFile = function(myArray){
 	fs.writeFile('Temporary.txt', myArray.join("\n"), 'utf8');
 }
 
+//console.table({from:from,to:to})
+
+
 module.exports = writeOnFile
