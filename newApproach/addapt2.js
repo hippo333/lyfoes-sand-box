@@ -42,13 +42,16 @@ let lstOfMovement = [];
 let lastLstOfMovement = [];
 class Movement {
 	mv = []
+	theBall = -1
 	bigBall = 0
 	ballWeFree = -1
 	spaceFree = 0
 	spaceWeUse = -1
 	level = 0
+	nature = "basic"
 	
 	constructor(from,to,level){
+		this.theBall = columns[from].top()
 		this.bigBall = columns[from].bigBall
 		this.mv = [from,to,this.bigBall]
 		this.ballWeFree = columns[from].secondBall()
@@ -69,20 +72,24 @@ function noteTheRain(level2){
 		let [from,to,bigBll] = thisMove;
 		let thisMovement = new Movement(from,to,level2);
 		
+		thisMovement.theBall = columns[to].top()
 		thisMovement.bigBall = bigBll;
+		thisMovement.mv[2] = bigBll;
 		thisMovement.ballWeFree = columns[from].top();
-		thisMovement.spaceWeFree = bigBll;
+		thisMovement.spaceFree = 4-columns[from].content.length;
 		thisMovement.spaceWeUse = bigBll;
+		thisMovement.nature = "rain";
 		
 		//if the same col ave been move multiple time
 		let previousMovement = lstOfMovement.find(
-			prvMv => prvMv.mv[0]
+			prvMv => prvMv.mv[0] ==from
 		);
 		if(previousMovement != undefined){
-			previousMovement.spaceWeFree -= bigBll;
-			previousMovement.ballWeFree = columns[to].top()
+			previousMovement.spaceFree -= bigBll;
+			previousMovement.ballWeFree = columns[to].top();
+			previousMovement.nature = "rain2";
 			
-		}
+		}//*/
 		
 		lstOfMovement.push(thisMovement);
 	}
@@ -235,6 +242,7 @@ function addaptAll(lastLevel,level,state2){
 	console.log("lstOfMove",lstOfMove);
 	abstract(columns);
 	
+	console.log("lastLstOfMovement",lstOfMovement);
 	noteTheRain(level);
 	
 	let lastLevel2 = [];
