@@ -90,10 +90,27 @@ function noteTheRain(level2){
 			previousMovement.nature = "rain2";
 			
 		}//*/
-		
 		lstOfMovement.push(thisMovement);
 	}
+}
+
+function archiveLstOfMovement(){
+	console.log("archiveLstOfMovement");
+	lastLstOfMovement = lstOfMovement;
 	
+	let lastEmptyBtl = lstOfMove[0][1];
+	let newEmptyBtl = emptyBotle();
+	let lstToEmpty = lastLstOfMovement.filter(
+		mvmnt => mvmnt.mv[1] == lastEmptyBtl		
+	)
+	lstToEmpty = lstToEmpty.map(x => x.mv[1]=newEmptyBtl);
+	
+	let lstFromEmpty = lastLstOfMovement.filter(
+		mvmnt => mvmnt.mv[0] == lastEmptyBtl		
+	)
+	lstFromEmpty = lstFromEmpty.map(x => x.mv[0]=newEmptyBtl);
+	
+	lstOfMovement = [];
 }
 
 
@@ -137,16 +154,7 @@ function showWhatWeNeed(mv2,level2){
 		return false
 	}
 	
-	let thisMove = [mv];
-	let bllAboveFrom = colFrom.content[level2-2];
-	if(bllAboveFrom != undefined && bllAboveFrom !=colFrom.content[level2-2]){
-		thisMove.push(["colFrom",from,bllAboveFrom])
-	}	
-	let bllAboveTo = colTo.content[level2-2];
-	if(bllAboveTo != undefined && bllAboveTo != colTo.content[level2-2]){
-		thisMove.push(["colTo",to,bllAboveTo])
-	}
-	ballToMove.push(thisMove);
+	ballToMove.push(mv);
 	
 	return true
 
@@ -155,26 +163,32 @@ function showWhatWeNeed(mv2,level2){
 //addaptAll
 function develop(level2){
 	console.log("develop");
-	
+	/*
 	if(ballToMove.length >1){
 		console.log("lstOfMovement",lstOfMovement);
 		throw Error("to many ball to move",ballToMove);
-	}
-	thisMv = ballToMove[0];
-	if(thisMv == undefined){return};
+	}//*/
 	
-	for(let i=1;i< thisMv.length; i++){
-		let [col,bll] = thisMv[i].slice(1);
-		console.log("col and bll",col,bll);
-		let secondCol = otherBotle(col,bll);
-		console.log("col",col,"secondCol",secondCol);
-		lstOfMovement.push(new Movement(col,secondCol));
-		move(state,col,secondCol,level2);
+	for(thisMv of ballToMove){
+		if(thisMv == undefined){return};
+		let [from,to] = thisMv;
+		
+		if(columns[from].top() != columns[to].top() && !columns[to].isEmpty()){
+			console.log("thisMv",thisMv);
+			abstract(columns);
+			throw Error("a ball above")
+			
+			//we ave lot of work here
+			
+			
+			
+			
+		}
+		
+		console.log("thisMv",...thisMv);
+		lstOfMovement.push(new Movement(...thisMv,level2));
+		move(state,...thisMv);
 	}
-	console.log("thisMv",...thisMv[0]);
-	lstOfMovement.push(new Movement(...thisMv[0],level2));
-	move(state,...thisMv[0]);
-	
 }
 
 //addaptAll
@@ -242,8 +256,10 @@ function addaptAll(lastLevel,level,state2){
 	console.log("lstOfMove",lstOfMove);
 	abstract(columns);
 	
-	console.log("lastLstOfMovement",lstOfMovement);
+	archiveLstOfMovement();
+	console.log("lastLstOfMovement",lastLstOfMovement);
 	noteTheRain(level);
+	
 	
 	let lastLevel2 = [];
 	newEmptyBtl = emptyBotle();
