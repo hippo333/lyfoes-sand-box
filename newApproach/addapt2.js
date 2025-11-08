@@ -38,6 +38,58 @@ function otherBotle(col2,ball2){
 	return otherCol
 }
 
+let lstOfMovement = [];
+let lastLstOfMovement = [];
+class Movement {
+	mv = []
+	bigBall = 0
+	ballWeFree = -1
+	spaceFree = 0
+	spaceWeUse = -1
+	level = 0
+	
+	constructor(from,to,level){
+		this.bigBall = columns[from].bigBall
+		this.mv = [from,to,this.bigBall]
+		this.ballWeFree = columns[from].secondBall()
+		this.spaceFree = 4-columns[from].content.length+ this.bigBall
+		this.spaceWeUse = 4-columns[to].content.length
+		this.level = level
+	}
+	
+}
+
+function noteTheRain(level2){
+	console.log("noteTheRain, level",level2);
+	console.log("lstOfMove",lstOfMove);
+	lastLstOfMovement = lstOfMovement;
+	lstOfMovement = [];
+	
+	for(thisMove of lstOfMove){
+		let [from,to,bigBll] = thisMove;
+		let thisMovement = new Movement(from,to,level2);
+		
+		thisMovement.bigBall = bigBll;
+		thisMovement.ballWeFree = columns[from].top();
+		thisMovement.spaceWeFree = bigBll;
+		thisMovement.spaceWeUse = bigBll;
+		
+		//if the same col ave been move multiple time
+		let previousMovement = lstOfMovement.find(
+			prvMv => prvMv.mv[0]
+		);
+		if(previousMovement != undefined){
+			previousMovement.spaceWeFree -= bigBll;
+			previousMovement.ballWeFree = columns[to].top()
+			
+		}
+		
+		lstOfMovement.push(thisMovement);
+	}
+	
+}
+
+
 function isNotFinish(){
 	let colMix = columns.findIndex(
 		x => !x.isMonochrome()
@@ -80,11 +132,11 @@ function showWhatWeNeed(mv2,level2){
 	
 	let thisMove = [mv];
 	let bllAboveFrom = colFrom.content[level2-2];
-	if(bllAboveFrom != undefined && bllAboveFrom !=colFrom.content[level2-3]){
+	if(bllAboveFrom != undefined && bllAboveFrom !=colFrom.content[level2-2]){
 		thisMove.push(["colFrom",from,bllAboveFrom])
 	}	
 	let bllAboveTo = colTo.content[level2-2];
-	if(bllAboveTo != undefined && bllAboveTo != colTo.content[level2-3]){
+	if(bllAboveTo != undefined && bllAboveTo != colTo.content[level2-2]){
 		thisMove.push(["colTo",to,bllAboveTo])
 	}
 	ballToMove.push(thisMove);
@@ -94,10 +146,11 @@ function showWhatWeNeed(mv2,level2){
 }
 
 //addaptAll
-function develop(){
+function develop(level2){
 	console.log("develop");
 	
 	if(ballToMove.length >1){
+		console.log("lstOfMovement",lstOfMovement);
 		throw Error("to many ball to move",ballToMove);
 	}
 	thisMv = ballToMove[0];
@@ -108,9 +161,11 @@ function develop(){
 		console.log("col and bll",col,bll);
 		let secondCol = otherBotle(col,bll);
 		console.log("col",col,"secondCol",secondCol);
-		move(state,col,secondCol);
+		lstOfMovement.push(new Movement(col,secondCol));
+		move(state,col,secondCol,level2);
 	}
 	console.log("thisMv",...thisMv[0]);
+	lstOfMovement.push(new Movement(...thisMv[0],level2));
 	move(state,...thisMv[0]);
 	
 }
@@ -149,6 +204,7 @@ function finish(level2){
 			if(firstCol ==-1){return}
 			secondCol = emptyBotle()
 			console.log("we free place",firstCol,secondCol);
+			lstOfMovement.push(new movement(firstCol,secondCol,level2));
 			move(state,firstCol,secondCol);
 		}
 		let theBall = columns[firstCol].top();
@@ -162,6 +218,7 @@ function finish(level2){
 			continue;
 		}
 		console.log("feed hole",secondCol,firstCol);
+		lstOfMovement.push(new Movement(secondCol,firstCol,level2));
 		move(state,secondCol,firstCol)
 		firstCol = -1
 		
@@ -170,13 +227,15 @@ function finish(level2){
 
 
 function addaptAll(lastLevel,level,state2){
-	console.log("\naddaptAll level",level);
+	console.log("\n\naddaptAll level",level);
 	console.log("lastLevel",lastLevel);
 	[columns,lstOfMove] = state2;
 	state = [columns,lstOfMove];
 	
 	console.log("lstOfMove",lstOfMove);
 	abstract(columns);
+	
+	noteTheRain(level);
 	
 	let lastLevel2 = [];
 	newEmptyBtl = emptyBotle();
@@ -187,7 +246,7 @@ function addaptAll(lastLevel,level,state2){
 	console.log("lastLevel2",lastLevel2);
 	console.log("ball to move",ballToMove);
 	
-	develop();
+	develop(level);
 	
 	abstract(columns);
 	finish(level);
