@@ -64,8 +64,6 @@ class Movement {
 
 function noteTheRain(level2){
 	console.log("noteTheRain, level",level2);
-	console.log("lstOfMove",lstOfMove);
-	lastLstOfMovement = lstOfMovement;
 	lstOfMovement = [];
 	
 	for(thisMove of lstOfMove){
@@ -163,22 +161,26 @@ function showWhatWeNeed(mv2,level2){
 //addaptAll
 function develop(level2){
 	console.log("develop");
-	/*
-	if(ballToMove.length >1){
-		console.log("lstOfMovement",lstOfMovement);
-		throw Error("to many ball to move",ballToMove);
-	}//*/
 	
 	for(thisMv of ballToMove){
 		if(thisMv == undefined){return};
 		let [from,to] = thisMv;
 		
-		if(columns[from].top() != columns[to].top() && !columns[to].isEmpty()){
-			console.log("thisMv",thisMv);
-			abstract(columns);
-			throw Error("a ball above")
+		if(columns[from].top() != columns[to].top()&& !columns[to].isEmpty()){
 			
-			//we ave lot of work here
+			let firstCol =-1;
+			let thisMovement = lastLstOfMovement.find(x => x.mv[0]== from && x.mv[1]==to);
+			console.log("thisMovement",thisMovement);
+			if(columns[from].top() != thisMovement.theBall){
+				firstCol = from
+			}else{
+				firstCol = to
+			}
+			let theBall = columns[firstCol].top();
+			let secondCol = otherBotle(firstCol,theBall);
+			
+			lstOfMovement.push(new Movement(firstCol,secondCol,level2));
+			move(state,firstCol,secondCol);
 			
 			
 			
