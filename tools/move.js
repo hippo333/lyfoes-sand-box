@@ -21,17 +21,22 @@ function move(state,from,to){
 	let colFrom = columns2[from].content;
 	let colTo = columns2[to].content;
 	
-	let ballFrom = colFrom[colFrom.length -1];
-	let ballTo = colTo[colTo.length -1];
+	let ballFrom = columns2[from].top();
+	let ballTo = columns2[to].top();
 	
 	let bigBallFrom = columns2[from].bigBall;
 	
 	
-	if(columns2[to].isFull()){
+	if(ballFrom != ballTo && colTo.length >0){
+		console.log("\nError");
+		abstract(columns2);
+		console.log(from,to);
+		throw Error("the ball are different");
+	}else if(columns2[to].isFull()){
 		abstract(columns2);
 		console.log("\nlstOfMove",lstOfMove2);
 		console.log("from",from,"to",to);
-		throw Error("error Move, col is overfeeding",to,colTo);
+		throw Error("error Move, to is already full",to,colTo);
 		
 		//the botle to is not empty
 	}else if(ballTo != undefined){
@@ -46,8 +51,9 @@ function move(state,from,to){
 		throw Error("error Move, no ball From",from,colFrom);
 	}
 	if(colTo.length + bigBallFrom >4){
-		console.log("\n");
+		console.log("\nError");
 		abstract(columns2);
+		console.log(from,to);
 		throw Error("error Move, overFeed ",from,to);
 	}
 	
