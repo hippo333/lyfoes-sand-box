@@ -8,12 +8,14 @@ var move = require('../tools/move');
 
 function emptyBotle(columns2){
 	
-	for(let col=0 ; col<columns2.length; col++){
-		if(columns2[col].isEmpty()){return col}
-		
+	let level = columns2[0].content.length;
+	
+	if(level %2 ==0){
+		return columns2.findIndex(x => x.isEmpty())
+	}else{
+		//return columns2.findLastIndexOf(x => x.isEmpty())
+		return columns2.length -1
 	}
-	//else
-	return null
 }
 
 
