@@ -16,24 +16,25 @@ let lstTimeRedcon = [];
 
 function emptyBotle(){
 	
-	for(let col=0 ; col<columns.length; col++){
-		if(columns[col].isEmpty()){return col}
-	}	
-	return -1//no emptybotle
+	return columns.findIndex(x => x.isEmpty());
+	
 }
 
-function otherBotle(col2,ball2){
-	console.log("otherBotle col",col2,"ball",ball2)
+function otherBotle(col2,ball2,bigBll){
+	console.log("otherBotle col",col2,"ball",ball2,"bigBll",bigBll)
 	
+	if(bigBll == undefined){bigBll=1}
 	otherCol = columns.findIndex(
 		x => x.top() == ball2
 		&& columns.indexOf(x) != col2
-		&& x.content.length <4
+		&& x.content.length + bigBll <=4
 	);
 	
 	if(otherCol ==-1){otherCol = emptyBotle()}
 	if(otherCol ==-1){
-		throw Error("i can't find other Botle ");
+		abstract(columns);
+		console.log("lstOfMove",lstOfMove);
+		//throw Error("i can't find other Botle ");
 	}
 	return otherCol
 }
@@ -57,14 +58,18 @@ class Movement {
 		this.ballWeFree = columns[from].secondBall()
 		this.spaceFree = 4-columns[from].content.length+ this.bigBall
 		this.spaceWeUse = 4-columns[to].content.length
-		this.level = level
+		this.levelFrom = columns[from].content.length	//length
+		this.levelTo = columns[to].content.length	//length
 	}
 	
 }
 
+let lstColAffectedByRain =[];
 function noteTheRain(level2){
 	console.log("noteTheRain, level",level2);
 	lstOfMovement = [];
+	let lstWarning = [];
+	lstColAffectedByRain= [];
 	
 	for(thisMove of lstOfMove){
 		let [from,to,bigBll] = thisMove;
@@ -75,8 +80,10 @@ function noteTheRain(level2){
 		thisMovement.mv[2] = bigBll;
 		thisMovement.ballWeFree = columns[from].top();
 		thisMovement.spaceFree = 4-columns[from].content.length;
-		thisMovement.spaceWeUse = bigBll;
+		thisMovement.spaceWeUse = 4-columns[to].content.length +bigBll;
 		thisMovement.nature = "rain";
+		thisMovement.levelFrom += bigBll;
+		thisMovement.levelTo -= bigBll;
 		
 		//if the same col ave been move multiple time
 		let previousMovement = lstOfMovement.find(
@@ -86,29 +93,37 @@ function noteTheRain(level2){
 			previousMovement.spaceFree -= bigBll;
 			previousMovement.ballWeFree = columns[to].top();
 			previousMovement.nature = "rain2";
+			previousMovement.levelFrom += bigBll;
+			previousMovement.levelTo -= bigBll;
 			
 		}//*/
 		lstOfMovement.push(thisMovement);
+		if(lstWarning.includes(from) || bigBll >1 ){
+			lstColAffectedByRain.push(from);
+			let idMove = lastLevel.findIndex(mv => mv[0] == from);
+			if(idMove ==-1){continue}
+			console.log("lastMove",lastLevel[idMove],"to",to);
+			
+			
+			if(lastLevel[idMove][1] ==to){
+				console.log("lastLevel",lastLevel);
+				lastLevel.splice(idMove,1);
+				console.log(from,to);
+				console.log("lastLevel",lastLevel);
+				
+				let idMovement = lastLstOfMovement.findIndex(
+					x => x.mv[0] ==from
+					&& x.mv[1] == to
+				);
+				console.log("idMovement",idMovement);
+				console.log("thisMvt",lastLstOfMovement[idMovement]);
+				lastLstOfMovement.splice(idMovement,1);
+				
+				//throw Error("debug");
+			}
+		}
+		lstWarning.push(from);
 	}
-}
-
-function archiveLstOfMovement(){
-	console.log("archiveLstOfMovement");
-	lastLstOfMovement = lstOfMovement;
-	
-	let lastEmptyBtl = lstOfMove[0][1];
-	let newEmptyBtl = emptyBotle();
-	let lstToEmpty = lastLstOfMovement.filter(
-		mvmnt => mvmnt.mv[1] == lastEmptyBtl		
-	)
-	lstToEmpty = lstToEmpty.map(x => x.mv[1]=newEmptyBtl);
-	
-	let lstFromEmpty = lastLstOfMovement.filter(
-		mvmnt => mvmnt.mv[0] == lastEmptyBtl		
-	)
-	lstFromEmpty = lstFromEmpty.map(x => x.mv[0]=newEmptyBtl);
-	
-	lstOfMovement = [];
 }
 
 
@@ -119,75 +134,75 @@ function isNotFinish(){
 	);
 	if(colMix != -1){return true}
 	
-	let emptyCols = columns.filter(
-		x => x.isEmpty()
-	);
-	if(emptyCols.length <2){return true}
+	let lstColor = columns.map(x=> x.color).sort();
+	lstColor = lstColor.filter(x => x!=0);
+	let lstUnduplicate = new Set(lstColor)
+	console.log("lstColor",lstColor)
+	console.log("lstnduplicated",lstUnduplicate);
+	if(lstColor.length > lstUnduplicate){return true}
 	
-	return false	
+		
 }
 
-//addapt all
-let ballToMove = [];
-let newEmptyBotle = -1;
-function showWhatWeNeed(mv2,level2){
-	console.log("showWhatWeNeed",mv2);
-	let [from,to] = mv2;
-	
-	let lastEmptyBtl = lstOfMove[0][1];
-	if(from == lastEmptyBtl){from = newEmptyBtl; mv2[0] = from}
-	if(to == lastEmptyBtl){to = newEmptyBtl; mv2[1] = to}
-	
-	let colFrom = columns[from];
-	let colTo = columns[to];
-	
-	if(colFrom.isEmpty()){
-		console.log("the colFrom is empty");
-		return false
-	}if(colFrom.content.length < level2-1){
-		console.log("the Move is corupt");
-		return false
-	}if(colTo.isFinish()){
-		console.log("colTo is finish");
-		return false
-	}
-	
-	ballToMove.push(mv);
-	
-	return true
 
+//develope
+function whoCanGoBefor(idMovement2){
+	console.log("whoCanGoBefor",idMovement2);
+	
+	let thisMovemnet = lastLstOfMovement[idMovement2];
+	let thisBall = thisMovement.theBall;
+	console.log("thisBall",thisBall);
 }
+
 
 //addaptAll
+let lastLevel = [];
 function develop(level2){
 	console.log("develop");
 	
-	for(thisMv of ballToMove){
-		if(thisMv == undefined){return};
-		let [from,to] = thisMv;
+	for(thisMovement of lastLstOfMovement){
 		
-		if(columns[from].top() != columns[to].top()&& !columns[to].isEmpty()){
+		let [from,to] = thisMovement.mv;
+		let bigBll = thisMovement.bigBall
+		let thisMv = [from,to,bigBll]
+		
+		//console.log(lastLstOfMovement);
+		//console.log(from,to);
+		//console.log("\nthisMovement",thisMovement);
+		
+		if(columns[from].top() != thisMovement.theBall){
+			console.log("\nerror from top is not the good color");
+			//abstract(columns);
+			//console.log("thisMovement",thisMovement);
 			
-			let firstCol =-1;
-			let thisMovement = lastLstOfMovement.find(x => x.mv[0]== from && x.mv[1]==to);
-			console.log("thisMovement",thisMovement);
-			if(columns[from].top() != thisMovement.theBall){
-				firstCol = from
-			}else{
-				firstCol = to
+			if(thisMovement.levelFrom < columns[from].content.length){
+				let thisBall = columns[from].top();
+				let thisBigBll = columns[from].bigBall
+				let secondCol = otherBotle(from,thisBall,thisBigBll);
+				//console.log("secondCol",secondCol);
+				
+				lstOfMovement.push(new Movement(from,secondCol,level2));
+				move(state,from,secondCol);
+				//throw Error("not the good ball");
 			}
-			let theBall = columns[firstCol].top();
-			let secondCol = otherBotle(firstCol,theBall);
-			
-			lstOfMovement.push(new Movement(firstCol,secondCol,level2));
-			move(state,firstCol,secondCol);
-			
-			
-			
-			
 		}
 		
-		console.log("thisMv",...thisMv);
+		if(columns[to].top() !=thisMovement.theBall &&!columns[to].isEmpty()){
+			console.log("\nerror to top is not the good color");
+			abstract(columns);
+			console.log("thisMovement",thisMovement);
+			
+			if(thisMovement.levelTo < columns[to].content.length){
+				let thisBall = columns[to].top();
+				let thisBigBll = columns[to].bigBall
+				let secondCol = otherBotle(to,thisBall,thisBigBll);
+				console.log("secondCol",secondCol);
+				
+				lstOfMovement.push(new Movement(to,secondCol,level2));
+				move(state,to,secondCol);
+			}
+		}
+		
 		lstOfMovement.push(new Movement(...thisMv,level2));
 		move(state,...thisMv);
 	}
@@ -227,7 +242,7 @@ function finish(level2){
 			if(firstCol ==-1){return}
 			secondCol = emptyBotle()
 			console.log("we free place",firstCol,secondCol);
-			lstOfMovement.push(new movement(firstCol,secondCol,level2));
+			lstOfMovement.push(new Movement(firstCol,secondCol,level2));
 			move(state,firstCol,secondCol);
 		}
 		let theBall = columns[firstCol].top();
@@ -249,29 +264,23 @@ function finish(level2){
 }
 
 
-function addaptAll(lastLevel,level,state2){
+function addaptAll(lastLevel2,level,state2){
 	console.log("\n\naddaptAll level",level);
 	console.log("lastLevel",lastLevel);
 	[columns,lstOfMove] = state2;
 	state = [columns,lstOfMove];
+	lastLevel = lastLevel2;
 	
 	console.log("lstOfMove",lstOfMove);
 	abstract(columns);
 	
-	archiveLstOfMovement();
+	lastLstOfMovement = lstOfMovement;
+	lstOfMovement = [];
 	console.log("lastLstOfMovement",lastLstOfMovement);
 	noteTheRain(level);
 	
 	
-	let lastLevel2 = [];
 	newEmptyBtl = emptyBotle();
-	for(mv of lastLevel){
-		let thisMoveIsPosible = showWhatWeNeed(mv,level);
-		if(thisMoveIsPosible){lastLevel2.push(mv);}
-	}
-	console.log("lastLevel2",lastLevel2);
-	console.log("ball to move",ballToMove);
-	
 	develop(level);
 	
 	abstract(columns);
