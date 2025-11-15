@@ -155,6 +155,30 @@ function whoCanGoBefor(idMovement2){
 }
 
 
+//develop
+function freePlaceAbove(col2,ball2,level2){
+	console.log("freePlaceAbove, col2",col2,"ball2",ball2,"level2",level2);
+	
+	let thisCol = columns[col2];
+	let thisBall = thisCol.top();
+	if(thisBall == ball2 ){return}
+	
+	console.log("ther are ball above",thisBall);
+	console.log("the level",thisCol.content.length);
+	
+	let thisBigBall = thisCol.bigBall;
+	let secondCol = otherBotle(col2,thisBall,thisBigBall);
+	
+	if(secondCol != -1){
+		lstOfMovement.push(new Movement(col2,secondCol,level2))
+		move(state,col2,secondCol);	
+	}else{
+		console.log("no secondCol",secondCol);
+		throw Error
+	}
+
+}
+
 //addaptAll
 let lastLevel = [];
 function develop(level2){
@@ -168,40 +192,13 @@ function develop(level2){
 		
 		//console.log(lastLstOfMovement);
 		//console.log(from,to);
-		//console.log("\nthisMovement",thisMovement);
+		console.log("\nthisMovement",thisMovement);
 		
-		if(columns[from].top() != thisMovement.theBall){
-			console.log("\nerror from top is not the good color");
-			//abstract(columns);
-			//console.log("thisMovement",thisMovement);
-			
-			if(thisMovement.levelFrom < columns[from].content.length){
-				let thisBall = columns[from].top();
-				let thisBigBll = columns[from].bigBall
-				let secondCol = otherBotle(from,thisBall,thisBigBll);
-				//console.log("secondCol",secondCol);
-				
-				lstOfMovement.push(new Movement(from,secondCol,level2));
-				move(state,from,secondCol);
-				//throw Error("not the good ball");
-			}
+		freePlaceAbove(from,thisMovement.theBall,thisMovement.levelFrom);
+		if(!columns[to].isEmpty()){
+			freePlaceAbove(to,thisMovement.theBall,thisMovement.levelTo);
 		}
 		
-		if(columns[to].top() !=thisMovement.theBall &&!columns[to].isEmpty()){
-			console.log("\nerror to top is not the good color");
-			abstract(columns);
-			console.log("thisMovement",thisMovement);
-			
-			if(thisMovement.levelTo < columns[to].content.length){
-				let thisBall = columns[to].top();
-				let thisBigBll = columns[to].bigBall
-				let secondCol = otherBotle(to,thisBall,thisBigBll);
-				console.log("secondCol",secondCol);
-				
-				lstOfMovement.push(new Movement(to,secondCol,level2));
-				move(state,to,secondCol);
-			}
-		}
 		
 		lstOfMovement.push(new Movement(...thisMv,level2));
 		move(state,...thisMv);
