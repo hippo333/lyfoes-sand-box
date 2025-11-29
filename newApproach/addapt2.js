@@ -21,9 +21,14 @@ function emptyBotle(){
 }
 
 function otherBotle(col2,ball2,bigBll){
-	console.log("otherBotle col",col2,"ball",ball2,"bigBll",bigBll)
+	console.log("otherBotle col",col2)
 	
-	if(bigBll == undefined){bigBll=1}
+	if(ball2 == undefined){
+		ball2 = columns[col2].top();
+		bigBll = columns[col2].bigBall; 
+	}else{ bigBll =1}
+	console.log("  ball2",ball2,"bigBll",bigBll);
+	
 	otherCol = columns.findIndex(
 		x => x.top() == ball2
 		&& columns.indexOf(x) != col2
@@ -160,8 +165,8 @@ function doIt(lstOfMvt){
 		if(colFrom.top() != mvt.theBall){
 			console.log("from is stuck");
 		
-			let secondCol = otherBotle(from,colFrom.top(),colFrom.bigBall);
-			console.log("secondCol",secondCol);
+			let secondCol = otherBotle(from);
+			console.log("secondCol for from",secondCol);
 			if(secondCol !=-1){
 				lstOfMovement.push(new Movement(from,secondCol,999));
 				move(state,from,secondCol);
@@ -173,16 +178,16 @@ function doIt(lstOfMvt){
 		}if(colTo.top() != mvt.theBall){
 			console.log("to is stuck");
 		
-			let secondCol = otherBotle(to,colTo.top(),colTo.bigBall);
-			console.log("secondCol",secondCol);
+			let secondCol = otherBotle(to);
+			console.log("secondCol for to",secondCol);
 			if(secondCol !=-1){
 				lstOfMovement.push(new Movement(to,secondCol,999));
 				move(state,to,secondCol);
 				lstOfMovement.push(new Movement(from,to,888));
 				continue;
 			}else{
-				secondCol = otherBotle(from,colFrom.top(),colFrom.bigBall);
-				console.log("secondCol2",secondCol);
+				secondCol = otherBotle(from);
+				console.log("secondCol for from2",secondCol);
 				if(secondCol ==-1){throw Error}
 				lstOfMovement.push(new Movement(from,secondCol,999));
 				move(state,from,secondCol);
@@ -190,10 +195,7 @@ function doIt(lstOfMvt){
 				continue;				
 			}
 		}
-		
 	}
-	
-	
 	abstract(columns);
 }
 
@@ -243,13 +245,12 @@ function freePlaceAbove(col2,ball2,level2){
 	
 	let thisCol = columns[col2];
 	let thisBall = thisCol.top();
-	if(thisBall == ball2 ){return}
+	if(thisBall == ball2 ){return}	//nothing to free
 	
 	console.log("ther are ball above",thisBall);
 	console.log("the level",thisCol.content.length);
 	
-	let thisBigBall = thisCol.bigBall;
-	let secondCol = otherBotle(col2,thisBall,thisBigBall);
+	let secondCol = otherBotle(col2);
 	
 	if(secondCol != -1){
 		lstOfMovement.push(new Movement(col2,secondCol,level2))
@@ -257,11 +258,11 @@ function freePlaceAbove(col2,ball2,level2){
 	}else{
 		console.log("no secondCol",secondCol);
 		
-		newereToMove = true;
+		nowereToMove = true;
 		throw Error(col2);
 	}
-
 }
+
 
 //addaptAll
 let lastLevel = [];
@@ -279,6 +280,9 @@ function develop(level2){
 		//console.log(from,to);
 		console.log("\nthisMovement",thisMovement);
 		
+		let colFrom = columns[from];
+		if(colFrom.content.length <thisMovement.levelFrom){continue}
+		
 		nowereToMove = false;
 		try{
 			freePlaceAbove(from,thisMovement.theBall,thisMovement.levelFrom);
@@ -289,8 +293,6 @@ function develop(level2){
 			let nbMoveToSkip = whoCanGoBefor(thisMovement) +2;
 			i += nbMoveToSkip
 			//we already do that
-			
-			//throw Error("we are stuck");
 		}
 		
 		lstOfMovement.push(new Movement(...thisMv,level2));
@@ -366,7 +368,7 @@ function addaptAll(lastLevel2,level,state2){
 	
 	lastLstOfMovement = lstOfMovement;
 	lstOfMovement = [];
-	console.log("lastLstOfMovement",lastLstOfMovement);
+	//console.log("lastLstOfMovement",lastLstOfMovement);
 	noteTheRain(level);
 	
 	
