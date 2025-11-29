@@ -14,7 +14,11 @@ function emptyBotle(columns2){
 		return columns2.findIndex(x => x.isEmpty())
 	}else{
 		//return columns2.findLastIndexOf(x => x.isEmpty())
-		return columns2.length -1
+		if(columns2[columns2.length-1].isEmpty()){
+			return columns2.length -1
+		}else{
+			return -1
+		}
 	}
 }
 
@@ -149,7 +153,7 @@ function moveToColor(col2){
 					if(columns0[col2].content[0] == mostPresent[0]){
 						let theColor = columns0.findIndex(
 							clr => clr.top() == mostPresent[0]
-							&& clr.content.length <4	
+							&& clr.content.length + columns0[col2].bigBall <4	
 						)
 						if(theColor != -1){
 							//console.log("colFrom",col2,"colTo",col);
