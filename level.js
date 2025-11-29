@@ -16,8 +16,12 @@ const PINK = 11
 const CYAN = 12;
 const ORANGE = 13;
 
-var level = 4.58;
-//var level = "tst1";
+//var level = 4.58
+//var level = 1.1;
+var level = "tst5";
+//tst 2,3,4,5
+
+//1.2 - 2.3 - 3.12 4.1 4.58 4.326 4.3262 4.347 4.364 4.422 
 
 var columns;
 
@@ -35,6 +39,56 @@ function addInNumLst(color){
 }
 
 switch (level){
+
+case "permute0":
+var columns = [
+	new Column([RED, BLUE, YELLOW, RED]),
+	new Column([BLUE, YELLOW, RED, BLUE]),
+	new Column([YELLOW, RED, BLUE, YELLOW]),
+	new Column([]),
+	new Column([]),
+];
+break;
+
+case "permute1":
+var columns = [
+	new Column([RED, BLUE, RED, YELLOW]),
+	new Column([BLUE, YELLOW, RED, BLUE]),
+	new Column([YELLOW, RED, BLUE, YELLOW]),
+	new Column([]),
+	new Column([]),
+];
+break;
+
+case "permute2":
+var columns = [
+	new Column([RED, BLUE, RED, YELLOW]),
+	new Column([BLUE, YELLOW, RED, BLUE]),
+	new Column([RED, YELLOW, BLUE, YELLOW]),
+	new Column([]),
+	new Column([]),
+];
+break;
+
+case "aAW1":
+var columns = [
+	new Column([RED, RED, RED, BLUE]),
+	new Column([BLUE, BLUE, BLUE]),
+	new Column([YELLOW, YELLOW, YELLOW, RED]),
+	new Column([YELLOW]),
+	new Column([]),
+];
+break;
+
+case "aAW2":
+var columns = [
+	new Column([RED, RED, YELLOW, BLUE]),
+	new Column([BLUE, BLUE, RED, YELLOW]),
+	new Column([YELLOW, RED]),
+	new Column([YELLOW]),
+	new Column([]),
+];
+break;
 
 case "tst1":	//single criss cross
 default:		//main2
@@ -74,7 +128,7 @@ var columns = [	//main2
 	new Column([RED, RED, BLUE, YELLOW]),
 	new Column([YELLOW, YELLOW, RED, BLUE]),
 	new Column([]),
-	//new Column([]),
+	new Column([]),
 ];
 break;
 
@@ -477,6 +531,27 @@ var columns = [
 	new Column([]),
 ];
 break;
+
+case 4.3262:
+var columns = [
+	new Column([RED, PURPLE, PURPLE, PURPLE]),
+	new Column([WHITE, GREEN, GREEN, GREEN]),//1
+	new Column([LIGHTGREEN, CYAN, CYAN]),
+	new Column([GREY, BRIGHTPINK, BRIGHTPINK, BRIGHTPINK]),//3
+	new Column([BLUE, LIGHTBLUE, LIGHTBLUE, LIGHTBLUE]),
+	new Column([GREY, ORANGE, YELLOW, LIGHTGREEN]),//5
+	new Column([PINK, PINK, PINK]),
+	new Column([LIGHTGREEN, WHITE, WHITE, PURPLE]),//7
+	new Column([YELLOW, RED, CYAN, CYAN]),
+	new Column([LIGHTBLUE, YELLOW, BLUE, BLUE]),//9
+	new Column([PINK, RED, ORANGE, LIGHTGREEN]),
+	new Column([GREEN, RED, BRIGHTPINK, WHITE]),
+	new Column([BLUE, YELLOW, GREY, GREY]),
+	new Column([]),
+	new Column([ORANGE, ORANGE]),
+];
+break;
+
 
 case 4.347:
 var columns = [
