@@ -145,17 +145,99 @@ function isNotFinish(){
 }
 
 
-//develope
-function whoCanGoBefor(idMovement2){
-	console.log("whoCanGoBefor",idMovement2);
+//whoCanGoBefor
+//can be improve
+function doIt(lstOfMvt){
+	console.log("doIt",lstOfMvt.length,"movement");
 	
-	let thisMovemnet = lastLstOfMovement[idMovement2];
+	for(mvt of lstOfMvt){
+		let [from,to,igBll] = mvt.mv;
+		let colFrom = columns[from];
+		let colTo = columns[to];
+		
+		console.log("mvt",[from,to]);
+		
+		if(colFrom.top() != mvt.theBall){
+			console.log("from is stuck");
+		
+			let secondCol = otherBotle(from,colFrom.top(),colFrom.bigBall);
+			console.log("secondCol",secondCol);
+			if(secondCol !=-1){
+				lstOfMovement.push(new Movement(from,secondCol,999));
+				move(state,from,secondCol);
+				lstOfMovement.push(new Movement(from,to,888));
+				continue;
+			}else{
+				throw Error("can't move from");		
+			}//*/
+		}if(colTo.top() != mvt.theBall){
+			console.log("to is stuck");
+		
+			let secondCol = otherBotle(to,colTo.top(),colTo.bigBall);
+			console.log("secondCol",secondCol);
+			if(secondCol !=-1){
+				lstOfMovement.push(new Movement(to,secondCol,999));
+				move(state,to,secondCol);
+				lstOfMovement.push(new Movement(from,to,888));
+				continue;
+			}else{
+				secondCol = otherBotle(from,colFrom.top(),colFrom.bigBall);
+				console.log("secondCol2",secondCol);
+				if(secondCol ==-1){throw Error}
+				lstOfMovement.push(new Movement(from,secondCol,999));
+				move(state,from,secondCol);
+				lstOfMovement.push(new Movement(from,to,888));
+				continue;				
+			}
+		}
+		
+	}
+	
+	
+	abstract(columns);
+}
+
+//develope
+function whoCanGoBefor(thisMovement){
+	console.log("\nwhoCanGoBefor",thisMovement);
+	
+	let idMovement = lastLstOfMovement.indexOf(thisMovement);
 	let thisBall = thisMovement.theBall;
+	let [from,to,bigBll] = thisMovement.mv;
 	console.log("thisBall",thisBall);
+	console.log("idMovement",idMovement);
+	
+	let colStuck;
+	if(columns[from].top() != thisBall){colStuck = from}
+	else{colStuck = to}
+	let secondBall = columns[colStuck].top();
+	console.log("colStuck",colStuck,"secondBall",secondBall);
+	
+	let lstMoveToChange = [];
+	for(i=idMovement+1;i<lastLstOfMovement.length;i++){
+		let thatMovement = lastLstOfMovement[i];
+		lstMoveToChange.push(thatMovement);
+		if(thatMovement.ballWeFree ==secondBall){break}
+	
+	}
+	console.log("lstMoveToChange",lstMoveToChange);
+	doIt(lstMoveToChange);
+	
+	let lastMvt = lstMoveToChange[lstMoveToChange.length-1];
+	let secondCol = lastMvt.mv[0];
+	console.log("whoCanGo",secondCol);
+	
+	lstOfMovement.push(new Movement(colStuck,secondCol,777));
+	move(state,colStuck,secondCol);
+	
+	return lstMoveToChange.length
+	
+	throw Error("debug");
 }
 
 
-//develop
+//develop 
+let nowereToMove = false
 function freePlaceAbove(col2,ball2,level2){
 	console.log("freePlaceAbove, col2",col2,"ball2",ball2,"level2",level2);
 	
@@ -174,7 +256,9 @@ function freePlaceAbove(col2,ball2,level2){
 		move(state,col2,secondCol);	
 	}else{
 		console.log("no secondCol",secondCol);
-		throw Error
+		
+		newereToMove = true;
+		throw Error(col2);
 	}
 
 }
@@ -184,7 +268,8 @@ let lastLevel = [];
 function develop(level2){
 	console.log("develop");
 	
-	for(thisMovement of lastLstOfMovement){
+	for(i=0; i<lastLstOfMovement.length; i++){
+		thisMovement = lastLstOfMovement[i];
 		
 		let [from,to] = thisMovement.mv;
 		let bigBll = thisMovement.bigBall
@@ -194,11 +279,19 @@ function develop(level2){
 		//console.log(from,to);
 		console.log("\nthisMovement",thisMovement);
 		
-		freePlaceAbove(from,thisMovement.theBall,thisMovement.levelFrom);
-		if(!columns[to].isEmpty()){
-			freePlaceAbove(to,thisMovement.theBall,thisMovement.levelTo);
+		nowereToMove = false;
+		try{
+			freePlaceAbove(from,thisMovement.theBall,thisMovement.levelFrom);
+			if(!columns[to].isEmpty()){
+				freePlaceAbove(to,thisMovement.theBall,thisMovement.levelTo);
+			}
+		}catch(col){
+			let nbMoveToSkip = whoCanGoBefor(thisMovement) +2;
+			i += nbMoveToSkip
+			//we already do that
+			
+			//throw Error("we are stuck");
 		}
-		
 		
 		lstOfMovement.push(new Movement(...thisMv,level2));
 		move(state,...thisMv);
