@@ -33,29 +33,26 @@ let state = [columns0,lstOfMove];
 
 
 function nextCol(lstOfCol){
-	console.log("nextCol");
+	//console.log("nextCol");
 	
 	let lastCol = lstOfCol[lstOfCol.length -1];
 	let thisCol = columns0[lastCol];
 	let secondBll = thisCol.secondBall();
-	console.log("lastCol", lastCol,"secondBll",secondBll);
 	
 	let placeToFeed = 4-thisCol.content.length+thisCol.bigBall;
-	console.log("placeToFee",placeToFeed);
 	
 	let lstNextCol = columns0.filter(
 		nxt => nxt.top() == secondBll		
 	).map(x => columns0.indexOf(x));	
-	console.log("lstNextCol",lstNextCol);
 	
 	return lstNextCol
 }
 
 let lstOfCrissCross = [];
 function crissCross(columns2,lstOfCol2){
-	console.log("crissCross",lstOfCol2);
+	//console.log("crissCross",lstOfCol2);
 	
-	if(lstOfCol2.length >= 7){
+	if(lstOfCol2.length >= columns2.length){
 		throw Error("to many move");	//nececary?
 	}
 	
@@ -64,11 +61,15 @@ function crissCross(columns2,lstOfCol2){
 	for(col of lstNextCol){
 		let thisList = [...lstOfCol2];
 		if(thisList.includes(col)){
-			console.log("thisList",thisList);
 			let theStart = thisList.indexOf(col);
-			console.log("thestart",theStart);
 			thisList = thisList.slice(theStart)
-			console.log("thisList",thisList);
+			
+			let firstCol = thisList.indexOf(Math.min(...thisList));
+			let begening = thisList.splice(firstCol);
+			begening.push(...thisList);
+			thisList = begening.join();
+			
+			if(lstOfCrissCross.includes(thisList)){continue}
 			lstOfCrissCross.push(thisList);
 			
 		}else{
@@ -90,6 +91,7 @@ function main(state2){
 	for(let i=0; i<columns0.length; i++){
 		crissCross(columns0,[i]);
 	}
+	lstOfCrissCross = lstOfCrissCross.map(x => x.split(","));
 	console.log("lstCrissCross",lstOfCrissCross);
 
 }
