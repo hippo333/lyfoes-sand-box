@@ -60,6 +60,7 @@ function crissCross(columns2,lstOfCol2){
 	
 	for(col of lstNextCol){
 		let thisList = [...lstOfCol2];
+		colAlreadyTry.push(col);
 		if(thisList.includes(col)){
 			let theStart = thisList.indexOf(col);
 			thisList = thisList.slice(theStart)
@@ -76,24 +77,56 @@ function crissCross(columns2,lstOfCol2){
 			thisList.push(col);
 			crissCross(columns2,thisList);
 		}
-		
 	}
-	
-	
 }
 
 
+function doCrissCross(lstOfCol2){
+	console.log("doCrissCross",lstOfCol2);
+	
+	let emptyBtl = emptyBotle(columns0);
+	console.log("emptyBtl",emptyBtl);
+	let target = emptyBtl;
+	
+	for(i in lstOfCol2){
+		let col = lstOfCol2[i];
+		if(i>0){
+			target = lstOfCol2[i-1];
+		}
+		console.log("move",col,target);
+		move(state,col,target);
+	}
+	move(state,emptyBtl,lstOfCol2[lstOfCol2.length-1])
+	abstract(columns0);
+}
+
+
+let colAlreadyTry = [];
 function main(state2){
 	console.log("crissCross");
 	[columns0,lstOfMove] = state2;
+	state = state2;
+	lstOfCrissCross = []
 	
 	//nextCol([0]);
 	for(let i=0; i<columns0.length; i++){
+		//anty redondancy to heavy
+		//if(colAlreadyTry.includes(i)){continue}
 		crissCross(columns0,[i]);
 	}
-	lstOfCrissCross = lstOfCrissCross.map(x => x.split(","));
+	console.log("lstOfCrissCross",lstOfCrissCross);
+	lstOfCrissCross = lstOfCrissCross.map(x => x.split(",").map(
+		y => parseInt(y)
+	));
 	console.log("lstCrissCross",lstOfCrissCross);
-
+	
+	let firstCrissCross = lstOfCrissCross[0];
+	
+	if(firstCrissCross == undefined){return false}
+	else{
+		doCrissCross(lstOfCrissCross[0]);
+		return true
+	}
 }
 
 module.exports = main
