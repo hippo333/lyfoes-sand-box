@@ -38,16 +38,41 @@ function theOtherCol(col2){
 }
 
 
-
+function isFinish(columns2){
+	console.log("isFinish");
+	let unfinishedCol = columns2.findIndex(
+		cll => !cll.isEmpty()
+		&& !cll.isFinish()	
+	);
+	if(unfinishedCol == -1){return true}
+	else{return false}
+}
 
 
 function main(){
 	console.log("main");
-	//raining(state);
 	
-	abstract(columns0);
+	for(let i=0;i<4;i++){
+		console.log("cycle",i);
+		abstract(columns0);
 	
-	crissCross(state);
+		let succes = crissCross(state);
+		if(!succes){raining(state,succes)}
+		
+		if(!succes){
+			if(isFinish(columns0)){
+				console.log("\nwe did it");
+				abstract(columns0);
+				console.log("lstOfMove",lstOfMove);
+				return
+			}else{
+				console.log("\nfail");
+				abstract(columns0);
+				return
+				
+			}
+		}
+	}
 }
 
 
