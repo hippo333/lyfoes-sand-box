@@ -67,6 +67,7 @@ function mostPresentBall(){
 		let theCol = columns0[col];
 		let theColor = theCol.top();
 		
+		if(theCol.isMonochrome()){continue}
 		if(theColor == undefined){continue}
 		
 		addToTheList(col,theColor);		
@@ -190,12 +191,13 @@ function moveToColor(col2){
 }
 
 //for each color (column monochrome) move all top Ball who can go to
-function rainingAllColor(){
+function rainingAllColor(sucess2){
 	//console.log("raining All Color");
 	
 	let lstAllColor = getAllColor();
 	
 	for(let col=0; col<lstAllColor.length; col++){
+		success2 = true;
 		let thisColor = lstAllColor[col];
 		
 		if(thisColor == -1){continue}
@@ -209,7 +211,7 @@ function rainingAllColor(){
 
 	
 
-function main(state2){
+function main(state2,succes2){
 	state = state2;
 	[columns0,lstOfMove]= state
 	
@@ -225,10 +227,8 @@ function main(state2){
 	newColor();
 	
 	//console.log("raining all color");
-	rainingAllColor()
+	rainingAllColor(succes2)
 
-	//abstract(columns0);
-	//console.log(lstOfMove);
 	
 	
 	//abstract(columns0);
