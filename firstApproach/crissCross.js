@@ -33,11 +33,12 @@ let state = [columns0,lstOfMove];
 
 
 function nextCol(lstOfCol){
-	//console.log("nextCol");
+	console.log("nextCol");
 	
 	let lastCol = lstOfCol[lstOfCol.length -1];
 	let thisCol = columns0[lastCol];
 	let secondBll = thisCol.secondBall();
+	console.log("lastCol",lastCol,"secondBll",secondBll);
 	
 	let placeToFeed = 4-thisCol.content.length+thisCol.bigBall;
 	
@@ -50,7 +51,7 @@ function nextCol(lstOfCol){
 
 let lstOfCrissCross = [];
 function crissCross(columns2,lstOfCol2){
-	//console.log("crissCross",lstOfCol2);
+	console.log("crissCross",lstOfCol2);
 	
 	if(lstOfCol2.length >= columns2.length){
 		throw Error("to many move");	//nececary?
@@ -121,6 +122,7 @@ function main(state2){
 	console.log("lstCrissCross",lstOfCrissCross);
 	
 	let firstCrissCross = lstOfCrissCross[0];
+	console.log("firstCrissCross",firstCrissCross);
 	
 	if(firstCrissCross == undefined){return false}
 	else{
