@@ -26,7 +26,7 @@ function emptyBotle(columns2){
 let columns0 = [];
 let lstOfMove = [];
 let state = [columns0,lstOfMove];
-
+let succes0 = false;
 
 //set up
 
@@ -62,6 +62,9 @@ function addToTheList(col,color){
 
 //newColor
 function mostPresentBall(){
+	
+	lstByColor =[];
+	mostPresent = [-1,[]];
 	
 	for(let col=0; col< columns0.length; col++){
 		let theCol = columns0[col];
@@ -122,7 +125,11 @@ function getAllColor(){
 		}else if(columns0[col].content.length ==1){//we dont count if 1 ball
 			output.push(-1)
 		}else if(columns0[col].isMonochrome()){
-			output.push(columns0[col].top());
+			if(columns0[col].isFull()){
+				output.push(-1)
+			}else{
+				output.push(columns0[col].top());
+			}
 		}else{
 			output.push(-1);
 		}
@@ -147,6 +154,7 @@ function moveToColor(col2){
 		if(col == col2){continue}
 		if(topBall == theColor){
 			
+			succes0 = true
 			//if the invers move free a column
 			//move the second ball to the color
 			if(columns0[col2].content.length ==2){
@@ -191,30 +199,31 @@ function moveToColor(col2){
 }
 
 //for each color (column monochrome) move all top Ball who can go to
-function rainingAllColor(sucess2){
-	//console.log("raining All Color");
+function rainingAllColor(){
+	console.log("\nraining All Color");
 	
 	let lstAllColor = getAllColor();
 	
-	for(let col=0; col<lstAllColor.length; col++){
-		success2 = true;
+	for(let col=0; col<columns0.length; col++){
 		let thisColor = lstAllColor[col];
 		
 		if(thisColor == -1){continue}
+		console.log("col",col,"thisColor",thisColor);
 		
 		//after raining
 		let newTarget = moveToColor(col);
 		nextTarget = nextTarget.concat(newTarget);
 	}
-	
+	return
 }
+
 
 	
 
 function main(state2,succes2){
 	state = state2;
 	[columns0,lstOfMove]= state
-	
+	succes0 = false;
 	
 	//reset
 	lstByColor = [];
@@ -228,11 +237,11 @@ function main(state2,succes2){
 	
 	//console.log("raining all color");
 	rainingAllColor(succes2)
-
-	
+	succes2 = succes0;
 	
 	//abstract(columns0);
-	console.log(lstOfMove);
+	console.log("after raining",lstOfMove);
+	return succes2;
 }
 
 //main(state);
