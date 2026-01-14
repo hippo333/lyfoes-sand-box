@@ -52,12 +52,13 @@ function isFinish(columns2){
 function main(){
 	console.log("main");
 	
-	for(let i=0;i<4;i++){
+	for(let i=0;i<10;i++){
 		console.log("cycle",i);
 		abstract(columns0);
 	
-		let succes = crissCross(state);
-		if(!succes){raining(state,succes)}
+		let succes = false;
+		succes = crissCross(state);
+		if(!succes){succes= raining(state,succes)}
 		
 		if(!succes){
 			if(isFinish(columns0)){
@@ -66,7 +67,7 @@ function main(){
 				console.log("lstOfMove",lstOfMove);
 				return
 			}else{
-				console.log("\nfail");
+				console.log("\nfail at",i);
 				abstract(columns0);
 				return
 				
