@@ -88,6 +88,11 @@ let nextTarget = [];
 function newColor(){
 	let lstCol = mostPresent[1]
 	//if(lstCol.length <3){return}
+	if(mostPresent[0] ==-1){
+		succes0 = false
+		return
+	}
+	succes0 = true
 	
 	let target = columns0.findIndex(
 		x => x.isMonochrome()
@@ -154,7 +159,6 @@ function moveToColor(col2){
 		if(col == col2){continue}
 		if(topBall == theColor){
 			
-			succes0 = true
 			//if the invers move free a column
 			//move the second ball to the color
 			if(columns0[col2].content.length ==2){
@@ -236,11 +240,11 @@ function main(state2,succes2){
 	newColor();
 	
 	//console.log("raining all color");
-	rainingAllColor(succes2)
+	rainingAllColor()
 	succes2 = succes0;
 	
 	//abstract(columns0);
-	console.log("after raining",lstOfMove);
+	console.log("after raining",lstOfMove,"succes2",succes2);
 	return succes2;
 }
 
