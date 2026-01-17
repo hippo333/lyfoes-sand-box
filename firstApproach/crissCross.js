@@ -6,20 +6,24 @@ var move = require('../tools/move');
 
 
 
-function emptyBotle(columns2){
+function emptyBotle(){
+	return columns0.findIndex(x => x.isEmpty())
+}
+
+function otherColumn(col2){
+	let theBigBll = columns0[col2].bigBall;
+	let theBll = columns0[col2].top();
 	
-	let level = columns2[0].content.length;
+	let otherCol = columns0.findIndex(
+		cll => cll.top() == theBll
+		&& columns0.indexOf(cll) != col2
+		&& cll.content.length + theBigBll <= 4
+	);
 	
-	if(level %2 ==0){
-		return columns2.findIndex(x => x.isEmpty())
-	}else{
-		//return columns2.findLastIndexOf(x => x.isEmpty())
-		if(columns2[columns2.length-1].isEmpty()){
-			return columns2.length -1
-		}else{
-			return -1
-		}
+	if(otherCol == -1){
+		otherCol = emptyBotle()
 	}
+	return otherCol
 }
 
 
@@ -33,17 +37,18 @@ let state = [columns0,lstOfMove];
 
 
 function nextCol(lstOfCol){
-	//console.log("nextCol");
+	console.log("nextCol");
 	
 	let lastCol = lstOfCol[lstOfCol.length -1];
 	let thisCol = columns0[lastCol];
 	let secondBll = thisCol.secondBall();
-	//console.log("lastCol",lastCol,"secondBll",secondBll);
+	console.log("lastCol",lastCol,"secondBll",secondBll);
 	
 	let placeToFeed = 4-thisCol.content.length+thisCol.bigBall;
 	
 	let lstNextCol = columns0.filter(
-		nxt => nxt.top() == secondBll		
+		nxt => nxt.top() == secondBll
+		&& nxt.bigBall + (thisCol.content.length- thisCol.bigBall) <=4		
 	).map(x => columns0.indexOf(x));	
 	
 	return lstNextCol
@@ -63,18 +68,35 @@ function crissCross(columns2,lstOfCol2){
 		let thisList = [...lstOfCol2];
 		colAlreadyTry.push(col);
 		if(thisList.includes(col)){
+			console.log("we loop",thisList);
+		
+			let target = thisList.shift();
 			let theStart = thisList.indexOf(col);
+			
+			let theTarget = columns0[target];
+			if(!theTarget.isEmpty() && theStart !=0){continue}
+			
+			
 			thisList = thisList.slice(theStart)
 			
 			let firstCol = thisList.indexOf(Math.min(...thisList));
 			let begening = thisList.splice(firstCol);
 			begening.push(...thisList);
+			begening.unshift(target);
 			thisList = begening.join();
 			
 			if(lstOfCrissCross.includes(thisList)){continue}
 			lstOfCrissCross.push(thisList);
 			
+		}else if(columns2[col].isMonochrome()){//we free a botle
+			console.log("col is monochrome");
+			console.log("thisList",thisList);
+			thisList.push(col);
+			thisList = thisList.join();
+			lstOfCrissCross.push(thisList);
+			
 		}else{
+			console.log("thisList",thisList);
 			thisList.push(col);
 			crissCross(columns2,thisList);
 		}
@@ -85,9 +107,8 @@ function crissCross(columns2,lstOfCol2){
 function doCrissCross(lstOfCol2){
 	console.log("doCrissCross",lstOfCol2);
 	
-	let emptyBtl = emptyBotle(columns0);
-	//console.log("emptyBtl",emptyBtl);
-	let target = emptyBtl;
+	let firstTarget = lstOfCol2.shift();
+	let target = firstTarget;
 	
 	for(i in lstOfCol2){
 		let col = lstOfCol2[i];
@@ -97,7 +118,11 @@ function doCrissCross(lstOfCol2){
 		console.log("move",col,target);
 		move(state,col,target);
 	}
-	move(state,emptyBtl,lstOfCol2[lstOfCol2.length-1])
+	let lastColFrom = lstOfCol2[lstOfCol2.length -1];
+	let lastFrom = columns0[lastColFrom];
+	if(!lastFrom.isEmpty()){
+		move(state,firstTarget,lstOfCol2[lstOfCol2.length-1]);
+	}
 	abstract(columns0);
 }
 
@@ -109,11 +134,17 @@ function main(state2){
 	state = state2;
 	lstOfCrissCross = []
 	
-	//nextCol([0]);
+	//if(emptyBotle() == -1){return false}
+	let firstEmpty = emptyBotle();
+	
 	for(let i=0; i<columns0.length; i++){
-		//anty redondancy to heavy
-		//if(colAlreadyTry.includes(i)){continue}
-		crissCross(columns0,[i]);
+		let target = firstEmpty
+		if(target ==-1){
+			target = otherColumn(i)
+			if(target ==-1){continue}
+		}
+		
+		crissCross(columns0,[target,i]);
 	}
 	lstOfCrissCross = lstOfCrissCross.map(x => x.split(",").map(
 		y => parseInt(y)
@@ -121,8 +152,10 @@ function main(state2){
 	
 	let firstCrissCross = lstOfCrissCross[0];
 	
-	if(firstCrissCross == undefined){return false}
-	else{
+	if(firstCrissCross == undefined){
+		console.log("no crissCross");
+		return false
+	}else{
 		doCrissCross(lstOfCrissCross[0]);
 		return true
 	}
