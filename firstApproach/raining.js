@@ -86,13 +86,13 @@ console.log("theMost Present",mostPresent);
 let nextTarget = [];
 
 function newColor(){
+	console.log("newColor");
 	let lstCol = mostPresent[1]
-	//if(lstCol.length <3){return}
 	if(mostPresent[0] ==-1){
-		succes0 = false
-		return
+		succes0 = false;
+		console.log("no mostPresent");
+		return false
 	}
-	succes0 = true
 	
 	let target = columns0.findIndex(
 		x => x.isMonochrome()
@@ -103,7 +103,13 @@ function newColor(){
 	}
 	console.log("target",target);
 	
-	if(target ==-1){return}
+	if(target ==-1){
+		succes0 = false ;
+		console.log("no target");
+		return false
+	}
+	
+	succes0 = true
 	
 	for(thisCol of lstCol){
 		if(thisCol == target){continue}
@@ -111,9 +117,7 @@ function newColor(){
 		
 		nextTarget.push(thisCol);
 	}
-	
-	
-	
+	return true
 }
 
 
@@ -224,7 +228,7 @@ function rainingAllColor(){
 
 	
 
-function main(state2,succes2){
+function main(state2){
 	state = state2;
 	[columns0,lstOfMove]= state
 	succes0 = false;
@@ -237,15 +241,15 @@ function main(state2,succes2){
 	mostPresentBall();
 	
 	//console.log("new Color");
-	newColor();
+	let succes2 = newColor();
+	if(succes2 = false){return false}
 	
 	//console.log("raining all color");
 	rainingAllColor()
-	succes2 = succes0;
 	
 	//abstract(columns0);
-	console.log("after raining",lstOfMove,"succes2",succes2);
-	return succes2;
+	console.log("after raining",lstOfMove,"succes0",succes0);
+	return succes0;
 }
 
 //main(state);

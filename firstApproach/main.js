@@ -58,7 +58,7 @@ function main(){
 	
 		let succes = false;
 		succes = crissCross(state);
-		if(!succes){succes= raining(state,succes)}
+		if(!succes){succes= raining(state)}
 		
 		if(!succes){
 			if(isFinish(columns0)){
