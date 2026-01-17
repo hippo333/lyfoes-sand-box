@@ -42,7 +42,7 @@ function nextCol(lstOfCol){
 	let lastCol = lstOfCol[lstOfCol.length -1];
 	let thisCol = columns0[lastCol];
 	let secondBll = thisCol.secondBall();
-	//console.log("lastCol",lastCol,"secondBll",secondBll);
+	console.log("lastCol",lastCol,"secondBll",secondBll);
 	
 	let placeToFeed = 4-thisCol.content.length+thisCol.bigBall;
 	
@@ -137,19 +137,16 @@ function main(state2){
 	//if(emptyBotle() == -1){return false}
 	let firstEmpty = emptyBotle();
 	
-	if(firstEmpty != -1){
-		for(let i=0; i<columns0.length; i++){
-			crissCross(columns0,[firstEmpty,i]);
-		}
-	}else{
-		for(let i=0; i<columns0.length; i++){
+	
+	for(let i=0; i<columns0.length; i++){
+		let target = firstEmpty
+		if(target ==-1){
 			target = otherColumn(i)
 			if(target ==-1){continue}
-			
-			crissCross(columns0,[target,i]);
 		}
+		
+		crissCross(columns0,[target,i]);
 	}
-	
 	lstOfCrissCross = lstOfCrissCross.map(x => x.split(",").map(
 		y => parseInt(y)
 	));
