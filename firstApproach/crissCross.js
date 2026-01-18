@@ -104,6 +104,9 @@ function crissCross(columns2,lstOfCol2){
 			if(lstOfCrissCross.includes(thisList)){continue}
 			lstOfCrissCross.push(thisList);
 			
+		}else if(thisList.includes(col)){
+			continue;
+			
 		}else if(columns2[col].isMonochrome()){//we free a botle
 			console.log("col is monochrome");
 			console.log("  col",col,columns0[col].content);
