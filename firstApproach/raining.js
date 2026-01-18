@@ -195,6 +195,7 @@ function moveToColor(col2){
 			//dont Over feed
 			if(thisCol.bigBall + columns0[col2].content.length > 4){continue}
 			
+			succes0 = true
 			move(state,col,col2);
 			newTarget2.push(col);
 			//console.log("add col",col);
@@ -208,7 +209,7 @@ function moveToColor(col2){
 
 //for each color (column monochrome) move all top Ball who can go to
 function rainingAllColor(){
-	console.log("\nraining All Color");
+	console.log("raining All Color");
 	
 	let lstAllColor = getAllColor();
 	
@@ -229,6 +230,7 @@ function rainingAllColor(){
 	
 
 function main(state2){
+	console.log("\nraining");
 	state = state2;
 	[columns0,lstOfMove]= state
 	succes0 = false;
