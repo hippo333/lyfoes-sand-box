@@ -166,7 +166,7 @@ function moveToColor(col2){
 			//if the invers move free a column
 			//move the second ball to the color
 			if(columns0[col2].content.length ==2){
-				if(thisCol.content.length < 4){
+				if(thisCol.content.length + columns0[col2].bigBall <= 4){
 					if(columns0[col2].content[0] == mostPresent[0]){
 						let theColor = columns0.findIndex(
 							clr => clr.top() == mostPresent[0]
