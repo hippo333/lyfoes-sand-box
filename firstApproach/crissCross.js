@@ -51,7 +51,30 @@ function nextCol(lstOfCol){
 		&& nxt.bigBall + (thisCol.content.length- thisCol.bigBall) <=4		
 	).map(x => columns0.indexOf(x));	
 	
+	if(lstNextCol.length !=0){
+		return lstNextCol
+	}
+	
+	
+	let theColor = columns0.findIndex(
+		clr => clr.color == secondBll
+	);
+	if(theColor ==-1){return []}
+	
+	let thisMove = [lastCol,theColor]
+	let thirdBll = thisCol.content[thisCol.content.length - thisCol.bigBall -2]
+	if(thirdBll == undefined){return [thisMove]}
+	placeToFeed--; //if second BigBall =1
+	
+	let nextStep = columns0.filter(
+		nxt => nxt.top() == thirdBll
+		&& nxt.bigBall + (thisCol.content.length- thisCol.bigBall -1) <=4
+	).map(x => columns0.indexOf(x));
+	
+	if(nextStep.length ==0){ return []}
+	lstNextCol.push(thisMove,...nextStep);
 	return lstNextCol
+	
 }
 
 let lstOfCrissCross = [];
@@ -59,40 +82,33 @@ function crissCross(columns2,lstOfCol2){
 	//console.log("crissCross",lstOfCol2);
 	
 	if(lstOfCol2.length >= columns2.length){
+		return
 		throw Error("to many move");	//nececary?
 	}
 	
 	let lstNextCol = nextCol(lstOfCol2);
+	let itsArray = false;
 	
 	for(col of lstNextCol){
 		let thisList = [...lstOfCol2];
 		colAlreadyTry.push(col);
-		if(thisList.includes(col)){
-			console.log("we loop",thisList);
 		
-			let target = thisList.shift();
-			let theStart = thisList.indexOf(col);
-			
-			let theTarget = columns0[target];
-			if(!theTarget.isEmpty() && theStart !=0){continue}
-			
-			
-			thisList = thisList.slice(theStart)
-			
-			let firstCol = thisList.indexOf(Math.min(...thisList));
-			let begening = thisList.splice(firstCol);
-			begening.push(...thisList);
-			begening.unshift(target);
-			thisList = begening.join();
+		if(typeof(col) == "object"){
+			lstOfCol2.push(col)
+			itsArray = true
+			continue
+		}
+		if(thisList[1] ==col){
+			console.log("we loop",thisList);
 			
 			if(lstOfCrissCross.includes(thisList)){continue}
 			lstOfCrissCross.push(thisList);
 			
 		}else if(columns2[col].isMonochrome()){//we free a botle
 			console.log("col is monochrome");
-			console.log("thisList",thisList);
+			console.log("  col",col,columns0[col].content);
 			thisList.push(col);
-			thisList = thisList.join();
+			console.log("thisList",thisList);
 			lstOfCrissCross.push(thisList);
 			
 		}else{
@@ -114,6 +130,12 @@ function doCrissCross(lstOfCol2){
 		let col = lstOfCol2[i];
 		if(i>0){
 			target = lstOfCol2[i-1];
+			if(typeof(target) == "object"){
+				console.log("target",target);
+				target = target[0];
+			}
+		}if(typeof(col) == "object"){
+			[col,target] = col;
 		}
 		console.log("move",col,target);
 		move(state,col,target);
@@ -147,9 +169,6 @@ function main(state2){
 		
 		crissCross(columns0,[target,i]);
 	}
-	lstOfCrissCross = lstOfCrissCross.map(x => x.split(",").map(
-		y => parseInt(y)
-	));
 	
 	let firstCrissCross = lstOfCrissCross[0];
 	
