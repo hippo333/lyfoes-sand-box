@@ -17,11 +17,8 @@ const CYAN = 12;
 const ORANGE = 13;
 
 //var level = 4.58
-//var level = 1.1;
-var level = "tst5";
-//tst 2,3,4,5
-
-//1.2 - 2.3 - 3.12 4.1 4.58 4.326 4.3262 4.347 4.364 4.422 
+var level = 2.3;
+//var level = "CC1";
 
 var columns;
 
@@ -86,6 +83,18 @@ var columns = [
 	new Column([BLUE, BLUE, RED, YELLOW]),
 	new Column([YELLOW, RED]),
 	new Column([YELLOW]),
+	new Column([]),
+];
+break;
+
+case "CC1":
+var columns = [
+	new Column([RED, BLUE]),
+	new Column([BLUE,YELLOW]),
+	new Column([YELLOW, RED]),
+	new Column([BLUE, RED]),
+	new Column([YELLOW, BLUE]),
+	new Column([]),
 	new Column([]),
 ];
 break;
