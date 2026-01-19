@@ -165,29 +165,27 @@ function moveToColor(col2){
 			
 			//if the invers move free a column
 			//move the second ball to the color
-			if(columns0[col2].content.length ==2){
+			if(columns0[col2].content.length -columns0[col2].bigBall <2){
 				if(thisCol.content.length + columns0[col2].bigBall <= 4){
-					if(columns0[col2].content[0] == mostPresent[0]){
-						let theColor = columns0.findIndex(
-							clr => clr.top() == mostPresent[0]
-							&& clr.content.length + columns0[col2].bigBall <=4	
-						)
-						if(theColor != -1){
-							//console.log("colFrom",col2,"colTo",col);
-							//console.log(" the color",theColor,"\n");
-							move(state,col2,col);
-							if(theColor != col2){
-								console.log("colFrom",col2,"colTo",theColor);
-								move(state,col2,theColor);
-							}
-							
-							abstract(columns0)
-							console.log("lstOfMove",state[1]);
-							//throw Error
-							continue
+					
+					let colorForLastBall = columns0.findIndex(
+						clr => clr.top() == columns0[col2][0]
+						&& columns0.indexOf(clr) != col2
+						&& clr.content.length + 1 <4					
+					);
+					
+					if(colorForLastBall !=1){
+						
+						move(state,col2,col);//revers move
+						
+						//the col wasn't monochrome
+						if(columns0[col2].content.length >0){
+							move(state,col2,colorForLastBall);
 						}
+						continue
 					}
-				}	//messy			
+					
+				}		
 			}//*/
 					
 			
