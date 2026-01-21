@@ -176,13 +176,15 @@ function moveToColor(col2){
 					
 					if(colorForLastBall !=1){
 						
+						//console.log("the revers move",col2,col);
 						move(state,col2,col);//revers move
 						
 						//the col wasn't monochrome
 						if(columns0[col2].content.length >0){
+							//console.log("empty the col",colorForLastBall);
 							move(state,col2,colorForLastBall);
 						}
-						continue
+						return
 					}
 					
 				}		
