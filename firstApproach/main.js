@@ -6,7 +6,7 @@ var move = require('../tools/move');
 var raining = require('./raining');
 var crissCross = require('./crissCross');
 var capillarity = require('./capillarity');
-var goToColor = require('./goToColor');
+var removeMidle = require('./removeMidle');
 
 abstract(columns0)
 let lstOfMove = [];
@@ -59,10 +59,10 @@ function main(){
 		abstract(columns0);
 	
 		let succes = false;
-		//succes = goToColor(state);
-		if(!succes){capillarity(state)}
-		if(!succes){succes = crissCross(state)};
+		if(!succes){succes= capillarity(state)}
+		if(!succes){succes= crissCross(state)};
 		if(!succes){succes= raining(state)}
+		if(!succes){succes= removeMidle(state)}
 		
 		if(!succes){
 			if(isFinish(columns0)){
