@@ -37,7 +37,7 @@ let state = [columns0,lstOfMove];
 
 
 function nextCol(lstOfCol){
-	//console.log("nextCol");
+	console.log("  nextCol");
 	
 	let lastCol = lstOfCol[lstOfCol.length -1];
 	let thisCol = columns0[lastCol];
@@ -59,7 +59,19 @@ function nextCol(lstOfCol){
 	let theColor = columns0.findIndex(
 		clr => clr.color == secondBll
 	);
-	if(theColor ==-1){return []}
+	if(theColor ==-1){
+		console.log("  no color");
+		let firstEmpty = lstOfCol[0];
+		let firstCol = lstOfCol[1];  
+		let firstColumn = columns0[firstCol];
+		if(firstColumn.top() == secondBll){
+			console.log("  you can go to firstEmpty");
+			theColor = firstEmpty;
+		}else{
+			return []
+		}
+	}
+	console.log("  the color",theColor);
 	
 	let thisMove = [lastCol,theColor]
 	let thirdBll = thisCol.content[thisCol.content.length - thisCol.bigBall -2]
@@ -73,6 +85,9 @@ function nextCol(lstOfCol){
 	
 	if(nextStep.length ==0){ return []}
 	lstNextCol.push(thisMove,...nextStep);
+	console.log("bip bip it's work");
+	console.log("thisMove",thisMove);
+	console.log("nextStep",nextStep);
 	return lstNextCol
 	
 }
@@ -96,6 +111,7 @@ function crissCross(columns2,lstOfCol2){
 		if(typeof(col) == "object"){
 			lstOfCol2.push(col)
 			itsArray = true
+			throw Error("maybe remove this part");
 			continue
 		}
 		if(thisList[1] ==col){
