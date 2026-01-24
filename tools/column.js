@@ -16,7 +16,18 @@ var Column = function(contents) {
   
   obj.secondBall = function (){
   	if(this.content.length == this.bigBall){return -1}
-  	return this.content.slice(-this.bigBall -1)[0];
+  	return this.content[this.content.length-this.bigBall -1];
+  }
+  
+  obj.secondBigBall = function(){
+  	let sdBigBall =0;
+  	let secondBll = this.secondBall();
+  	let startLevel = this.content.length-1 -this.bigBall;
+  	for(let bll= startLevel; bll>=0;bll--){
+  		if(this.content[bll] != secondBll){return sdBigBall}
+  		sdBigBall++
+  	}
+  	
   }
   
   obj.isFull = function(){
