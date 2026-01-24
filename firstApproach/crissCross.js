@@ -111,7 +111,7 @@ function crissCross(columns2,lstOfCol2){
 		if(typeof(col) == "object"){
 			lstOfCol2.push(col)
 			itsArray = true
-			throw Error("maybe remove this part");
+			//throw Error("maybe remove this part");
 			continue
 		}
 		if(thisList[1] ==col){
