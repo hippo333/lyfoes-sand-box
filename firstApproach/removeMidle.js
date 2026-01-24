@@ -18,7 +18,7 @@ let state = [columns0,lstOfMove];
 let theEmptyBotle = -1;
 
 function secondBigBall(col2){
-	console.log("secoondBigBall",col2);
+	//console.log("secoondBigBall",col2);
 	
 	let thisCol = columns0[col2];
 	let secondBall = thisCol.secondBall();
@@ -30,14 +30,14 @@ function secondBigBall(col2){
 		sdBigBall++
 	}
 	
-	console.log("sdBigBall",sdBigBall);
+	//console.log("sdBigBall",sdBigBall);
 	return sdBigBall
 }
 
 
 function isSuspect(thisCol2){
 	let col = columns0.indexOf(thisCol2);
-	console.log(col,"isSuspect?");
+	//console.log(col,"isSuspect?");
 	
 	if(thisCol2.content.length <3){return false}
 	let secondBigBll = secondBigBall(col);
@@ -46,27 +46,24 @@ function isSuspect(thisCol2){
 	let thirdLevel= thisCol2.content.length-1 -thisCol2.bigBall- secondBigBll;
 	
 	if(thirdLevel < 0){return false}
-	console.log("third Ball",thisCol2.content[thirdLevel]);
-	console.log("top",thisCol2.top());
 	if(thisCol2.content[thirdLevel] != thisCol2.top()){return false};
 	
-	console.log("	",col,"is suspect");
+	//console.log("	",col,"is suspect");
 	return true
 }
 
 function findSuspect(){
-	console.log("findSuspect");
+	//console.log("findSuspect");
 	
 	let theSuspect = columns0.findIndex(
 		cll => isSuspect(cll)		
 	);
 	
-	console.log("theSuspect",theSuspect);
 	return theSuspect
 }
 
 function getTarget(col2,emptyBtl2){
-	console.log("getTarget",col2,emptyBtl2);
+	//console.log("getTarget",col2,emptyBtl2);
 	
 	let thisCol = columns0[col2];
 	let secondBll = thisCol.secondBall();
@@ -86,7 +83,7 @@ function getTarget(col2,emptyBtl2){
 }
 
 function doTheThing(col2,emptyBtl2,target2){
-	console.log("doTheThing",col2,emptyBtl2,target2);
+	//console.log("doTheThing",col2,emptyBtl2,target2);
 	
 	move(state,col2,emptyBtl2);
 	move(state,col2,target2);
