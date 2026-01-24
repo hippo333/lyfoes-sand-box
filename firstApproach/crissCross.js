@@ -56,6 +56,12 @@ function nextCol(lstOfCol){
 	}
 	
 	
+	let thirdLevel = thisCol.content.length-1 - thisCol.bigBall - thisCol.secondBigBall();
+	if(thirdLevel >=0){return []}
+	//not redy yet
+	
+	
+	
 	let theColor = columns0.findIndex(
 		clr => clr.color == secondBll
 	);
@@ -114,7 +120,7 @@ function crissCross(columns2,lstOfCol2){
 		if(thisList[1] ==col){
 			console.log("we loop",thisList);
 			
-			if(lstOfCrissCross.includes(thisList)){continue}
+			
 			lstOfCrissCross.push(thisList);
 			
 		}else if(thisList.includes(col)){
@@ -157,9 +163,11 @@ function doCrissCross(lstOfCol2){
 		move(state,col,target);
 	}
 	let lastColFrom = lstOfCol2[lstOfCol2.length -1];
+	if(typeof(lastColFrom) == "object"){lastColFrom = lastColFrom[0]}
+	
 	let lastFrom = columns0[lastColFrom];
 	if(!lastFrom.isEmpty()){
-		move(state,firstTarget,lstOfCol2[lstOfCol2.length-1]);
+		move(state,firstTarget,lastColFrom);
 	}
 	abstract(columns0);
 }
