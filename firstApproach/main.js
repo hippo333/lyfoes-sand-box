@@ -41,7 +41,7 @@ function theOtherCol(col2){
 
 
 function isFinish(columns2){
-	console.log("isFinish");
+	console.log("\nisFinish");
 	let unfinishedCol = columns2.findIndex(
 		cll => !cll.isEmpty()
 		&& !cll.isFinish()	

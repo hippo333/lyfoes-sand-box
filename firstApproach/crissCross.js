@@ -37,12 +37,12 @@ let state = [columns0,lstOfMove];
 
 
 function nextCol(lstOfCol){
-	console.log("  nextCol");
+	//console.log("  nextCol");
 	
 	let lastCol = lstOfCol[lstOfCol.length -1];
 	let thisCol = columns0[lastCol];
 	let secondBll = thisCol.secondBall();
-	console.log("lastCol",lastCol,"secondBll",secondBll);
+	//console.log("lastCol",lastCol,"secondBll",secondBll);
 	
 	let placeToFeed = 4-thisCol.content.length+thisCol.bigBall;
 	
@@ -60,18 +60,18 @@ function nextCol(lstOfCol){
 		clr => clr.color == secondBll
 	);
 	if(theColor ==-1){
-		console.log("  no color");
+		//console.log("  no color");
 		let firstEmpty = lstOfCol[0];
 		let firstCol = lstOfCol[1];  
 		let firstColumn = columns0[firstCol];
 		if(firstColumn.top() == secondBll){
-			console.log("  you can go to firstEmpty");
+			//console.log("  you can go to firstEmpty");
 			theColor = firstEmpty;
 		}else{
 			return []
 		}
 	}
-	console.log("  the color",theColor);
+	//console.log("  the color",theColor);
 	
 	let thisMove = [lastCol,theColor]
 	let thirdBll = thisCol.content[thisCol.content.length - thisCol.bigBall -2]
@@ -85,9 +85,6 @@ function nextCol(lstOfCol){
 	
 	if(nextStep.length ==0){ return []}
 	lstNextCol.push(thisMove,...nextStep);
-	console.log("bip bip it's work");
-	console.log("thisMove",thisMove);
-	console.log("nextStep",nextStep);
 	return lstNextCol
 	
 }

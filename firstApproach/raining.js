@@ -250,7 +250,8 @@ function main(state2){
 	rainingAllColor()
 	
 	//abstract(columns0);
-	console.log("after raining",lstOfMove,"succes0",succes0);
+	//console.log("after raining",lstOfMove,"succes0",succes0);
+	console.log("raining",succes0);
 	return succes0;
 }
 
