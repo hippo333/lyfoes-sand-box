@@ -50,14 +50,16 @@ function isFinish(columns2){
 	else{return false}
 }
 
-
+let maxCycle = 15;
 function main(){
 	console.log("main");
 	
-	for(let i=0;i<10;i++){
-		console.log("cycle",i);
+	for(let cycle=0;cycle<=maxCycle;cycle++){
+		console.log("cycle",cycle);
 		abstract(columns0);
-	
+		
+		if(cycle == maxCycle){throw Error("to Many Cycle");}
+		
 		let succes = false;
 		if(!succes){succes= capillarity(state)}
 		if(!succes){succes= crissCross(state)};
