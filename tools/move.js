@@ -15,7 +15,8 @@ function move(state,from,to){
 	
 	
 	if(from ==-1 || to ==-1){
-		throw Error("error invalid argument, from",from,"to",to);
+		console.log("from",from,"to",to);
+		throw Error("error invalid argument, from");
 	}
 	
 	let colFrom = columns2[from].content;
@@ -27,16 +28,23 @@ function move(state,from,to){
 	let bigBallFrom = columns2[from].bigBall;
 	
 	
-	if(ballFrom != ballTo && colTo.length >0){
+	if(columns2[from].isEmpty()){
+		console.log("\nError");
+		abstract(columns2);
+		console.log(from,to);
+		throw Error("colFrom is empty");
+		
+	}else if(ballFrom != ballTo && colTo.length >0){
 		console.log("\nError");
 		abstract(columns2);
 		console.log(from,to);
 		throw Error("the ball are different");
+		
 	}else if(columns2[to].isFull()){
 		abstract(columns2);
 		console.log("\nlstOfMove",lstOfMove2);
 		console.log("from",from,"to",to);
-		throw Error("error Move, to is already full",to,colTo);
+		throw Error("error Move, to is already full");
 		
 		//the botle to is not empty
 	}else if(ballTo != undefined){
@@ -48,13 +56,13 @@ function move(state,from,to){
 	}
 	if(ballFrom == undefined){
 		console.log(`\nfrom ${from}, to ${to}`);
-		throw Error("error Move, no ball From",from,colFrom);
+		throw Error("error Move, no ball From");
 	}
 	if(colTo.length + bigBallFrom >4){
 		console.log("\nError");
 		abstract(columns2);
 		console.log(from,to);
-		throw Error("error Move, overFeed ",from,to);
+		throw Error("error Move, overFeed ");
 	}
 	
 	//we can do the move
