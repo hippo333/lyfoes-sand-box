@@ -73,7 +73,8 @@ function main(){
 				console.log("lstOfMove",lstOfMove);
 				return
 			}else{
-				console.log("\nfail at",i);
+				console.log("\nfail at",cycle);
+				console.log("lstOfMove",lstOfMove);
 				abstract(columns0);
 				return
 				

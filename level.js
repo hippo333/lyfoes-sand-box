@@ -24,10 +24,10 @@ const ORANGE = 13;
 
 
 //var level = 4.58
-var level = 2.1;
+var level = 2.18;
 //var level = "CC1";
 
-//2.1 -2.6, 2.8 -2.12
+//2.1 -2.12, 2.14 -2.17,; 
 
 //1.2, 2.3, 3.12, 4.1 4.58 4.326 4.3262 4.347, 4.364 4.422, 4.492
 
@@ -498,7 +498,7 @@ break;
 
 case 2.18:
 var columns = [
-	new Column([BLUE, GREEN, YELLOW, YELLOW]),
+	new Column([BLUE, GREEN, YELLOW, GREEN]),
 	new Column([BLUE, WHITE, WHITE, RED]),
 	new Column([BRIGHTPINK, YELLOW, WHITE, BLUE]),
 	new Column([RED, GREEN, WHITE, YELLOW]),
