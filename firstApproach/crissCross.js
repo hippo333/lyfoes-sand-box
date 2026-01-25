@@ -54,13 +54,7 @@ function nextCol(lstOfCol){
 	if(lstNextCol.length !=0){
 		return lstNextCol
 	}
-	
-	
-	let thirdLevel = thisCol.content.length-1 - thisCol.bigBall - thisCol.secondBigBall();
-	if(thirdLevel >=0){return []}
-	//not redy yet
-	
-	
+		
 	
 	let theColor = columns0.findIndex(
 		clr => clr.color == secondBll
@@ -79,14 +73,16 @@ function nextCol(lstOfCol){
 	}
 	//console.log("  the color",theColor);
 	
-	let thisMove = [lastCol,theColor]
-	let thirdBll = thisCol.content[thisCol.content.length - thisCol.bigBall -2]
+	let thisMove = [lastCol,theColor];
+	let thirdLevel =thisCol.content.length- thisCol.bigBall- thisCol.secondBigBall()-1 ;
+	let thirdBll = thisCol.content[thirdLevel];
+	
 	if(thirdBll == undefined){return [thisMove]}
 	placeToFeed--; //if second BigBall =1
 	
 	let nextStep = columns0.filter(
 		nxt => nxt.top() == thirdBll
-		&& nxt.bigBall + (thisCol.content.length- thisCol.bigBall -1) <=4
+		&& nxt.bigBall + thirdLevel <=4
 	).map(x => columns0.indexOf(x));
 	
 	if(nextStep.length ==0){ return []}
