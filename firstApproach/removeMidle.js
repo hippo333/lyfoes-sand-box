@@ -17,30 +17,13 @@ let lstOfMove = [];
 let state = [columns0,lstOfMove];
 let theEmptyBotle = -1;
 
-function secondBigBall(col2){
-	//console.log("secoondBigBall",col2);
-	
-	let thisCol = columns0[col2];
-	let secondBall = thisCol.secondBall();
-	
-	let sizeUnderBigBall = thisCol.content.length-1 - thisCol.bigBall 
-	let sdBigBall =0;
-	for(let i= sizeUnderBigBall; i>=0;i--){
-		if(thisCol.content[i] != secondBall){break}
-		sdBigBall++
-	}
-	
-	//console.log("sdBigBall",sdBigBall);
-	return sdBigBall
-}
-
 
 function isSuspect(thisCol2){
 	let col = columns0.indexOf(thisCol2);
 	//console.log(col,"isSuspect?");
 	
 	if(thisCol2.content.length <3){return false}
-	let secondBigBll = secondBigBall(col);
+	let secondBigBll = columns0[col].secondBigBall();
 	if( secondBigBll == 0){return false}
 	
 	let thirdLevel= thisCol2.content.length-1 -thisCol2.bigBall- secondBigBll;
@@ -67,18 +50,20 @@ function getTarget(col2,emptyBtl2){
 	
 	let thisCol = columns0[col2];
 	let secondBll = thisCol.secondBall();
-	let secondBigBll = secondBigBall(col2);
+	let secondBigBll = thisCol.secondBigBall();
 	
 	let target = columns0.findIndex(
 		tgt => tgt.top() == secondBll
-		&& tgt.content.length + secondBigBall <= 4
+		&& tgt.content.length + secondBigBll <= 4
 	);
+	//console.log("target",target);
 	if(target !=-1){return target}
 	
 	let secondEmpty = columns0.findIndex(
 		tgt => tgt.isEmpty()
 		&& columns0.indexOf(tgt) != emptyBtl2	
 	);	
+	//console.log("secondEmpty",secondEmpty);
 	return secondEmpty
 }
 
