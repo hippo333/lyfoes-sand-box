@@ -83,7 +83,7 @@ function getTarget(col2,emptyBtl2){
 }
 
 function doTheThing(col2,emptyBtl2,target2){
-	//console.log("doTheThing",col2,emptyBtl2,target2);
+	console.log("doTheThing",col2,emptyBtl2,target2);
 	
 	move(state,col2,emptyBtl2);
 	move(state,col2,target2);
@@ -104,6 +104,7 @@ function main(state2){
 	if(suspect == -1){ return false}
 	
 	let target = getTarget(suspect,emptyBtl);
+	if(target ==-1){return false}
 	
 	doTheThing(suspect,emptyBtl,target)
 	abstract(columns0);
