@@ -82,7 +82,7 @@ function nextCol(lstOfCol){
 	
 	let nextStep = columns0.filter(
 		nxt => nxt.top() == thirdBll
-		&& nxt.bigBall + thirdLevel <=4
+		&& nxt.bigBall + thirdLevel <4
 	).map(x => columns0.indexOf(x));
 	
 	if(nextStep.length ==0){ return []}
@@ -116,6 +116,8 @@ function crissCross(columns2,lstOfCol2){
 		if(thisList[1] ==col){
 			console.log("we loop",thisList);
 			
+			let firstCol = columns0[thisList[0]];
+			if(!firstCol.isEmpty()){continue}
 			
 			lstOfCrissCross.push(thisList);
 			
