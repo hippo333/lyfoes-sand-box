@@ -1,6 +1,6 @@
 var startTime = new Date().getTime();
 var column = require('../tools/column');
-var columns0 = require('../level');
+var getTheLevel = require('../level');
 var abstract = require('../tools/abstract');
 var move = require('../tools/move');
 var raining = require('./raining');
@@ -8,8 +8,9 @@ var crissCross = require('./crissCross');
 var capillarity = require('./capillarity');
 var removeMidle = require('./removeMidle');
 
-abstract(columns0)
+
 let lstOfMove = [];
+let columns0 = [];
 let state = [columns0,lstOfMove];
 
 function emptyBotle(columns2){
@@ -50,9 +51,15 @@ function isFinish(columns2){
 	else{return false}
 }
 
+let theLevel = 2.1;
 let maxCycle = 15;
-function main(){
+function main(theLevel){
 	console.log("main");
+	
+	columns0 = getTheLevel(theLevel);
+	lstOfMove = [];
+	state = [columns0,lstOfMove];
+	
 	
 	for(let cycle=0;cycle<=maxCycle;cycle++){
 		console.log("cycle",cycle);
@@ -68,7 +75,7 @@ function main(){
 		
 		if(!succes){
 			if(isFinish(columns0)){
-				console.log("\nwe did it");
+				console.log("\nwe did it",theLevel);
 				abstract(columns0);
 				console.log("lstOfMove",lstOfMove);
 				return
@@ -76,6 +83,7 @@ function main(){
 				console.log("\nfail at",cycle);
 				console.log("lstOfMove",lstOfMove);
 				abstract(columns0);
+				throw Error("can't move animore");
 				return
 				
 			}
@@ -85,8 +93,8 @@ function main(){
 
 
 
-
-main();
+//test one level
+//main(2.1);
 
 
 var end = new Date().getTime();	//timer
@@ -96,5 +104,5 @@ console.log(time/1000,"s");
 
 
 
-
+module.exports = main
 
