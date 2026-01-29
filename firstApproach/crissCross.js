@@ -61,14 +61,23 @@ function nextCol(lstOfCol){
 	);
 	if(theColor ==-1){
 		//console.log("  no color");
-		let firstEmpty = lstOfCol[0];
-		let firstCol = lstOfCol[1];  
-		let firstColumn = columns0[firstCol];
-		if(firstColumn.top() == secondBll){
-			//console.log("  you can go to firstEmpty");
-			theColor = firstEmpty;
-		}else{
-			return []
+		
+		theColor = columns0.findIndex(
+			clr => clr.top() == secondBll
+			&& clr.content.length + thisCol.secondBigBall() <=4
+			
+		);		
+		
+		if(theColor == -1){
+			let firstEmpty = lstOfCol[0];
+			let firstCol = lstOfCol[1];  
+			let firstColumn = columns0[firstCol];
+			if(firstColumn.top() == secondBll){
+				//console.log("  you can go to firstEmpty");
+				theColor = firstEmpty;
+			}else{
+				return []
+			}
 		}
 	}
 	//console.log("  the color",theColor);
@@ -93,7 +102,7 @@ function nextCol(lstOfCol){
 
 let lstOfCrissCross = [];
 function crissCross(columns2,lstOfCol2){
-	//console.log("crissCross",lstOfCol2);
+	console.log("crissCross",lstOfCol2);
 	
 	if(lstOfCol2.length >= columns2.length){
 		return
