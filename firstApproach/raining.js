@@ -7,19 +7,10 @@ var move = require('../tools/move');
 
 
 function emptyBotle(columns2){
-	
-	let level = columns2[0].content.length;
-	
-	if(level %2 ==0){
-		return columns2.findIndex(x => x.isEmpty())
-	}else{
-		//return columns2.findLastIndexOf(x => x.isEmpty())
-		if(columns2[columns2.length-1].isEmpty()){
-			return columns2.length -1
-		}else{
-			return -1
-		}
-	}
+	let emptyBtl = columns0.findIndex(
+		btl => btl.isEmpty()
+	);
+	return emptyBtl
 }
 
 
