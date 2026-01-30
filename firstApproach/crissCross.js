@@ -45,21 +45,19 @@ function nextCol(lstOfCol){
 	console.log("lastCol",lastCol,"secondBll",secondBll);
 	
 	//try to finish thisCol
-	console.log("without bigBall",thisCol.content.length - thisCol.bigBall);
-	console.log("secondBigBall", thisCol.secondBigBall());
 	if(thisCol.content.length - thisCol.bigBall == thisCol.secondBigBall()){
 		console.log("almost finish");
 		//throw Error("debug");
 		
 		let toFinish = columns0.findIndex(
 			cll => cll.top() == secondBll
-			&& !lstOfCol.includes(cll)
+			&& !lstOfCol.includes(columns0.indexOf(cll))
 			&& cll.content.length + thisCol.secondBigBall() <=4
 		);
-		console.log("toFinish",toFinish);
+		
 		if(toFinish != -1){
 			let thisMove = [lastCol,toFinish];
-			console.log("thisMove",thisMove,"\n");
+			//console.log("thisMove",thisMove,"\n");
 			return [thisMove]
 		}
 	}
@@ -69,6 +67,7 @@ function nextCol(lstOfCol){
 	
 	let lstNextCol = columns0.filter(
 		nxt => nxt.top() == secondBll
+		//&& !lstOfCol.includes(columns0.indexOf(nxt))//not tested yet
 		&& nxt.bigBall + (thisCol.content.length- thisCol.bigBall) <=4		
 	).map(x => columns0.indexOf(x));	
 	
@@ -81,20 +80,25 @@ function nextCol(lstOfCol){
 		clr => clr.color == secondBll
 	);
 	if(theColor ==-1){
-		//console.log("  no color");
+		console.log("  no color");
 		
 		theColor = columns0.findIndex(
 			clr => clr.top() == secondBll
+			&& !lstOfCol.join().includes(columns0.indexOf(clr))
 			&& clr.content.length + thisCol.secondBigBall() <=4
 			
-		);		
+		);	
+		
+		/*if(lastCol == 2 && theColor ==5){		
+			throw Error("here");	
+		}//*/
 		
 		if(theColor == -1){
 			let firstEmpty = lstOfCol[0];
 			let firstCol = lstOfCol[1];  
 			let firstColumn = columns0[firstCol];
 			if(firstColumn.top() == secondBll){
-				//console.log("  you can go to firstEmpty");
+				console.log("  you can go to firstEmpty");
 				theColor = firstEmpty;
 			}else{
 				return []
@@ -112,6 +116,7 @@ function nextCol(lstOfCol){
 	
 	let nextStep = columns0.filter(
 		nxt => nxt.top() == thirdBll
+		&& columns0.indexOf(nxt) != theColor
 		&& nxt.bigBall + thirdLevel <4
 	).map(x => columns0.indexOf(x));
 	
