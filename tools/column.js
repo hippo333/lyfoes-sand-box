@@ -20,14 +20,16 @@ var Column = function(contents) {
   }
   
   obj.secondBigBall = function(){
-  	let sdBigBall =0;
   	let secondBll = this.secondBall();
+  	if(secondBll == -1){return 0}
+  	let sdBigBall =0;
+  	
   	let startLevel = this.content.length-1 -this.bigBall;
   	for(let bll= startLevel; bll>=0;bll--){
   		if(this.content[bll] != secondBll){return sdBigBall}
   		sdBigBall++
   	}
-  	
+  	return sdBigBall
   }
   
   obj.isFull = function(){
