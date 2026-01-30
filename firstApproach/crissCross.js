@@ -37,12 +37,33 @@ let state = [columns0,lstOfMove];
 
 
 function nextCol(lstOfCol){
-	//console.log("  nextCol");
+	console.log("  nextCol");
 	
 	let lastCol = lstOfCol[lstOfCol.length -1];
 	let thisCol = columns0[lastCol];
 	let secondBll = thisCol.secondBall();
-	//console.log("lastCol",lastCol,"secondBll",secondBll);
+	console.log("lastCol",lastCol,"secondBll",secondBll);
+	
+	//try to finish thisCol
+	console.log("without bigBall",thisCol.content.length - thisCol.bigBall);
+	console.log("secondBigBall", thisCol.secondBigBall());
+	if(thisCol.content.length - thisCol.bigBall == thisCol.secondBigBall()){
+		console.log("almost finish");
+		//throw Error("debug");
+		
+		let toFinish = columns0.findIndex(
+			cll => cll.top() == secondBll
+			&& !lstOfCol.includes(cll)
+			&& cll.content.length + thisCol.secondBigBall() <=4
+		);
+		console.log("toFinish",toFinish);
+		if(toFinish != -1){
+			let thisMove = [lastCol,toFinish];
+			console.log("thisMove",thisMove,"\n");
+			return [thisMove]
+		}
+	}
+	
 	
 	let placeToFeed = 4-thisCol.content.length+thisCol.bigBall;
 	
@@ -120,7 +141,12 @@ function crissCross(columns2,lstOfCol2){
 			lstOfCol2.push(col)
 			itsArray = true
 			//throw Error("maybe remove this part");
-			continue
+			if(lstNextCol.length ==1){
+				lstOfCrissCross.push(lstOfCol2); 
+				return
+			}else{
+				continue;
+			}
 		}
 		if(thisList[1] ==col){
 			console.log("we loop",thisList);
