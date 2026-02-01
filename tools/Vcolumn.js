@@ -73,22 +73,17 @@ function Vupdate(columns2,VColumn2,[from,to]){
 	VColumn2[to] = [bllTo,bBTo,sizeTo];
 }
 
-/*
-function Vfinish(Vcolumn2){
-	for(col in Vcolumn2){
-		//empty botle
-		if(Vcolumn2[col][1] ==0){continue}
-		//if the big ball of the column is not 4 the col is not full finish
-		if(Vcolumn2[col][1] <4){
-			//console.log("the column is not clean",col);
-			return false	
-		}
+
+function Vcoppy(Vcolumn2){
+	let Vcolumn3 = [];
+	for(col of Vcolumn2){
+		Vcolumn3.push(col)
 	}
-	return true
-}*/
+	return Vcolumn3
+}
 
 
 
 
 
-module.exports =[newVcolumn,Vupdate]
+module.exports =[newVcolumn,Vupdate,Vcoppy]
