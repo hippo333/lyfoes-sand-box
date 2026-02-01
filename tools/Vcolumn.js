@@ -76,7 +76,7 @@ function Vupdate(columns2,VColumn2,[from,to]){
 
 function Vcoppy(Vcolumn2){
 	let Vcolumn3 = [];
-	for(col of Vcolumn2){
+	for(let col of Vcolumn2){
 		Vcolumn3.push(col)
 	}
 	return Vcolumn3
