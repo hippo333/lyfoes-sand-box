@@ -40,6 +40,8 @@ function nextCol(lstOfCol){
 	console.log("  nextCol");
 	
 	let lastCol = lstOfCol[lstOfCol.length -1];
+	if(typeof(lastCol) == "object"){lastCol = lastCol[0]}
+	
 	let thisCol = columns0[lastCol];
 	let secondBll = thisCol.secondBall();
 	console.log("lastCol",lastCol,"secondBll",secondBll);
@@ -67,7 +69,6 @@ function nextCol(lstOfCol){
 	
 	let lstNextCol = columns0.filter(
 		nxt => nxt.top() == secondBll
-		//&& !lstOfCol.includes(columns0.indexOf(nxt))//not tested yet
 		&& nxt.bigBall + (thisCol.content.length- thisCol.bigBall) <=4		
 	).map(x => columns0.indexOf(x));	
 	
@@ -112,15 +113,31 @@ function nextCol(lstOfCol){
 	let thirdBll = thisCol.content[thirdLevel];
 	
 	if(thirdBll == undefined){return [thisMove]}
-	placeToFeed--; //if second BigBall =1
+	placeToFeed -= thisCol.secondBigBall(); //if second BigBall =1
+	
+	//console.log("  thirdBll",thirdBll);
 	
 	let nextStep = columns0.filter(
 		nxt => nxt.top() == thirdBll
 		&& columns0.indexOf(nxt) != theColor
+		&& columns0.indexOf(nxt) != lastCol
 		&& nxt.bigBall + thirdLevel <4
 	).map(x => columns0.indexOf(x));
+	console.log("  nextStep",nextStep);
 	
-	if(nextStep.length ==0){ return []}
+	if(nextStep.length ==0){ 
+			let firstEmpty = lstOfCol[0];
+			let firstCol = lstOfCol[1];  
+			let firstColumn = columns0[firstCol];
+		if(thirdBll == firstColumn.secondBall()){
+			let finishMove = [lastCol,firstCol];
+			console.log("  third finish",thisMove,finishMove);
+			return [thisMove,finishMove];
+			
+		}else{
+			return []
+		}
+	}
 	lstNextCol.push(thisMove,...nextStep);
 	return lstNextCol
 	
@@ -143,13 +160,18 @@ function crissCross(columns2,lstOfCol2){
 		colAlreadyTry.push(col);
 		
 		if(typeof(col) == "object"){
-			lstOfCol2.push(col)
+			thisList.push(col)
 			itsArray = true
 			//throw Error("maybe remove this part");
-			if(lstNextCol.length ==1){
-				lstOfCrissCross.push(lstOfCol2); 
+			if(lstNextCol.indexOf(col) == lstNextCol.length -1){
+				console.log("col",col);
+				let lastCol = columns0[col];
+				//throw Error("debug");
+				lstOfCrissCross.push(thisList); 
 				return
+				
 			}else{
+				lstOfCol2 = thisList;
 				continue;
 			}
 		}
@@ -162,6 +184,7 @@ function crissCross(columns2,lstOfCol2){
 			lstOfCrissCross.push(thisList);
 			
 		}else if(thisList.includes(col)){
+			console.log("thisList",thisList,"includes",col);
 			continue;
 			
 		}else if(columns2[col].isMonochrome()){//we free a botle
