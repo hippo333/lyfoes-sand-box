@@ -3,6 +3,7 @@ var column = require('../tools/column');
 //var columns999 = require('../level');
 var abstract = require('../tools/abstract');
 var move = require('../tools/move');
+var [newVcolumn, Vupdate, Vcoppy] = require('../tools/Vcolumn');
 
 
 
@@ -29,122 +30,87 @@ function otherColumn(col2){
 
 let columns0 = [];
 let lstOfMove = [];
+let Vcolumn0 = [];
 let state = [columns0,lstOfMove];
 
 
 //set up
 
 
+//nextCol
+function removeLastTop(lstOfCol2,Vcolumn2){
+	console.log("  -removeTop");
+	
+	let lastCol = lstOfCol2[lstOfCol2.length -1];
+	if(typeof(lastCol) == "object"){lastCol = lastCol[0]};
+	console.log("  -lastCol",lastCol,"ball",Vcolumn2[lastCol][0]);
+	
+	let lstTarget = Vcolumn2.filter(
+		tgt => tgt[0] == Vcolumn2[lastCol][0]
+		&& Vcolumn2.indexOf(tgt) != lastCol
+		&& tgt[2] + Vcolumn2[lastCol][1] <= 4
+	);
+	console.log("  -lstTarget",lstTarget)
+	
+	if(lstTarget.length ==0){return []}
+	
+	let target = Vcolumn2.indexOf(lstTarget.find(//color
+		clr => clr[1] == clr[2] //monochrome
+	));
+	if(target ==-1){
+		console.log("  -no Color");
+		target = Vcolumn2.indexOf(lstTarget[0]); 
+	}
+	if(target == -1){return []}
+	
+	console.log("  -target",target);
+	let thisMove = [lastCol,target];
+	return [thisMove]
+}
 
-function nextCol(lstOfCol){
+
+function nextCol(lstOfCol,Vcolumn2){
 	console.log("  nextCol");
 	
 	let lastCol = lstOfCol[lstOfCol.length -1];
 	if(typeof(lastCol) == "object"){lastCol = lastCol[0]}
 	
 	let thisCol = columns0[lastCol];
-	let secondBll = thisCol.secondBall();
-	console.log("lastCol",lastCol,"secondBll",secondBll);
+	let secondBll = Vcolumn2[lastCol][0];
+	console.log("  lastCol",lastCol,"secondBll",secondBll);
 	
 	//try to finish thisCol
-	if(thisCol.content.length - thisCol.bigBall == thisCol.secondBigBall()){
-		console.log("almost finish");
+	if(Vcolumn2[lastCol][1] == Vcolumn2[lastCol][2]){
+		console.log("  lastCol isMono");
 		//throw Error("debug");
 		
-		let toFinish = columns0.findIndex(
-			cll => cll.top() == secondBll
-			&& !lstOfCol.includes(columns0.indexOf(cll))
-			&& cll.content.length + thisCol.secondBigBall() <=4
+		let toFinish = Vcolumn2.findIndex(
+			cll => cll[0] == secondBll
+			&& cll[2] + Vcolumn2[lastCol][1] <=4
+			&& Vcolumn2.indexOf(cll) != lastCol
 		);
 		
 		if(toFinish != -1){
 			let thisMove = [lastCol,toFinish];
-			//console.log("thisMove",thisMove,"\n");
+			console.log("for finish",thisMove,"\n");
 			return [thisMove]
 		}
 	}
 	
 	
-	let placeToFeed = 4-thisCol.content.length+thisCol.bigBall;
+	let placeToFeed = 4-Vcolumn2[lastCol][2];
 	
-	let lstNextCol = columns0.filter(
-		nxt => nxt.top() == secondBll
-		&& nxt.bigBall + (thisCol.content.length- thisCol.bigBall) <=4		
-	).map(x => columns0.indexOf(x));	
+	let lstNextCol = Vcolumn2.filter(
+		nxt => nxt[0] == secondBll
+		&& nxt[1] + Vcolumn2[lastCol][2] <=4
+		&& Vcolumn2.indexOf(nxt) != lastCol		
+	).map(x => Vcolumn2.indexOf(x));	
 	
-	if(lstNextCol.length !=0){
-		return lstNextCol
-	}
-		
-	
-	let theColor = columns0.findIndex(
-		clr => clr.color == secondBll
-	);
-	if(theColor ==-1){
-		console.log("  no color");
-		
-		theColor = columns0.findIndex(
-			clr => clr.top() == secondBll
-			&& !lstOfCol.join().includes(columns0.indexOf(clr))
-			&& clr.content.length + thisCol.secondBigBall() <=4
-			
-		);	
-		
-		/*if(lastCol == 2 && theColor ==5){		
-			throw Error("here");	
-		}//*/
-		
-		if(theColor == -1){
-			let firstEmpty = lstOfCol[0];
-			let firstCol = lstOfCol[1];  
-			let firstColumn = columns0[firstCol];
-			if(firstColumn.top() == secondBll){
-				console.log("  you can go to firstEmpty");
-				theColor = firstEmpty;
-			}else{
-				return []
-			}
-		}
-	}
-	//console.log("  the color",theColor);
-	
-	let thisMove = [lastCol,theColor];
-	let thirdLevel =thisCol.content.length- thisCol.bigBall- thisCol.secondBigBall()-1 ;
-	let thirdBll = thisCol.content[thirdLevel];
-	
-	if(thirdBll == undefined){return [thisMove]}
-	placeToFeed -= thisCol.secondBigBall(); //if second BigBall =1
-	
-	//console.log("  thirdBll",thirdBll);
-	
-	let nextStep = columns0.filter(
-		nxt => nxt.top() == thirdBll
-		&& columns0.indexOf(nxt) != theColor
-		&& columns0.indexOf(nxt) != lastCol
-		&& nxt.bigBall + thirdLevel <4
-	).map(x => columns0.indexOf(x));
-	console.log("  nextStep",nextStep);
-	
-	if(nextStep.length ==0){ 
-			let firstEmpty = lstOfCol[0];
-			let firstCol = lstOfCol[1];  
-			let firstColumn = columns0[firstCol];
-		if(thirdBll == firstColumn.secondBall()){
-			let finishMove = [lastCol,firstCol];
-			console.log("  third finish",thisMove,finishMove);
-			return [thisMove,finishMove];
-			
-		}else{
-			return []
-		}
-	}
-	lstNextCol.push(thisMove,...nextStep);
 	return lstNextCol
-	
 }
 
 let lstOfCrissCross = [];
-function crissCross(columns2,lstOfCol2){
+function crissCross(columns2,lstOfCol2,Vcolumn2){
 	console.log("crissCross",lstOfCol2);
 	
 	if(lstOfCol2.length >= columns2.length){
@@ -152,52 +118,45 @@ function crissCross(columns2,lstOfCol2){
 		throw Error("to many move");	//nececary?
 	}
 	
-	let lstNextCol = nextCol(lstOfCol2);
-	let itsArray = false;
+	let lstNextCol = nextCol(lstOfCol2,Vcolumn2);
+	if(lstNextCol.length ==0){
+		lstNextCol = removeLastTop(lstOfCol2,Vcolumn2);
+	}
 	
 	for(col of lstNextCol){
 		let thisList = [...lstOfCol2];
-		colAlreadyTry.push(col);
+		console.log("col",col);
+		let from = col;
+		let to = thisList[thisList.length-1];
+		console.log("from0",from,"to",to);
 		
-		if(typeof(col) == "object"){
-			thisList.push(col)
-			itsArray = true
-			//throw Error("maybe remove this part");
-			if(lstNextCol.indexOf(col) == lstNextCol.length -1){
-				console.log("col",col);
-				let lastCol = columns0[col];
-				//throw Error("debug");
-				lstOfCrissCross.push(thisList); 
-				return
-				
-			}else{
-				lstOfCol2 = thisList;
-				continue;
-			}
-		}
-		if(thisList[1] ==col){
-			console.log("we loop",thisList);
-			
-			let firstCol = columns0[thisList[0]];
-			if(!firstCol.isEmpty()){continue}
-			
-			lstOfCrissCross.push(thisList);
-			
-		}else if(thisList.includes(col)){
-			console.log("thisList",thisList,"includes",col);
-			continue;
-			
-		}else if(columns2[col].isMonochrome()){//we free a botle
-			console.log("col is monochrome");
-			console.log("  col",col,columns0[col].content);
-			thisList.push(col);
+		if(typeof(from) == "object"){ [from,to] = from}
+		if(typeof(to) == "object"){ to = to[0]}
+		console.log("from1",from,"to",to);
+		
+		thisList.push(col);
+		
+		if(Vcolumn2[from][1] == Vcolumn2[from][2]){//we free a botle
+			console.log("from is monochrome");
+			console.log("  from",from,columns0[from].content);
+			//thisList.push(from);
 			console.log("thisList",thisList);
 			lstOfCrissCross.push(thisList);
 			
 		}else{
 			console.log("thisList",thisList);
-			thisList.push(col);
-			crissCross(columns2,thisList);
+			//thisList.push(from);
+			
+			let Vcolumn3 = Vcoppy(Vcolumn2);
+			
+			abstract(columns0)
+			console.log("thisList",thisList);
+			console.log("Vcolumn3",Vcolumn3);
+			console.log("from2",from,"to",to);
+			//throw Error("debug");
+			Vupdate(columns0,Vcolumn3,[from,to]);
+			
+			crissCross(columns2,thisList,Vcolumn3);
 		}
 	}
 }
@@ -234,25 +193,28 @@ function doCrissCross(lstOfCol2){
 }
 
 
-let colAlreadyTry = [];
 function main(state2){
 	console.log("\ncrissCross");
 	[columns0,lstOfMove] = state2;
 	state = state2;
 	lstOfCrissCross = []
+	Vcolumn0 = newVcolumn(columns0);
 	
 	//if(emptyBotle() == -1){return false}
 	let firstEmpty = emptyBotle();
 	
 	
 	for(let i=0; i<columns0.length; i++){
+		if(columns0[i].isEmpty()){continue}
+		if(columns0[i].isFinish()){continue}
 		let target = firstEmpty
 		if(target ==-1){
 			target = otherColumn(i)
 			if(target ==-1){continue}
 		}
-		
-		crissCross(columns0,[target,i]);
+		let Vcolumn2 = Vcoppy(Vcolumn0);
+		Vupdate(columns0,Vcolumn2,[i,target])
+		crissCross(columns0,[target,i],Vcolumn2);
 	}
 	
 	let firstCrissCross = lstOfCrissCross[0];
