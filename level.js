@@ -278,7 +278,7 @@ function getTheLevel(level){
 	];
 	break;
 
-	case 2.1:	//main2
+	case 2.01:	//main2
 	var columns = [
 		new Column([GREEN, RED, RED, BLUE]),
 		new Column([RED, YELLOW, BRIGHTPINK, BRIGHTPINK]),
@@ -290,7 +290,7 @@ function getTheLevel(level){
 	];
 	break;
 
-	case 2.2:
+	case 2.02:
 	var columns = [
 		new Column([RED, RED, YELLOW, BLUE]),
 		new Column([BLUE, BRIGHTPINK, RED, YELLOW]),
@@ -302,7 +302,7 @@ function getTheLevel(level){
 	];
 	break;
 
-	case 2.3:
+	case 2.03:
 	var columns = [
 		new Column([YELLOW, RED, BRIGHTPINK, BRIGHTPINK]),
 		new Column([BRIGHTPINK, BLUE, RED, GREEN]),
@@ -314,7 +314,7 @@ function getTheLevel(level){
 	];
 	break;
 
-	case 2.4:
+	case 2.04:
 	var columns = [
 		new Column([BLUE, YELLOW, YELLOW, BRIGHTPINK]),
 		new Column([GREEN, BRIGHTPINK, GREEN, BLUE]),
@@ -326,7 +326,7 @@ function getTheLevel(level){
 	];
 	break;
 
-	case 2.5:
+	case 2.05:
 	var columns = [
 		new Column([YELLOW, YELLOW, GREEN, BLUE]),
 		new Column([RED, GREEN, GREEN, BRIGHTPINK]),
@@ -338,7 +338,7 @@ function getTheLevel(level){
 	];
 	break;
 
-	case 2.6:
+	case 2.06:
 	var columns = [
 		new Column([BLUE, BLUE, RED, YELLOW]),
 		new Column([YELLOW, RED, YELLOW, GREEN]),
@@ -350,7 +350,7 @@ function getTheLevel(level){
 	];
 	break;
 
-	case 2.7:
+	case 2.07:
 	var columns = [
 		new Column([BRIGHTPINK, BRIGHTPINK, RED, GREEN]),
 		new Column([BRIGHTPINK, GREEN, YELLOW, RED]),
@@ -362,7 +362,7 @@ function getTheLevel(level){
 	];
 	break;
 
-	case 2.8:
+	case 2.08:
 	var columns = [
 		new Column([GREEN, BRIGHTPINK, GREEN, BRIGHTPINK]),
 		new Column([RED, BRIGHTPINK, GREEN, RED]),
@@ -374,7 +374,7 @@ function getTheLevel(level){
 	];
 	break;
 
-	case 2.9:
+	case 2.09:
 	var columns = [
 		new Column([YELLOW, RED, RED, YELLOW]),
 		new Column([GREEN, BRIGHTPINK, BLUE, BRIGHTPINK]),
@@ -386,7 +386,7 @@ function getTheLevel(level){
 	];
 	break;
 
-	case 2.101:
+	case 2.10:
 	var columns = [
 		new Column([BLUE, RED, YELLOW, RED]),
 		new Column([BLUE, GREEN, RED, RED]),
@@ -506,7 +506,7 @@ function getTheLevel(level){
 	];
 	break;
 
-	case 2.201:
+	case 2.20:
 	var columns = [
 		new Column([BLUE, YELLOW, BLUE, RED]),
 		new Column([RED, GREEN, RED, GREEN]),
@@ -626,12 +626,136 @@ function getTheLevel(level){
 	];
 	break;
 
-	case 2.301:
+	case 2.30:
 	var columns = [
 		new Column([YELLOW, YELLOW, RED, BLUE]),
 		new Column([GREEN, GREEN, GREEN, BLUE]),
 		new Column([GREEN, RED, RED, BLUE]),
 		new Column([RED, BLUE, YELLOW, YELLOW]),
+		new Column([]),
+	];
+	break;
+
+	case 2.31:
+	var columns = [
+		new Column([GREEN, YELLOW, RED, GREEN]),
+		new Column([BRIGHTPINK, GREEN, YELLOW, BLUE]),
+		new Column([RED, GREEN, BLUE, BLUE]),
+		new Column([BRIGHTPINK, BRIGHTPINK, BLUE, YELLOW]),
+		new Column([RED, BRIGHTPINK, RED, YELLOW]),
+		new Column([]),
+		new Column([]),
+	];
+	break;
+
+	case 2.32:
+	var columns = [
+		new Column([GREEN, WHITE, WHITE, GREEN]),
+		new Column([BLUE, YELLOW, YELLOW, WHITE]),
+		new Column([RED, BRIGHTPINK, BLUE, BRIGHTPINK]),
+		new Column([GREEN, YELLOW, BLUE, GREEN]),
+		new Column([RED, YELLOW, RED, BRIGHTPINK]),
+		new Column([BRIGHTPINK, RED, BLUE, WHITE]),
+		new Column([]),
+		new Column([]),
+	];
+	break;
+
+	case 2.33:
+	var columns = [
+		new Column([BLUE, YELLOW, BRIGHTPINK, RED]),
+		new Column([RED, RED, BRIGHTPINK, BLUE]),
+		new Column([YELLOW, YELLOW, BRIGHTPINK, GREEN]),
+		new Column([YELLOW, BLUE, BRIGHTPINK, RED]),
+		new Column([BLUE, GREEN, GREEN, GREEN]),
+		new Column([]),
+		new Column([]),
+	];
+	break;
+
+	case 2.34:
+	var columns = [
+		new Column([YELLOW, GREEN, BRIGHTPINK, GREEN]),
+		new Column([YELLOW, RED, WHITE, GREEN]),
+		new Column([YELLOW, RED, BLUE, BLUE]),
+		new Column([BRIGHTPINK, BRIGHTPINK, WHITE, BRIGHTPINK]),
+		new Column([RED, GREEN, RED, BLUE]),
+		new Column([WHITE, BLUE, YELLOW, WHITE]),
+		new Column([]),
+		new Column([]),
+	];
+	break;
+
+	case 2.35:
+	var columns = [
+		new Column([BLUE, YELLOW, BRIGHTPINK, GREEN]),
+		new Column([YELLOW, GREEN, BLUE, BRIGHTPINK]),
+		new Column([YELLOW, BRIGHTPINK, BRIGHTPINK, RED]),
+		new Column([RED, RED, BLUE, GREEN]),
+		new Column([]),
+		new Column([]),
+	];
+	break;
+
+	case 2.36:
+	var columns = [
+		new Column([WHITE, GREEN, YELLOW, RED]),
+		new Column([WHITE, GREEN, YELLOW, RED]),
+		new Column([BRIGHTPINK, WHITE, BLUE, BRIGHTPINK]),
+		new Column([BLUE, BLUE, RED, BRIGHTPINK]),
+		new Column([GREEN, RED, WHITE, YELLOW]),
+		new Column([BLUE, BRIGHTPINK, YELLOW, GREEN]),
+		new Column([]),
+		new Column([]),
+	];
+	break;
+
+	case 2.37:
+	var columns = [
+		new Column([GREEN, RED, GREEN, YELLOW]),
+		new Column([BRIGHTPINK, GREEN, WHITE, WHITE]),
+		new Column([WHITE, GREEN, BLUE, WHITE]),
+		new Column([BRIGHTPINK, YELLOW, BLUE, YELLOW]),
+		new Column([BLUE, RED, BRIGHTPINK, YELLOW]),
+		new Column([RED, RED, BLUE, BRIGHTPINK]),
+		new Column([]),
+		new Column([]),
+	];
+	break;
+
+	case 2.38:
+	var columns = [
+		new Column([GREEN, BLUE, YELLOW, RED]),
+		new Column([BRIGHTPINK, BRIGHTPINK, BLUE, GREEN]),
+		new Column([YELLOW, BLUE, BRIGHTPINK, YELLOW]),
+		new Column([GREEN, GREEN, RED, RED]),
+		new Column([RED, BRIGHTPINK, BLUE, YELLOW]),
+		new Column([]),
+		new Column([]),
+	];
+	break;
+
+	case 2.39:
+	var columns = [
+		new Column([BRIGHTPINK, RED, YELLOW, BRIGHTPINK]),
+		new Column([WHITE, BRIGHTPINK, GREEN, YELLOW]),
+		new Column([BLUE, RED, GREEN, RED]),
+		new Column([WHITE, BLUE, BLUE, YELLOW]),
+		new Column([YELLOW, RED, GREEN, BRIGHTPINK]),
+		new Column([WHITE, WHITE, GREEN, BLUE]),
+		new Column([]),
+		new Column([]),
+	];
+	break;
+
+	case 2.40:
+	var columns = [
+		new Column([GREEN, BLUE, BRIGHTPINK, RED]),
+		new Column([GREEN, YELLOW, GREEN, RED]),
+		new Column([BLUE, GREEN, BLUE, YELLOW]),
+		new Column([BRIGHTPINK, BRIGHTPINK, RED, BRIGHTPINK]),
+		new Column([RED, BLUE, YELLOW, YELLOW]),
+		new Column([]),
 		new Column([]),
 	];
 	break;
