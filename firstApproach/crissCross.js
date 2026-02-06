@@ -113,10 +113,6 @@ let lstOfCrissCross = [];
 function crissCross(columns2,lstOfCol2,Vcolumn2){
 	console.log("crissCross",lstOfCol2);
 	
-	if(lstOfCol2.length >= columns2.length){
-		return
-		throw Error("to many move");	//nececary?
-	}
 	
 	let lstNextCol = nextCol(lstOfCol2,Vcolumn2);
 	if(lstNextCol.length ==0){
@@ -148,11 +144,11 @@ function crissCross(columns2,lstOfCol2,Vcolumn2){
 			//thisList.push(from);
 			
 			let Vcolumn3 = Vcoppy(Vcolumn2);
-			
+			/*
 			abstract(columns0)
-			console.log("thisList",thisList);
+			console.log("thisList",thisList);/*
 			console.log("Vcolumn3",Vcolumn3);
-			console.log("from2",from,"to",to);
+			console.log("from2",from,"to",to);*/
 			//throw Error("debug");
 			Vupdate(columns0,Vcolumn3,[from,to]);
 			
