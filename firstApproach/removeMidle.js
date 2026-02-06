@@ -7,8 +7,25 @@ var move = require('../tools/move');
 
 
 function emptyBotle(){
-	
 	return columns0.findIndex(x => x.isEmpty())
+}
+
+function otherBotle(col2){
+	let botle = emptyBotle();
+	
+	if(botle ==-1){
+		let thisCol = columns0[col2];
+		let placeToFeed = thisCol.content.length - thisCol.secondBigBall();
+		botle = columns0.findIndex(
+			btl => btl.top() == thisCol.top()
+			&& columns0.indexOf(btl) != col2
+			&& btl.content.length + thisCol.bigBall <=4	//first step
+			&& placeToFeed + btl.bigBall <=4 //last step
+		);
+	
+	}
+	
+	return botle
 }
 
 
@@ -80,18 +97,21 @@ function main(state2){
 	console.log("\nremoveMidle");
 	state = state2;
 	[columns0,lstOfMove]= state
-	abstract(columns0);
-	
-	let emptyBtl = emptyBotle();
-	if(emptyBtl ==-1){return false}
-	
+	//abstract(columns0);
+		
 	let suspect = findSuspect();
 	if(suspect == -1){ return false}
+	console.log("suspect",suspect);
 	
-	let target = getTarget(suspect,emptyBtl);
+	let otherBtl = otherBotle(suspect);
+	if(otherBtl ==-1){return false}
+	console.log("otherBtl",otherBtl);
+	
+	let target = getTarget(suspect,otherBtl);
 	if(target ==-1){return false}
+	console.log("target",target);
 	
-	doTheThing(suspect,emptyBtl,target)
+	doTheThing(suspect,otherBtl,target)
 	abstract(columns0);
 	//throw Error("debug");
 	
