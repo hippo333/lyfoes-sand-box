@@ -690,6 +690,7 @@ function getTheLevel(level){
 	var columns = [
 		new Column([BLUE, YELLOW, BRIGHTPINK, GREEN]),
 		new Column([YELLOW, GREEN, BLUE, BRIGHTPINK]),
+		new Column([YELLOW, RED, GREEN, BLUE]),
 		new Column([YELLOW, BRIGHTPINK, BRIGHTPINK, RED]),
 		new Column([RED, RED, BLUE, GREEN]),
 		new Column([]),
