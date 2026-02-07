@@ -52,6 +52,13 @@ function removeLastTop(lstOfCol2,Vcolumn2){
 	);
 	console.log("  -lstTarget",lstTarget)
 	
+	if(lstTarget.length ==0){
+		lstTarget = Vcolumn2.filter(
+			tgt => tgt[2] == 0
+			&& Vcolumn2.indexOf(tgt) != lastCol	
+		)		
+	}
+	
 	if(lstTarget.length ==0){return []}
 	
 	let target = Vcolumn2.indexOf(lstTarget.find(//color
