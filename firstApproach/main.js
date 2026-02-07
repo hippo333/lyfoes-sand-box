@@ -70,8 +70,8 @@ function main(theLevel){
 		let succes = false;
 		if(!succes){succes= capillarity(state)}
 		if(!succes){succes= crissCross(state)};
-		if(!succes){succes= raining(state)}
 		if(!succes){succes= removeMidle(state)}
+		if(!succes){succes= raining(state)}
 		
 		if(!succes){
 			if(isFinish(columns0)){
@@ -94,7 +94,8 @@ function main(theLevel){
 
 
 //test one level
-//main(2.1);
+//2.1 -2.12, 2.14 -2.17,; 
+main(2.28);
 
 
 var end = new Date().getTime();	//timer
