@@ -89,6 +89,7 @@ function nextCol(lstOfCol,Vcolumn2){
 	//try to finish thisCol
 	if(Vcolumn2[lastCol][1] == Vcolumn2[lastCol][2]){
 		console.log("  lastCol isMono");
+		
 		//throw Error("debug");
 		
 		let toFinish = Vcolumn2.findIndex(
@@ -102,6 +103,7 @@ function nextCol(lstOfCol,Vcolumn2){
 			console.log("for finish",thisMove,"\n");
 			return [thisMove]
 		}
+		console.log("  can't finish");
 	}
 	
 	
@@ -131,19 +133,20 @@ function crissCross(columns2,lstOfCol2,Vcolumn2){
 		console.log("col",col);
 		let from = col;
 		let to = thisList[thisList.length-1];
-		console.log("from0",from,"to",to);
+		//console.log("from0",from,"to",to);
 		
 		if(typeof(from) == "object"){ [from,to] = from}
 		if(typeof(to) == "object"){ to = to[0]}
-		console.log("from1",from,"to",to);
+		//console.log("from1",from,"to",to);
 		
 		thisList.push(col);
 		
 		if(Vcolumn2[from][1] == Vcolumn2[from][2]){//we free a botle
 			console.log("from is monochrome");
-			console.log("  from",from,columns0[from].content);
+			console.log("Vcolumn2[from]",Vcolumn2[from]);
+			//console.log("from2",from,columns0[from].content);
 			//thisList.push(from);
-			console.log("thisList",thisList);
+			//console.log("thisList",thisList);
 			lstOfCrissCross.push(thisList);
 			
 		}else{
@@ -209,7 +212,7 @@ function main(state2){
 	
 	for(let i=0; i<columns0.length; i++){
 		if(columns0[i].isEmpty()){continue}
-		if(columns0[i].isFinish()){continue}
+		if(columns0[i].isMonochrome()){continue}
 		let target = firstEmpty
 		if(target ==-1){
 			target = otherColumn(i)
