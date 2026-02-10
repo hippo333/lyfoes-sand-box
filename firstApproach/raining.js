@@ -4,7 +4,7 @@ var column = require('../tools/column');
 var abstract = require('../tools/abstract');
 var move = require('../tools/move');
 
-
+let nbMaxBall = 4;//default
 
 function emptyBotle(columns2){
 	let emptyBtl = columns0.findIndex(
@@ -157,17 +157,17 @@ function moveToColor(col2){
 			//if the invers move free a column
 			//move the second ball to the color
 			if(columns0[col2].content.length -columns0[col2].bigBall <2){
-				if(thisCol.content.length + columns0[col2].bigBall <= 4){
+				if(thisCol.content.length + columns0[col2].bigBall < nbMaxBall){
 					
 					let colorForLastBall = columns0.findIndex(
 						clr => clr.top() == columns0[col2][0]
 						&& columns0.indexOf(clr) != col2
-						&& clr.content.length + 1 <4					
+						&& clr.content.length + columns0[col2].secondBigBalll() <=nbMaxBall					
 					);
 					
 					if(colorForLastBall !=1){
 						
-						//console.log("the revers move",col2,col);
+						console.log("the revers move",col2,col);
 						move(state,col2,col);//revers move
 						
 						//the col wasn't monochrome
@@ -184,7 +184,7 @@ function moveToColor(col2){
 			
 			
 			//dont Over feed
-			if(thisCol.bigBall + columns0[col2].content.length > 4){continue}
+			if(thisCol.bigBall + columns0[col2].content.length > nbMaxBall){continue}
 			
 			succes0 = true
 			move(state,col,col2);
@@ -225,6 +225,8 @@ function main(state2){
 	state = state2;
 	[columns0,lstOfMove]= state
 	succes0 = false;
+	
+	if(lstOfMove.length ==0){nbMaxBall = columns0[0].content.length}
 	
 	//reset
 	lstByColor = [];

@@ -4,7 +4,7 @@ var column = require('../tools/column');
 var abstract = require('../tools/abstract');
 var move = require('../tools/move');
 var [newVcolumn, Vupdate, Vcoppy] = require('../tools/Vcolumn');
-
+let nbMaxBall = 4; //default
 
 
 function emptyBotle(){
@@ -18,7 +18,7 @@ function otherColumn(col2){
 	let otherCol = columns0.findIndex(
 		cll => cll.top() == theBll
 		&& columns0.indexOf(cll) != col2
-		&& cll.content.length + theBigBll <= 4
+		&& cll.content.length + theBigBll <= nbMaxBall
 	);
 	
 	if(otherCol == -1){
@@ -48,7 +48,7 @@ function removeLastTop(lstOfCol2,Vcolumn2){
 	let lstTarget = Vcolumn2.filter(
 		tgt => tgt[0] == Vcolumn2[lastCol][0]
 		&& Vcolumn2.indexOf(tgt) != lastCol
-		&& tgt[2] + Vcolumn2[lastCol][1] <= 4
+		&& tgt[2] + Vcolumn2[lastCol][1] <= nbMaxBall
 	);
 	console.log("  -lstTarget",lstTarget)
 	
@@ -94,7 +94,7 @@ function nextCol(lstOfCol,Vcolumn2){
 		
 		let toFinish = Vcolumn2.findIndex(
 			cll => cll[0] == secondBll
-			&& cll[2] + Vcolumn2[lastCol][1] <=4
+			&& cll[2] + Vcolumn2[lastCol][1] <=nbMaxBall
 			&& Vcolumn2.indexOf(cll) != lastCol
 		);
 		
@@ -107,11 +107,11 @@ function nextCol(lstOfCol,Vcolumn2){
 	}
 	
 	
-	let placeToFeed = 4-Vcolumn2[lastCol][2];
+	let placeToFeed = nbMaxBall-Vcolumn2[lastCol][2];
 	
 	let lstNextCol = Vcolumn2.filter(
 		nxt => nxt[0] == secondBll
-		&& nxt[1] + Vcolumn2[lastCol][2] <=4
+		&& nxt[1] + Vcolumn2[lastCol][2] <=nbMaxBall
 		&& Vcolumn2.indexOf(nxt) != lastCol		
 	).map(x => Vcolumn2.indexOf(x));	
 	
@@ -205,6 +205,8 @@ function main(state2){
 	state = state2;
 	lstOfCrissCross = []
 	Vcolumn0 = newVcolumn(columns0);
+	
+	if(lstOfMove.length ==0){nbMaxBall = columns0[0].content.length}
 	
 	//if(emptyBotle() == -1){return false}
 	let firstEmpty = emptyBotle();

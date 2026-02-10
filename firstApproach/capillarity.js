@@ -7,19 +7,7 @@ var move = require('../tools/move');
 
 
 function emptyBotle(columns2){
-	
-	let level = columns2[0].content.length;
-	
-	if(level %2 ==0){
-		return columns2.findIndex(x => x.isEmpty())
-	}else{
-		//return columns2.findLastIndexOf(x => x.isEmpty())
-		if(columns2[columns2.length-1].isEmpty()){
-			return columns2.length -1
-		}else{
-			return -1
-		}
-	}
+	return columns2.findIndex(x => x.isEmpty())
 }
 
 
@@ -27,6 +15,7 @@ let columns0 = [];
 let lstOfMove = [];
 let state = [columns0,lstOfMove];
 let succes0 = false;
+let nbMaxBall =4;
 
 //set up
 
@@ -45,7 +34,7 @@ function basic(){
 	let theCol = columns0[col];
 	let secondCol = columns0.findIndex(
 		cll => cll.top() == theCol.top()
-		&& cll.content.length + theCol.bigBall <= 4
+		&& cll.content.length + theCol.bigBall <= nbMaxBall
 		&& columns0.indexOf(cll) != col
 	);
 	if(secondCol == -1){return}
@@ -59,6 +48,7 @@ function main(state2){
 	state = state2;
 	[columns0,lstOfMove]= state
 	succes0 = false;
+	if(lstOfMove.length ==0){nbMaxBall = columns0[0].content.length}
 	
 	basic();
 	

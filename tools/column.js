@@ -7,6 +7,7 @@ var Column = function(contents) {
   		content : [],
   		bigBall : 0,
   		color : 0,
+  		nbMaxBall : 4
   	}
 
   
@@ -36,7 +37,7 @@ var Column = function(contents) {
   	if(this.content.length == 0){
   		return false
   	}else{
-  		return this.content.length ==4
+  		return this.content.length == this.nbMaxBall;
   }	}
   
   obj.isEmpty = function(){

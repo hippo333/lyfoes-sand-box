@@ -1,16 +1,16 @@
 var Column = require('./column');
 var abstract = require('./abstract');
 
+let nbMaxBall = 4
+
 function move(state,from,to){
 	//console.log("__move: from:",from,"to:",to);	
 	
 	let [columns2,lstOfMove2] = state;
 	
-	/*if(from ==5 && to==4 ){
-		abstract(columns2);
-		console.log("lstOfMove",lstOfMove2);
-		throw Error("the error");
-	}//debug*/
+	if(lstOfMove2.length ==0){	//at begening
+		nbMaxBall = columns2[0].content.length;	
+	}
 	
 	
 	
@@ -58,10 +58,11 @@ function move(state,from,to){
 		console.log(`\nfrom ${from}, to ${to}`);
 		throw Error("error Move, no ball From");
 	}
-	if(colTo.length + bigBallFrom >4){
+	if(colTo.length + bigBallFrom > nbMaxBall){
 		console.log("\nError");
 		abstract(columns2);
 		console.log(from,to);
+		console.log("nbMaxBall",nbMaxBall);
 		throw Error("error Move, overFeed ");
 	}
 	
@@ -78,7 +79,9 @@ function move(state,from,to){
 	
 	columns2[to].bigBall += bigBallFrom;
 	columns2[from].newBigBall();
-	//columns2[to].newBigBall();
+	
+	columns2[from].nbMaxBall = nbMaxBall
+	columns2[to].nbMaxBall = nbMaxBall
 	
 	lstOfMove2.push([from,to,bigBallFrom]);//add the move into the history
 }
