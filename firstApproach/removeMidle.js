@@ -19,8 +19,8 @@ function otherBotle(col2){
 		botle = columns0.findIndex(
 			btl => btl.top() == thisCol.top()
 			&& columns0.indexOf(btl) != col2
-			&& btl.content.length + thisCol.bigBall <=4	//first step
-			&& placeToFeed + btl.bigBall <=4 //last step
+			&& btl.content.length + thisCol.bigBall <=nbMaxBall	//first step
+			&& placeToFeed + btl.bigBall <=nbMaxBall //last step
 		);
 	
 	}
@@ -33,6 +33,7 @@ let columns0 = [];
 let lstOfMove = [];
 let state = [columns0,lstOfMove];
 let theEmptyBotle = -1;
+let nbMaxBall = 4;
 
 
 function isSuspect(thisCol2){
@@ -71,7 +72,7 @@ function getTarget(col2,emptyBtl2){
 	
 	let target = columns0.findIndex(
 		tgt => tgt.top() == secondBll
-		&& tgt.content.length + secondBigBll <= 4
+		&& tgt.content.length + secondBigBll <= nbMaxBall
 	);
 	//console.log("target",target);
 	if(target !=-1){return target}
@@ -99,6 +100,8 @@ function main(state2){
 	[columns0,lstOfMove]= state
 	//abstract(columns0);
 		
+	if(lstOfMove.length ==0){nbMaxBall = columns0[0].content.length}
+	
 	let suspect = findSuspect();
 	if(suspect == -1){ return false}
 	console.log("suspect",suspect);
