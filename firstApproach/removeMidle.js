@@ -94,13 +94,16 @@ function doTheThing(col2,emptyBtl2,target2){
 	
 }
 
+function reset(nbMaxBall2){
+	nbMaxBall = nbMaxBall2;
+}
+
 function main(state2){
 	console.log("\nremoveMidle");
 	state = state2;
 	[columns0,lstOfMove]= state
 	//abstract(columns0);
 		
-	if(lstOfMove.length ==0){nbMaxBall = columns0[0].content.length}
 	
 	let suspect = findSuspect();
 	if(suspect == -1){ return false}
@@ -127,6 +130,6 @@ function main(state2){
 
 
 
-module.exports = main
+module.exports = [main,reset]
 
 

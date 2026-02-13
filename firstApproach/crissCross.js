@@ -4,7 +4,6 @@ var column = require('../tools/column');
 var abstract = require('../tools/abstract');
 var move = require('../tools/move');
 var [newVcolumn, Vupdate, Vcoppy] = require('../tools/Vcolumn');
-let nbMaxBall = 4; //default
 
 
 function emptyBotle(){
@@ -32,6 +31,7 @@ let columns0 = [];
 let lstOfMove = [];
 let Vcolumn0 = [];
 let state = [columns0,lstOfMove];
+let nbMaxBall = 4; //default
 
 
 //set up
@@ -44,6 +44,7 @@ function removeLastTop(lstOfCol2,Vcolumn2){
 	let lastCol = lstOfCol2[lstOfCol2.length -1];
 	if(typeof(lastCol) == "object"){lastCol = lastCol[0]};
 	console.log("  -lastCol",lastCol,"ball",Vcolumn2[lastCol][0]);
+	//console.log("  Vcolumn2",Vcolumn2);
 	
 	let lstTarget = Vcolumn2.filter(
 		tgt => tgt[0] == Vcolumn2[lastCol][0]
@@ -51,6 +52,12 @@ function removeLastTop(lstOfCol2,Vcolumn2){
 		&& tgt[2] + Vcolumn2[lastCol][1] <= nbMaxBall
 	);
 	console.log("  -lstTarget",lstTarget)
+	
+	let lstTarget_debug = Vcolumn2.filter(
+		tgt => tgt[0] == Vcolumn2[lastCol][0]
+		&& Vcolumn2.indexOf(tgt) != lastCol
+	);
+	console.log("  -lstTarget_debug",lstTarget_debug,"nbMaxBall",nbMaxBall)
 	
 	if(lstTarget.length ==0){
 		lstTarget = Vcolumn2.filter(
@@ -94,7 +101,7 @@ function nextCol(lstOfCol,Vcolumn2){
 		
 		let toFinish = Vcolumn2.findIndex(
 			cll => cll[0] == secondBll
-			&& cll[2] + Vcolumn2[lastCol][1] <=nbMaxBall
+			&& cll[2] + Vcolumn2[lastCol][1] <= nbMaxBall
 			&& Vcolumn2.indexOf(cll) != lastCol
 		);
 		
@@ -198,6 +205,9 @@ function doCrissCross(lstOfCol2){
 	abstract(columns0);
 }
 
+function reset(nbMaxBall2){
+	nbMaxBall = nbMaxBall2;
+}
 
 function main(state2){
 	console.log("\ncrissCross");
@@ -206,8 +216,7 @@ function main(state2){
 	lstOfCrissCross = []
 	Vcolumn0 = newVcolumn(columns0);
 	
-	if(lstOfMove.length ==0){nbMaxBall = columns0[0].content.length}
-	
+		
 	//if(emptyBotle() == -1){return false}
 	let firstEmpty = emptyBotle();
 	
@@ -236,6 +245,6 @@ function main(state2){
 	}
 }
 
-module.exports = main
+module.exports = [main,reset]
 
 

@@ -217,6 +217,10 @@ function rainingAllColor(){
 	return
 }
 
+function reset(nbMaxBall2){
+	nbMaxBall = nbMaxBall2;
+}
+
 
 	
 
@@ -226,7 +230,6 @@ function main(state2){
 	[columns0,lstOfMove]= state
 	succes0 = false;
 	
-	if(lstOfMove.length ==0){nbMaxBall = columns0[0].content.length}
 	
 	//reset
 	lstByColor = [];
@@ -255,6 +258,6 @@ function main(state2){
 
 
 
-module.exports = main
+module.exports = [main,reset]
 
 

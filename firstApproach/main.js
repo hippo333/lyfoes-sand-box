@@ -3,10 +3,11 @@ var column = require('../tools/column');
 var getTheLevel = require('../level');
 var abstract = require('../tools/abstract');
 var move = require('../tools/move');
-var raining = require('./raining');
-var crissCross = require('./crissCross');
-var capillarity = require('./capillarity');
-var removeMidle = require('./removeMidle');
+
+var [raining,resetRaining] = require('./raining');
+var [crissCross,resetCrissCross] = require('./crissCross');
+var [capillarity,resetCapilarity] = require('./capillarity');
+var [removeMidle,resetRemoveMidle] = require('./removeMidle');
 var whatIsBrocken = require('./whatIsBrocken');
 
 
@@ -52,6 +53,16 @@ function isFinish(columns2){
 	else{return false}
 }
 
+function resetAll(){
+	//console.log("resetAll");
+	let nbMaxBall = columns0[0].content.length;
+	resetCapilarity(nbMaxBall);
+	resetRemoveMidle(nbMaxBall);
+	resetCrissCross(nbMaxBall);
+	resetRaining(nbMaxBall);
+	
+}
+
 let maxCycle = 15;
 function main(theLevel){
 	console.log("main");
@@ -61,6 +72,7 @@ function main(theLevel){
 	lstOfMove = [];
 	state = [columns0,lstOfMove];
 	
+	resetAll();
 	
 	for(let cycle=0;cycle<=maxCycle;cycle++){
 		console.log("cycle",cycle);
