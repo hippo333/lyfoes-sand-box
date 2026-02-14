@@ -53,17 +53,13 @@ function removeLastTop(lstOfCol2,Vcolumn2){
 	);
 	console.log("  -lstTarget",lstTarget)
 	
-	let lstTarget_debug = Vcolumn2.filter(
-		tgt => tgt[0] == Vcolumn2[lastCol][0]
-		&& Vcolumn2.indexOf(tgt) != lastCol
-	);
-	console.log("  -lstTarget_debug",lstTarget_debug,"nbMaxBall",nbMaxBall)
-	
 	if(lstTarget.length ==0){
 		lstTarget = Vcolumn2.filter(
 			tgt => tgt[2] == 0
 			&& Vcolumn2.indexOf(tgt) != lastCol	
 		)		
+		//console.log("  -Vcolumn2",Vcolumn2);
+		console.log("  -emptyBrl",lstTarget);
 	}
 	
 	if(lstTarget.length ==0){return []}
@@ -224,11 +220,14 @@ function main(state2){
 	for(let i=0; i<columns0.length; i++){
 		if(columns0[i].isEmpty()){continue}
 		if(columns0[i].isMonochrome()){continue}
-		let target = firstEmpty
+		
+		let target = otherColumn(i);
 		if(target ==-1){
-			target = otherColumn(i)
+			target = firstEmpty
 			if(target ==-1){continue}
 		}
+		
+		
 		let Vcolumn2 = Vcoppy(Vcolumn0);
 		Vupdate(columns0,Vcolumn2,[i,target])
 		crissCross(columns0,[target,i],Vcolumn2);
