@@ -1146,6 +1146,143 @@ function getTheLevel(level){
 	];
 	break;
 
+	case 3.21:	
+	var columns = [
+		new Column([GREEN, BLUE, WHITE]),
+		new Column([YELLOW, BRIGHTPINK, YELLOW]),
+		new Column([WHITE, GREEN, RED]),
+		new Column([BRIGHTPINK, YELLOW, GREEN]),
+		new Column([BRIGHTPINK, RED, RED]),
+		new Column([BLUE, BLUE, WHITE]),
+		new Column([]),
+	];
+	break;
+
+	case 3.22:	
+	var columns = [
+		new Column([PURPLE, WHITE, BLUE, ORANGE]),
+		new Column([RED, BRIGHTPINK, RED, PURPLE]),
+		new Column([WHITE, RED, GREEN, YELLOW]),
+		new Column([BLUE, LIGHTBLUE, BLUE, YELLOW]),
+		new Column([WHITE, BLUE, LIGHTBLUE, LIGHTBLUE]),
+		new Column([YELLOW, PURPLE, GREEN, WHITE]),
+		new Column([BRIGHTPINK, RED, PURPLE, ORANGE]),
+		new Column([GREEN, YELLOW, ORANGE, GREEN]),
+		new Column([BRIGHTPINK, ORANGE, LIGHTBLUE, BRIGHTPINK]),
+		new Column([]),
+		new Column([]),
+	];
+	break;
+
+	case 3.23:	
+	var columns = [
+		new Column([BLUE, WHITE, RED]),
+		new Column([WHITE, RED, BRIGHTPINK]),
+		new Column([GREEN, GREEN, YELLOW]),
+		new Column([BLUE, RED, BLUE]),
+		new Column([YELLOW, YELLOW, BRIGHTPINK]),
+		new Column([GREEN, BRIGHTPINK, WHITE]),
+		new Column([]),
+	];
+	break;
+
+	case 3.24:	
+	var columns = [
+		new Column([BRIGHTPINK, RED, BRIGHTPINK]),
+		new Column([BLUE, RED, BLUE]),
+		new Column([GREEN, BRIGHTPINK, GREEN]),
+		new Column([WHITE, WHITE, WHITE]),
+		new Column([YELLOW, GREEN, YELLOW]),
+		new Column([BLUE, RED, YELLOW]),
+		new Column([]),
+	];
+	break;
+
+	case 3.25:	
+	var columns = [
+		new Column([WHITE, BRIGHTPINK, WHITE, ORANGE]),
+		new Column([YELLOW, BLUE, RED, BLUE]),
+		new Column([RED, WHITE, BRIGHTPINK, LIGHTBLUE]),
+		new Column([RED, YELLOW, WHITE, ORANGE]),
+		new Column([LIGHTBLUE, BRIGHTPINK, GREEN, BLUE]),
+		new Column([BRIGHTPINK, LIGHTBLUE, GREEN, GREEN]),
+		new Column([ORANGE, ORANGE, BLUE, LIGHTBLUE]),
+		new Column([YELLOW, RED, YELLOW, GREEN]),
+		new Column([]),
+		new Column([]),
+	];
+	break;
+
+	case 3.26:	
+	var columns = [
+		new Column([YELLOW, WHITE, WHITE, LIGHTBLUE]),
+		new Column([RED, YELLOW, WHITE, WHITE]),
+		new Column([YELLOW, GREEN, RED, BLUE]),
+		new Column([BLUE, BRIGHTPINK, BRIGHTPINK, YELLOW]),
+		new Column([ORANGE, GREEN, ORANGE, BRIGHTPINK]),
+		new Column([BLUE, RED, GREEN, ORANGE]),
+		new Column([RED, LIGHTBLUE, GREEN, LIGHTBLUE]),
+		new Column([BRIGHTPINK, LIGHTBLUE, ORANGE, BLUE]),
+		new Column([]),
+		new Column([]),
+	];
+	break;
+
+	case 3.27:	
+	var columns = [
+		new Column([BLUE, BLUE, BRIGHTPINK]),
+		new Column([WHITE, YELLOW, WHITE]),
+		new Column([RED, BRIGHTPINK, GREEN]),
+		new Column([RED, YELLOW, BLUE]),
+		new Column([YELLOW, RED, GREEN]),
+		new Column([WHITE, BRIGHTPINK, GREEN]),
+		new Column([]),
+	];
+	break;
+
+	case 3.28:	
+	var columns = [
+		new Column([WHITE, LIGHTBLUE, BRIGHTPINK, BRIGHTPINK]),
+		new Column([RED, LIGHTBLUE, BLUE, ORANGE]),
+		new Column([RED, YELLOW, BLUE, GREEN]),
+		new Column([YELLOW, BRIGHTPINK, WHITE, RED]),
+		new Column([WHITE, GREEN, GREEN, RED]),
+		new Column([BLUE, WHITE, ORANGE, YELLOW]),
+		new Column([LIGHTBLUE, BLUE, BRIGHTPINK, BLUE]),
+		new Column([ORANGE, GREEN, ORANGE, YELLOW]),
+		new Column([]),
+		new Column([]),
+	];
+	break;
+
+	case 3.29:	
+	var columns = [
+		new Column([LIGHTBLUE, LIGHTBLUE, BRIGHTPINK, RED]),
+		new Column([WHITE, ORANGE, BLUE, GREEN]),
+		new Column([LIGHTBLUE, PURPLE, YELLOW, BLUE]),
+		new Column([WHITE, YELLOW, BRIGHTPINK, BLUE]),
+		new Column([ORANGE, YELLOW, LIGHTBLUE, BLUE]),
+		new Column([PURPLE, GREEN, RED, YELLOW]),
+		new Column([GREEN, GREEN, PURPLE, BRIGHTPINK]),
+		new Column([RED, WHITE, PURPLE, WHITE]),
+		new Column([ORANGE, BRIGHTPINK,RED, ORANGE]),
+		new Column([]),
+		new Column([]),
+	];
+	break;
+
+	case 3.30:	
+	var columns = [
+		new Column([RED, BLUE, GREEN]),
+		new Column([BRIGHTPINK, WHITE, RED]),
+		new Column([WHITE, GREEN, BLUE]),
+		new Column([BLUE, BRIGHTPINK, YELLOW]),
+		new Column([BRIGHTPINK, RED, YELLOW]),
+		new Column([YELLOW, GREEN, WHITE]),
+		new Column([]),
+	];
+	break;
+
 	case 3.99:	
 	var columns = [
 		new Column([]),
