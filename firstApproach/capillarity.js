@@ -40,7 +40,8 @@ function basic(){
 	if(secondCol == -1){return}
 	console.log("secondCol",secondCol);
 	move(state,col,secondCol);
-	succes0 = true;
+	//succes0 = true;
+	succes0 = "capilarity";
 }
 
 function reset(nbMaxBall2){

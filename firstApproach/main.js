@@ -63,6 +63,7 @@ function resetAll(){
 	
 }
 
+let history = [];
 let maxCycle = 15;
 function main(theLevel){
 	console.log("main");
@@ -71,6 +72,7 @@ function main(theLevel){
 	
 	lstOfMove = [];
 	state = [columns0,lstOfMove];
+	history = [];
 	
 	resetAll();
 	
@@ -91,6 +93,7 @@ function main(theLevel){
 				console.log("\nwe did it",theLevel);
 				abstract(columns0);
 				console.log("lstOfMove",lstOfMove);
+				console.log("history",history);
 				return
 			}else{
 				console.log("\nfail at",cycle);
@@ -104,6 +107,8 @@ function main(theLevel){
 				return
 				
 			}
+		}else{
+			history.push([succes,lstOfMove.length]); //*/
 		}
 	}
 }
@@ -112,7 +117,7 @@ function main(theLevel){
 
 //test one level
 //2.1 -2.12, 2.14 -2.17,; 
-main(3.05);
+main(3.1);
 
 
 var end = new Date().getTime();	//timer

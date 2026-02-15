@@ -122,7 +122,8 @@ function main(state2){
 	//throw Error("debug");
 	
 	console.log("removeMidle",true);
-	return true;
+	//return true;
+	return "removeMidle"
 }
 
 

@@ -100,7 +100,8 @@ function newColor(){
 		return false
 	}
 	
-	succes0 = true
+	//succes0 = true
+	succes0 = "raining";
 	
 	for(thisCol of lstCol){
 		if(thisCol == target){continue}
@@ -186,7 +187,8 @@ function moveToColor(col2){
 			//dont Over feed
 			if(thisCol.bigBall + columns0[col2].content.length > nbMaxBall){continue}
 			
-			succes0 = true
+			//succes0 = true
+			succes0 = "raining";
 			move(state,col,col2);
 			newTarget2.push(col);
 			//console.log("add col",col);

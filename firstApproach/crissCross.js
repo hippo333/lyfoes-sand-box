@@ -240,7 +240,8 @@ function main(state2){
 		return false
 	}else{
 		doCrissCross(lstOfCrissCross[0]);
-		return true
+		//return true
+		return "crisscross"
 	}
 }
 
