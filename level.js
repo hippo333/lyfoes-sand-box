@@ -1248,7 +1248,7 @@ function getTheLevel(level){
 		new Column([YELLOW, BRIGHTPINK, WHITE, RED]),
 		new Column([WHITE, GREEN, GREEN, RED]),
 		new Column([BLUE, WHITE, ORANGE, YELLOW]),
-		new Column([LIGHTBLUE, BLUE, BRIGHTPINK, BLUE]),
+		new Column([LIGHTBLUE, BLUE, BRIGHTPINK, LIGHTBLUE]),
 		new Column([ORANGE, GREEN, ORANGE, YELLOW]),
 		new Column([]),
 		new Column([]),
