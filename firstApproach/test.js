@@ -19,6 +19,10 @@ for(level of levelToTest3){
 	}
 }
 
+
+
+
+
 console.log(lstError);
 
 var end = new Date().getTime();	//timer

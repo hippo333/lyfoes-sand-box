@@ -122,6 +122,7 @@ function nextCol(lstOfCol,Vcolumn2){
 }
 
 let lstOfCrissCross = [];
+let previousLst = [];
 function crissCross(columns2,lstOfCol2,Vcolumn2){
 	console.log("crissCross",lstOfCol2);
 	
@@ -170,6 +171,28 @@ function crissCross(columns2,lstOfCol2,Vcolumn2){
 	}
 }
 
+function findCrissCross(){
+	console.log("findCrissCross");
+	
+	let firstEmpty = emptyBotle();
+	
+	
+	for(let i=0; i<columns0.length; i++){
+		if(columns0[i].isEmpty()){continue}
+		if(columns0[i].isMonochrome()){continue}
+		
+		let target = otherColumn(i);
+		if(target ==-1){
+			target = firstEmpty
+			if(target ==-1){continue}
+		}
+		
+		
+		let Vcolumn2 = Vcoppy(Vcolumn0);
+		Vupdate(columns0,Vcolumn2,[i,target])
+		crissCross(columns0,[target,i],Vcolumn2);
+	}	
+}
 
 function doCrissCross(lstOfCol2){
 	console.log("doCrissCross",lstOfCol2);
@@ -205,32 +228,24 @@ function reset(nbMaxBall2){
 	nbMaxBall = nbMaxBall2;
 }
 
-function main(state2){
+function main(state2, lastFaill){
 	console.log("\ncrissCross");
 	[columns0,lstOfMove] = state2;
 	state = state2;
 	lstOfCrissCross = []
 	Vcolumn0 = newVcolumn(columns0);
 	
-		
-	//if(emptyBotle() == -1){return false}
-	let firstEmpty = emptyBotle();
-	
-	
-	for(let i=0; i<columns0.length; i++){
-		if(columns0[i].isEmpty()){continue}
-		if(columns0[i].isMonochrome()){continue}
-		
-		let target = otherColumn(i);
-		if(target ==-1){
-			target = firstEmpty
-			if(target ==-1){continue}
-		}
-		
-		
-		let Vcolumn2 = Vcoppy(Vcolumn0);
-		Vupdate(columns0,Vcolumn2,[i,target])
-		crissCross(columns0,[target,i],Vcolumn2);
+	switch (lastFaill){
+		case "raining": return false
+		case "crissCross":
+			if( previousLst.length ==0){return false}
+			lstOfCrissCross = previousLst;
+			lstOfCrissCross.shift()
+			break;
+		default :
+			previousLst = lstOfCrissCross;
+			findCrissCross();
+			break
 	}
 	
 	let firstCrissCross = lstOfCrissCross[0];

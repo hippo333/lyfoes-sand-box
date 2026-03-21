@@ -48,11 +48,12 @@ function reset(nbMaxBall2){
 	nbMaxBall = nbMaxBall2;
 }	
 
-function main(state2){
+function main(state2, newOne){
 	console.log("\ncapillarity");
 	state = state2;
 	[columns0,lstOfMove]= state
 	succes0 = false;
+	
 	
 	basic();
 	

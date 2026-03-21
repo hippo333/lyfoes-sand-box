@@ -8,7 +8,7 @@ var [raining,resetRaining] = require('./raining');
 var [crissCross,resetCrissCross] = require('./crissCross');
 var [capillarity,resetCapilarity] = require('./capillarity');
 var [removeMidle,resetRemoveMidle] = require('./removeMidle');
-var whatIsBrocken = require('./whatIsBrocken');
+var [whatIsBrocken,resetWhatIsBrocken] = require('./whatIsBrocken');
 
 
 let lstOfMove = [];
@@ -43,6 +43,8 @@ function theOtherCol(col2){
 }
 
 
+
+
 function isFinish(columns2){
 	console.log("\nisFinish");
 	let unfinishedCol = columns2.findIndex(
@@ -60,6 +62,7 @@ function resetAll(){
 	resetRemoveMidle(nbMaxBall);
 	resetCrissCross(nbMaxBall);
 	resetRaining(nbMaxBall);
+	resetWhatIsBrocken(nbMaxBall);
 	
 }
 
@@ -73,8 +76,10 @@ function main(theLevel){
 	lstOfMove = [];
 	state = [columns0,lstOfMove];
 	history = [];
+	let countOfFix = 0;
 	
 	resetAll();
+	let lastFaill = null; //false if we rewind
 	
 	for(let cycle=0;cycle<=maxCycle;cycle++){
 		console.log("cycle",cycle);
@@ -83,11 +88,12 @@ function main(theLevel){
 		if(cycle == maxCycle){throw Error("to Many Cycle");}
 		
 		let succes = false;
-		if(!succes){succes= capillarity(state)}
-		if(!succes){succes= removeMidle(state)}
-		if(!succes){succes= crissCross(state)};
-		if(!succes){succes= raining(state)}
+		if(!succes){succes= capillarity(state, lastFaill)}
+		if(!succes){succes= removeMidle(state, lastFaill)}
+		if(!succes){succes= crissCross(state, lastFaill)};
+		if(!succes){succes= raining(state, lastFaill)}
 		
+		lastFaill = null;
 		if(!succes){
 			if(isFinish(columns0)){
 				console.log("\nwe did it",theLevel);
@@ -100,11 +106,14 @@ function main(theLevel){
 				console.log("lstOfMove",lstOfMove);
 				abstract(columns0);
 				
-				//whatIsBrocken(state);
+				lastFaill = history[history.length -1][0];
+				whatIsBrocken(state,history);
+				countOfFix++;
+				console.log("countOfFix",countOfFix);
+				console.log("history",history);
 				
+				//throw Error("can't move animore");
 				
-				throw Error("can't move animore");
-				return
 				
 			}
 		}else{
@@ -117,7 +126,7 @@ function main(theLevel){
 
 //test one level
 //2.1 -2.12, 2.14 -2.17,; 
-main(3.1);
+main(3.24);
 
 
 var end = new Date().getTime();	//timer

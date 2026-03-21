@@ -32,7 +32,7 @@ let succes0 = false;
 
 
 let lstByColor = [];
-let mostPresent = [-1,[]];
+let previousLst = [];
 
 function addToTheList(col,color){
 	let theColor = lstByColor.find(
@@ -45,17 +45,17 @@ function addToTheList(col,color){
 	}	
 	theColor[1].push(col);	
 	
-	
+	/*
 	if(theColor[1].length > mostPresent[1].length){
 		mostPresent = theColor;
-	}
+	}//*/
 }
 
 //newColor
 function mostPresentBall(){
 	
 	lstByColor =[];
-	mostPresent = [-1,[]];
+	//mostPresent = [-1,[]];
 	
 	for(let col=0; col< columns0.length; col++){
 		let theCol = columns0[col];
@@ -66,24 +66,27 @@ function mostPresentBall(){
 		
 		addToTheList(col,theColor);		
 	}	
+	
+	lstByColor.sort((a,b) => b[1].length -a[1].length);
+	
+	console.log("lstByColor",lstByColor);
+	//throw Error("debug");
+	
 }
 
 
-/*
-console.log("lstByColor",lstByColor);
-console.log("theMost Present",mostPresent);
-*/
 
 let nextTarget = [];
 
 function newColor(){
 	console.log("newColor");
-	let lstCol = mostPresent[1]
-	if(mostPresent[0] ==-1){
-		succes0 = false;
-		console.log("no mostPresent");
-		return false
-	}
+	
+	if(lstByColor.length ==0){return false}
+	let mostPresent = lstByColor[0];
+	console.log("lstByColor",lstByColor);
+	
+	let lstCol = mostPresent[1];
+	console.log("lstCol",lstCol);
 	
 	let target = columns0.findIndex(
 		x => x.isMonochrome()
@@ -91,6 +94,7 @@ function newColor(){
 	);
 	if(target ==-1){
 		target= emptyBotle(columns0);
+		console.log("take empty to target");
 	}
 	console.log("target",target);
 	
@@ -226,19 +230,21 @@ function reset(nbMaxBall2){
 
 	
 
-function main(state2){
+function main(state2, lastFaill){
 	console.log("\nraining");
 	state = state2;
 	[columns0,lstOfMove]= state
 	succes0 = false;
 	
+	if(lastFaill == "raining"){
+		if(previousLst.length ==0){return false}
+		lstByColor = previousLst;
+		lstByColor.shift()
+	}else{
+		previousLst = lstByColor;
+		mostPresentBall()
+	}
 	
-	//reset
-	lstByColor = [];
-	mostPresent = [-1,[]];
-	
-	//console.log("mostPresent Ball");
-	mostPresentBall();
 	
 	//console.log("new Color");
 	let succes2 = newColor();

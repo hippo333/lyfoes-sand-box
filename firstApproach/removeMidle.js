@@ -34,6 +34,8 @@ let lstOfMove = [];
 let state = [columns0,lstOfMove];
 let theEmptyBotle = -1;
 let nbMaxBall = 4;
+let suspects = []
+let previousLst = [];
 
 
 function isSuspect(thisCol2){
@@ -56,9 +58,9 @@ function isSuspect(thisCol2){
 function findSuspect(){
 	//console.log("findSuspect");
 	
-	let theSuspect = columns0.findIndex(
+	let theSuspect = columns0.filter(
 		cll => isSuspect(cll)		
-	);
+	).map(x => columns0.indexOf(x));
 	
 	return theSuspect
 }
@@ -98,15 +100,30 @@ function reset(nbMaxBall2){
 	nbMaxBall = nbMaxBall2;
 }
 
-function main(state2){
+function main(state2, lastFaill){
 	console.log("\nremoveMidle");
 	state = state2;
 	[columns0,lstOfMove]= state
 	//abstract(columns0);
-		
 	
-	let suspect = findSuspect();
-	if(suspect == -1){ return false}
+	switch (lastFaill){
+		case "raining": return false;
+		case "crisscross": return false;
+		case "removeMiddle":
+			if(suspects.length == 0){return false}
+				suspects = previousLst;
+				suspects.shift()
+				break;
+		default: 
+			previousLst = suspects;
+			suspects = findSuspect(); 
+			break;
+	}
+	
+	
+	console.log("suspects",suspects);
+	let suspect = suspects[0];
+	if(suspect == undefined){ return false}
 	console.log("suspect",suspect);
 	
 	let otherBtl = otherBotle(suspect);
