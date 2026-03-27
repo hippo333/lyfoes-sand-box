@@ -51,6 +51,8 @@ function isFinish(columns2){
 		cll => !cll.isEmpty()
 		&& !cll.isFinish()	
 	);
+	console.log("unfinishedCol",columns2[3].nbMaxBall);
+	
 	if(unfinishedCol == -1){return true}
 	else{return false}
 }
@@ -64,19 +66,23 @@ function resetAll(){
 	resetRaining(nbMaxBall);
 	resetWhatIsBrocken(nbMaxBall);
 	
+	columns0.map(x => x.nbMaxBall = nbMaxBall);
 }
 
 let history = [];
-let maxCycle = 15;
+let maxCycle = 16;
 function main(theLevel){
 	console.log("main");
 	
+	let columns = getTheLevel(theLevel);
 	columns0 = getTheLevel(theLevel);
 	
 	lstOfMove = [];
 	state = [columns0,lstOfMove];
 	history = [];
 	let countOfFix = 0;
+	
+	
 	
 	resetAll();
 	let lastFaill = null; //false if we rewind
@@ -97,7 +103,7 @@ function main(theLevel){
 		if(!succes){
 			if(isFinish(columns0)){
 				console.log("\nwe did it",theLevel);
-				abstract(columns0);
+				abstract(columns);
 				console.log("lstOfMove",lstOfMove);
 				console.log("history",history);
 				return
@@ -126,7 +132,7 @@ function main(theLevel){
 
 //test one level
 //2.1 -2.12, 2.14 -2.17,; 
-main(3.24);
+//main(3.24);
 
 
 var end = new Date().getTime();	//timer
