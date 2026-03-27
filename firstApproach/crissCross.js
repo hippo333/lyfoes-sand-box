@@ -39,11 +39,11 @@ let nbMaxBall = 4; //default
 
 //nextCol
 function removeLastTop(lstOfCol2,Vcolumn2){
-	console.log("  -removeTop");
+	//console.log("  -removeTop");
 	
 	let lastCol = lstOfCol2[lstOfCol2.length -1];
 	if(typeof(lastCol) == "object"){lastCol = lastCol[0]};
-	console.log("  -lastCol",lastCol,"ball",Vcolumn2[lastCol][0]);
+	//console.log("  -lastCol",lastCol,"ball",Vcolumn2[lastCol][0]);
 	//console.log("  Vcolumn2",Vcolumn2);
 	
 	let lstTarget = Vcolumn2.filter(
@@ -51,7 +51,7 @@ function removeLastTop(lstOfCol2,Vcolumn2){
 		&& Vcolumn2.indexOf(tgt) != lastCol
 		&& tgt[2] + Vcolumn2[lastCol][1] <= nbMaxBall
 	);
-	console.log("  -lstTarget",lstTarget)
+	//console.log("  -lstTarget",lstTarget)
 	
 	if(lstTarget.length ==0){
 		lstTarget = Vcolumn2.filter(
@@ -59,7 +59,7 @@ function removeLastTop(lstOfCol2,Vcolumn2){
 			&& Vcolumn2.indexOf(tgt) != lastCol	
 		)		
 		//console.log("  -Vcolumn2",Vcolumn2);
-		console.log("  -emptyBrl",lstTarget);
+		//console.log("  -emptyBrl",lstTarget);
 	}
 	
 	if(lstTarget.length ==0){return []}
@@ -73,21 +73,21 @@ function removeLastTop(lstOfCol2,Vcolumn2){
 	}
 	if(target == -1){return []}
 	
-	console.log("  -target",target);
+	//console.log("  -target",target);
 	let thisMove = [lastCol,target];
 	return [thisMove]
 }
 
 
 function nextCol(lstOfCol,Vcolumn2){
-	console.log("  nextCol");
+	//console.log("  nextCol");
 	
 	let lastCol = lstOfCol[lstOfCol.length -1];
 	if(typeof(lastCol) == "object"){lastCol = lastCol[0]}
 	
 	let thisCol = columns0[lastCol];
 	let secondBll = Vcolumn2[lastCol][0];
-	console.log("  lastCol",lastCol,"secondBll",secondBll);
+	//console.log("  lastCol",lastCol,"secondBll",secondBll);
 	
 	//try to finish thisCol
 	if(Vcolumn2[lastCol][1] == Vcolumn2[lastCol][2]){
@@ -116,7 +116,16 @@ function nextCol(lstOfCol,Vcolumn2){
 		nxt => nxt[0] == secondBll
 		&& nxt[1] + Vcolumn2[lastCol][2] <=nbMaxBall
 		&& Vcolumn2.indexOf(nxt) != lastCol		
-	).map(x => Vcolumn2.indexOf(x));	
+	).map(x => Vcolumn2.indexOf(x));
+	
+	let lstRevers = Vcolumn2.filter(
+		rv => rv[0] == secondBll
+		&& rv[2] + Vcolumn2[lastCol][1] <= nbMaxBall
+		&& Vcolumn2.indexOf(rv) != lastCol
+	).map(x => [lastCol, Vcolumn2.indexOf(x)]);	
+	lstNextCol = lstNextCol.concat(lstRevers);
+	console.log("lstRevers",lstRevers);
+	
 	
 	return lstNextCol
 }
