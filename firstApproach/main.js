@@ -8,7 +8,7 @@ var [raining,resetRaining] = require('./raining');
 var [crissCross,resetCrissCross] = require('./crissCross');
 var [capillarity,resetCapilarity] = require('./capillarity');
 var [removeMidle,resetRemoveMidle] = require('./removeMidle');
-var [whatIsBrocken,resetWhatIsBrocken] = require('./whatIsBrocken');
+var [tryOtherOne,resetTryOtherOne] = require('./tryOtherOne');
 
 
 let lstOfMove = [];
@@ -51,7 +51,6 @@ function isFinish(columns2){
 		cll => !cll.isEmpty()
 		&& !cll.isFinish()	
 	);
-	console.log("unfinishedCol",columns2[3].nbMaxBall);
 	
 	if(unfinishedCol == -1){return true}
 	else{return false}
@@ -64,7 +63,7 @@ function resetAll(){
 	resetRemoveMidle(nbMaxBall);
 	resetCrissCross(nbMaxBall);
 	resetRaining(nbMaxBall);
-	resetWhatIsBrocken(nbMaxBall);
+	resetTryOtherOne(nbMaxBall);
 	
 	columns0.map(x => x.nbMaxBall = nbMaxBall);
 }
@@ -80,8 +79,8 @@ function main(theLevel){
 	lstOfMove = [];
 	state = [columns0,lstOfMove];
 	history = [];
-	let countOfFix = 0;
-	
+	let countOfTry = 0;
+	maxCycle =20 +columns0.length;
 	
 	
 	resetAll();
@@ -113,12 +112,13 @@ function main(theLevel){
 				abstract(columns0);
 				
 				lastFaill = history[history.length -1][0];
-				whatIsBrocken(state,history);
-				countOfFix++;
+				tryOtherOne(state,history);
+				countOfTry++;
+				cycle -=2;
 				console.log("countOfFix",countOfFix);
 				console.log("history",history);
 				
-				//throw Error("can't move animore");
+				if(countOfFix >5){throw Error("to many fix")};
 				
 				
 			}
@@ -132,7 +132,7 @@ function main(theLevel){
 
 //test one level
 //2.1 -2.12, 2.14 -2.17,; 
-//main(3.24);
+main(4.01);
 
 
 var end = new Date().getTime();	//timer

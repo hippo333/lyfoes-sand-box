@@ -60,6 +60,8 @@ function move(state,from,to){
 	}
 	if(colTo.length + bigBallFrom > nbMaxBall){
 		console.log("\nError");
+		console.log("colTo",colTo);
+		console.log("bigBallFrom",bigBallFrom);
 		abstract(columns2);
 		console.log(from,to);
 		console.log("nbMaxBall",nbMaxBall);
