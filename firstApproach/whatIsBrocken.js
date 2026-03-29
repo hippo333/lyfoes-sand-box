@@ -4,6 +4,7 @@ var column = require('../tools/column');
 var abstract = require('../tools/abstract');
 var move = require('../tools/move');
 var [price,resetPrice] = require('./price');
+var [newVcolumn, Vupdate, Vcoppy] = require('../tools/Vcolumn');
 
 
 
@@ -14,6 +15,8 @@ function emptyBotle(){
 
 let columns0 = [];
 let lstOfMove = [];
+let history = [];
+let Vcolumn = [];
 let state = [columns0,lstOfMove];
 let succes0 = false;
 let nbMaxBall = 4;
@@ -22,20 +25,23 @@ let nbMaxBall = 4;
 //set up
 
 
-function findNbMv(history2){
-	let lastMv = history2[history2.length -1];
-	let mvBefor = history2[history2.length -2];
-	if(mvBefor == undefined){mvBefor = [null,0]}
+function findProblem(){
+	console.log("findProblem");
 	
-	let nbOfMv = lastMv[1] - mvBefor[1];
-	return nbOfMv
+	let theTriple = Vcolumn.findIndex(
+		tr => tr[1] ==nbMaxBall-1
+		&& tr[2] == nbMaxBall
+	);
+	console.log("theTriple",theTriple);
+	
+	return theTriple
 }
 
 function removeLastMv(){
-	console.log("removeLastMv")
+	//console.log("removeLastMv")
 	
 	let lastMv = lstOfMove.pop();
-	console.log("lastMv",lastMv);
+	//console.log("lastMv",lastMv);
 	
 	let [from,to,bigBll] = lastMv;
 	let colFrom = columns0[from];
@@ -47,15 +53,37 @@ function removeLastMv(){
 	colTo.bigBall -= bigBll
 	colFrom.bigBall = bigBll
 	
-	abstract(columns0);
+	//abstract(columns0);
 }
 
 function removeNbMove(nb){
-	console.log("removeNbMove",nb);
+	//console.log("removeNbMove",nb);
 	
 	for(let i=0; i<nb; i++){
 		removeLastMv();
 	}
+}
+
+
+function wayBack(col2){
+	console.log("wayBack",col2);
+	
+	let lstOfMoveRevers = [...lstOfMove].reverse();
+	let theCut = 1+ lstOfMoveRevers.findIndex(
+		ct => ct[1] == col2		
+	);
+	
+	let historyRevers = [...history].reverse();
+	let theCount = historyRevers.find(
+		cnt => cnt[1] <= lstOfMove.length -theCut -1
+	);
+	theCut = lstOfMove.length -theCount[1]
+	//go to last history befor
+	
+	removeNbMove(theCut);
+	
+	console.log("lstOfMove",lstOfMove);
+	abstract(columns0);
 }
 
 
@@ -64,15 +92,16 @@ function reset(nbMaxBall2){
 	resetPrice(nbMaxBall2);
 }
 
-function main(state2,history){
+function main(state2,history2){
 	console.log("\nwhatIsBrocken");
 	[columns0,lstOfMove] = state2;
+	history = history2
+	Vcolumn = newVcolumn(columns0);
 	
-	console.log("history",history);
-	lastNbMv = findNbMv(history);
+	abstract(columns0);
 	
-	removeNbMove(lastNbMv);
-	history.pop();	
+	let theProblem = findProblem();
+	wayBack(theProblem);
 	
 	//throw Error("debug");
 }
