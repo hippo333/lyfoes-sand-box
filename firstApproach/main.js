@@ -9,6 +9,7 @@ var [crissCross,resetCrissCross] = require('./crissCross');
 var [capillarity,resetCapilarity] = require('./capillarity');
 var [removeMidle,resetRemoveMidle] = require('./removeMidle');
 var [tryOtherOne,resetTryOtherOne] = require('./tryOtherOne');
+var [whatIsBrocken,resetWhatIsBrocken] = require('./whatIsBrocken');
 
 
 let lstOfMove = [];
@@ -64,6 +65,7 @@ function resetAll(){
 	resetCrissCross(nbMaxBall);
 	resetRaining(nbMaxBall);
 	resetTryOtherOne(nbMaxBall);
+	resetWhatIsBrocken(nbMaxBall);
 	
 	columns0.map(x => x.nbMaxBall = nbMaxBall);
 }
@@ -115,10 +117,13 @@ function main(theLevel){
 				tryOtherOne(state,history);
 				countOfTry++;
 				cycle -=2;
-				console.log("countOfFix",countOfFix);
+				console.log("countOfTry",countOfTry);
 				console.log("history",history);
 				
-				if(countOfFix >5){throw Error("to many fix")};
+				if(countOfTry >5){
+					whatIsBrocken(state,history);
+					throw Error("to many fix")
+				};
 				
 				
 			}
