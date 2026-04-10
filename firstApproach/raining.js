@@ -16,6 +16,7 @@ function emptyBotle(columns2){
 
 let columns0 = [];
 let lstOfMove = [];
+let history = [];
 let state = [columns0,lstOfMove];
 let succes0 = false;
 
@@ -68,6 +69,7 @@ function mostPresentBall(){
 	}	
 	
 	lstByColor.sort((a,b) => b[1].length -a[1].length);
+	lstByColor = lstByColor.filter(x => x[1].length >=2);
 	
 	console.log("lstByColor",lstByColor);
 	//throw Error("debug");
@@ -83,10 +85,8 @@ function newColor(){
 	
 	if(lstByColor.length ==0){return false}
 	let mostPresent = lstByColor[0];
-	console.log("lstByColor",lstByColor);
 	
 	let lstCol = mostPresent[1];
-	console.log("lstCol",lstCol);
 	
 	let target = columns0.findIndex(
 		x => x.isMonochrome()
@@ -225,6 +225,7 @@ function rainingAllColor(){
 
 function reset(nbMaxBall2){
 	nbMaxBall = nbMaxBall2;
+	history = [];
 }
 
 
@@ -236,25 +237,49 @@ function main(state2, lastFaill){
 	[columns0,lstOfMove]= state
 	succes0 = false;
 	
-	if(lastFaill == "raining"){
-		if(previousLst.length ==0){return false}
-		lstByColor = previousLst;
-		lstByColor.shift()
+	//findLast
+	let lastId = history.length -1 -[...history].reverse().findIndex(
+		lst => lst < lstOfMove.length	
+	);
+	if(lastId == history.length){lastId =0};
+	let lastTime = history[lastId];
+	
+	console.log("history0",history);
+	console.log("lastTime",lastId,lastTime);
+	console.log("lstOfMove",lstOfMove.length);
+		
+	history = history.slice(0,lastId+2);	
+	
+	
+	if(lastTime == lstOfMove.length){	//we back to same level
+		lstByColor = history[lastId +1];
+		lstByColor.shift();
+		console.log("lstByColor",lstByColor);
+			
+		//keep lstByColor to avoid loop
+		if(lstByColor.length ==0){return succes0}
 	}else{
-		previousLst = lstByColor;
-		mostPresentBall()
+		mostPresentBall();
+		history.push(lstOfMove.length, lstByColor);	
+		
+		console.log("history1",history);
+		if(history.length >8 || lstOfMove.length ==12){
+			throw Error("debug");	
+		}
 	}
+	
 	
 	
 	//console.log("new Color");
 	let succes2 = newColor();
-	if(succes2 = false){return false}
+	if(succes2 == false){return false}
 	
 	//console.log("raining all color");
 	rainingAllColor()
 	
 	//abstract(columns0);
 	//console.log("after raining",lstOfMove,"succes0",succes0);
+	//throw Error("we raining");
 	console.log("raining",succes0);
 	return succes0;
 }
