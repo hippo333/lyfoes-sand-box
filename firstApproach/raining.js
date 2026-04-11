@@ -230,45 +230,49 @@ function reset(nbMaxBall2){
 
 
 	
-
+let second = false;//debug
 function main(state2, lastFaill){
 	console.log("\nraining");
 	state = state2;
 	[columns0,lstOfMove]= state
 	succes0 = false;
 	
-	//findLast
-	let lastId = history.length -1 -[...history].reverse().findIndex(
-		lst => lst < lstOfMove.length	
-	);
-	if(lastId == history.length){lastId =0};
-	let lastTime = history[lastId];
+	//console.log("history0",history);
+	//console.log("lstOfMove.length",lstOfMove.length);
 	
-	console.log("history0",history);
-	console.log("lastTime",lastId,lastTime);
-	console.log("lstOfMove",lstOfMove.length);
+	for(let bloc =history.length -1; bloc>=0; bloc--){
+		console.log("bloc",bloc);
+		let thisElement = history[bloc];
 		
-	history = history.slice(0,lastId+2);	
-	
-	
-	if(lastTime == lstOfMove.length){	//we back to same level
-		lstByColor = history[lastId +1];
-		lstByColor.shift();
-		console.log("lstByColor",lstByColor);
+		if(thisElement[0] >  lstOfMove.length){
+			history.pop();
+		}
+		else if(thisElement[0] == lstOfMove.length){
+			lstByColor = thisElement[1];
+			lstByColor.shift();
 			
-		//keep lstByColor to avoid loop
-		if(lstByColor.length ==0){return succes0}
-	}else{
-		mostPresentBall();
-		history.push(lstOfMove.length, lstByColor);	
-		
-		console.log("history1",history);
-		if(history.length >8 || lstOfMove.length ==12){
-			throw Error("debug");	
+			if(lstByColor.length == 0){
+				//console.log("no more move");
+				//console.log("thisElement",thisElement);
+				//console.log("raining0", succes0);
+				return succes0;
+			}
+			
+			break;
+		}else{
+			mostPresentBall();
+			history.push([lstOfMove.length,lstByColor]);
+			break;			
 		}
 	}
 	
+	if(history.length ==0){
+		mostPresentBall();
+		history.push([lstOfMove.length,lstByColor]);
+	}
+	//console.log("history1",history);
 	
+	//if(history.length >3){throw Error("debug")}
 	
 	//console.log("new Color");
 	let succes2 = newColor();

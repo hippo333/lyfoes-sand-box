@@ -82,6 +82,7 @@ function main(theLevel){
 	state = [columns0,lstOfMove];
 	history = [];
 	let countOfTry = 0;
+	let countOfFix = 0;
 	maxCycle =20 +columns0.length;
 	
 	
@@ -121,14 +122,26 @@ function main(theLevel){
 				console.log("history",history);
 				
 				if(countOfTry >5){
-					whatIsBrocken(state,history);
-					throw Error("to many fix")
+					if(countOfFix >0){
+						throw Error("to many fix");
+					}
+					history = whatIsBrocken(state,history);
+					countOfTry =2;
+					countOfFix++;
+					//throw Error("to many try")
 				};
 				
 				
 			}
 		}else{
 			history.push([succes,lstOfMove.length]); //*/
+		}
+		
+		if(lstOfMove.length ==13 ){
+			if(history.length == 7){
+				console.log("history",history);
+				throw Error("we get it");
+			}
 		}
 	}
 }

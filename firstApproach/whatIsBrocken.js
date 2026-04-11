@@ -70,7 +70,7 @@ function cutHistory(theCut2){
 	
 	history = history.slice(0,idCut);
 	
-	//console.log("history after",history);
+	console.log("history after",history);
 }
 
 function wayBack(col2){
@@ -112,6 +112,7 @@ function main(state2,history2){
 	let theProblem = findProblem();
 	wayBack(theProblem);
 	
+	return history;
 	//throw Error("debug");
 }
 
