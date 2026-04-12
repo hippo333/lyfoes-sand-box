@@ -248,8 +248,9 @@ function main(state2, lastFaill){
 			history.pop();
 		}
 		else if(thisElement[0] == lstOfMove.length){
+			thisElement[1].shift();
 			lstByColor = thisElement[1];
-			lstByColor.shift();
+			//lstByColor.shift();
 			
 			if(lstByColor.length == 0){
 				//console.log("no more move");

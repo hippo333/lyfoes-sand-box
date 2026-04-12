@@ -122,7 +122,7 @@ function main(theLevel){
 				console.log("history",history);
 				
 				if(countOfTry >5){
-					if(countOfFix >0){
+					if(countOfFix >3){
 						throw Error("to many fix");
 					}
 					history = whatIsBrocken(state,history);
@@ -140,7 +140,7 @@ function main(theLevel){
 		if(lstOfMove.length ==13 ){
 			if(history.length == 7){
 				console.log("history",history);
-				throw Error("we get it");
+				//throw Error("we get it");
 			}
 		}
 	}
@@ -150,7 +150,7 @@ function main(theLevel){
 
 //test one level
 //2.1 -2.12, 2.14 -2.17,; 
-main(4.01);
+//main(4.01);
 
 
 var end = new Date().getTime();	//timer

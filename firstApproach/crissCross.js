@@ -32,6 +32,7 @@ let lstOfMove = [];
 let Vcolumn0 = [];
 let state = [columns0,lstOfMove];
 let nbMaxBall = 4; //default
+let history = [];
 
 
 //set up
@@ -235,8 +236,14 @@ function doCrissCross(lstOfCol2){
 
 function reset(nbMaxBall2){
 	nbMaxBall = nbMaxBall2;
+	history = [];
+	metaHistory = [];
+	second = 0;
 }
 
+
+let metaHistory = []; //debug
+let second = 0;
 function main(state2, lastFaill){
 	console.log("\ncrissCross");
 	[columns0,lstOfMove] = state2;
@@ -244,18 +251,52 @@ function main(state2, lastFaill){
 	lstOfCrissCross = []
 	Vcolumn0 = newVcolumn(columns0);
 	
-	switch (lastFaill){
-		case "raining": return false
-		case "crissCross":
-			if( previousLst.length ==0){return false}
-			lstOfCrissCross = previousLst;
-			lstOfCrissCross.shift()
+	console.log("history0",history);
+	console.log("lstOfMove.length",lstOfMove.length);
+	
+	for(let bloc =history.length -1; bloc >=0; bloc--){
+		console.log("bloc",bloc);
+		let thisElement = history[bloc];
+		
+		if(thisElement[0] > lstOfMove.length){history.pop()}
+		else if(thisElement[0] == lstOfMove.length){
+			thisElement[1].shift();
+			lstOfCrissCross = thisElement[1];
+			console.log("already exist",thisElement);
+			
+			if(lstOfCrissCross.length ==0){
+				console.log("no more crissCross");
+				return false;
+			}
 			break;
-		default :
-			previousLst = lstOfCrissCross;
+			
+		}else{
 			findCrissCross();
-			break
+			history.push([lstOfMove.length, lstOfCrissCross]);
+			break;
+		}
 	}
+	
+	if(history.length ==0){
+		findCrissCross();	
+		history.push([lstOfMove.length, lstOfCrissCross]);
+	}
+	console.log("history1",history);
+	//*/
+	
+	
+	let thisHistory = history.map(x => x[0]);
+	metaHistory.push(thisHistory);
+	console.log("metaHistory",metaHistory);//debug
+	
+	if(lstOfMove.length ==11){
+		if(second >1){
+			//console.log("lastBloc",history[history.length-1]);
+			//throw Error("we get it");
+		}
+		second++
+	}
+	
 	
 	let firstCrissCross = lstOfCrissCross[0];
 	
