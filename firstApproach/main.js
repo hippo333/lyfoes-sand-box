@@ -137,12 +137,6 @@ function main(theLevel){
 			history.push([succes,lstOfMove.length]); //*/
 		}
 		
-		if(lstOfMove.length ==13 ){
-			if(history.length == 7){
-				console.log("history",history);
-				//throw Error("we get it");
-			}
-		}
 	}
 }
 
