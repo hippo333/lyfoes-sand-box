@@ -257,7 +257,36 @@ function getTheLevel(level){
 		new Column([]),
 	];
 	break;
-
+	
+	case "blowUp0":
+	var columns = [
+		new Column([BLUE, BRIGHTPINK, GREEN, RED]),
+		new Column([CYAN, RED, ORANGE, ORANGE]),
+		new Column([LIGHTBLUE]),
+		new Column([BLUE, PURPLE, ORANGE, LIGHTBLUE]),
+		new Column([LIGHTBLUE, GREEN, PURPLE, PURPLE]),
+		new Column([])	
+	];
+	break;
+	
+	case "blowUp1":
+	var columns = [
+		new Column([PURPLE, CYAN, YELLOW, YELLOW]),	
+		new Column([CYAN, YELLOW, GREEN, GREEN]),	
+		new Column([BLUE, BRIGHTPINK, GREEN, RED]),
+		new Column([RED, YELLOW, BRIGHTPINK, BRIGHTPINK]),	
+		new Column([CYAN, RED, ORANGE, ORANGE]),
+		new Column([LIGHTBLUE]),
+		new Column([BLUE, PURPLE, ORANGE, LIGHTBLUE]),
+		new Column([]),	
+		new Column([LIGHTBLUE, GREEN, PURPLE, PURPLE]),
+		new Column([RED, BLUE, BLUE]),	
+		new Column([WHITE, WHITE, WHITE, WHITE]),	
+		new Column([]),	
+		
+	];
+	break;
+	
 	case 1.1:
 	var columns = [
 		new Column([RED, YELLOW, BLUE, YELLOW]),
@@ -1298,7 +1327,7 @@ function getTheLevel(level){
 	];
 	break;
 
-	case 4.1:	
+	case 4.01:	
 	var columns = [
 		new Column([PURPLE, CYAN, YELLOW, WHITE]),
 		new Column([CYAN, YELLOW, GREEN, BLUE]),
