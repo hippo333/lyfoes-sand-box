@@ -103,6 +103,7 @@ function main(state2,history2){
 	let theProblem = findProblem();
 	wayBack(theProblem);
 	
+	
 	//throw Error("debug");
 }
 

@@ -82,6 +82,7 @@ function main(theLevel){
 	state = [columns0,lstOfMove];
 	history = [];
 	let countOfTry = 0;
+	let countOfFix = 0;
 	maxCycle =20 +columns0.length;
 	
 	
@@ -121,8 +122,13 @@ function main(theLevel){
 				console.log("history",history);
 				
 				if(countOfTry >5){
+					if(countOfFix >0){
+						throw Error("to many fix");
+					}
 					whatIsBrocken(state,history);
-					throw Error("to many fix")
+					countOfTry =2;
+					countOfFix++;
+					//throw Error("to many try")
 				};
 				
 				
