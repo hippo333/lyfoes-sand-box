@@ -35,25 +35,49 @@ let history = [];
 
 
 //set up
-columns0 = getTheLevel("blowUp1");
+columns0 = getTheLevel("blowUp0");
 abstract(columns0);
+
+function emptyTheCol(col2,level2){
+	console.log("emptyTheCol, col2",col2,"level2",level2);
+	
+	let thisCol = columns0[col];
+	let bigBll =1;
+	for(let bll =thisCol.content.length-1; bll >=0; bll--){
+		let thisBll = thisCol.content[bll];
+		let bllUnder = thisCol.content[bll-1];
+		if(thisBll == bllUnder){
+			bigBll++;
+			continue;
+		}
+		
+		
+		bigBll = 1
+	}
+}
 
 function reset(nbMaxBall2){
 	nbMaxBall = nbMaxBall2;
 	history = [];
 }
 
+let colUsed = [];
+let colUsedFor = []; //[col, color];
+let ballToHide = [];
+let [col, level] = [4, 0]; //test
 
-function main(state2, lastFaill){
-	console.log("\ncrissCross");
+function main(state2){
+	console.log("\nblowUp");
 	[columns0,lstOfMove] = state2;
 	state = state2;
+	abstract(columns0);
 	
-	
+	emptyTheCol(col,level);
 	
 	
 }
 
+main(state);
+
+
 module.exports = [main,reset]
-
-
