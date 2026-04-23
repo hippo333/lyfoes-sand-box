@@ -64,6 +64,14 @@ function removeNbMove(nb){
 	}
 }
 
+function cutHistory(theCut2){
+	let idCut = history.indexOf(theCut2) +1;
+	//console.log("cutHistory",idCut);
+	
+	history = history.slice(0,idCut);
+	
+	console.log("history after",history);
+}
 
 function wayBack(col2){
 	console.log("wayBack",col2);
@@ -81,6 +89,7 @@ function wayBack(col2){
 	//go to last history befor
 	
 	removeNbMove(theCut);
+	cutHistory(theCount);
 	
 	console.log("lstOfMove",lstOfMove);
 	abstract(columns0);
@@ -103,7 +112,11 @@ function main(state2,history2){
 	let theProblem = findProblem();
 	wayBack(theProblem);
 	
+<<<<<<< HEAD
 	
+=======
+	return history;
+>>>>>>> 9dc7c66fa4692dd6e223d3ac8643889020187c28
 	//throw Error("debug");
 }
 
