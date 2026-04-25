@@ -39,7 +39,7 @@ columns0 = getTheLevel("blowUp0");
 state = [columns0,lstOfMove];
 abstract(columns0);
 
-
+//make lst
 function getEmpty(){
 	console.log("getEmpty");
 	
@@ -49,7 +49,7 @@ function getEmpty(){
 	return lstEmpty
 }
 
-
+//who can go to color?
 function fragile(lstCol2){
 	console.log("fragile",lstCol2);	
 		
@@ -73,31 +73,40 @@ function fragile(lstCol2){
 }
 
 let lstEmptyCol = [];
-function getTarget(cll2,lvl2,bigBll){
+function getTarget(cll2,lvl2,bigBll,lstColor2,lstEmptyCol2){
 	console.log("  getTarget, cll2",cll2,"lvl2",lvl2);
 	
 	let theCol = columns0[cll2];
 	let theBall = theCol.content[lvl2];
 	console.log("theBall",theBall,"bigBll",bigBll);
 	
-	let lstTarget = [columns0.findIndex(
+	let target = columns0.findIndex(
 		tgt => tgt.content[0] == theBall
 		&& tgt.isMonochrome()
-	)];
-	if(lstTarget[0] != -1){return lstTarget}
+	);
+	if(target != -1){return [target]}
 	
+	target = lstColor2.find(
+		tgt => tgt[0] == theBall	
+	);
+	if(target != undefined){
+		console.log("target",target);
+		if(target[2] +bigBll > target[1]){throw Error("overFeed");}
+		return [lstColor2.indexOf(target)]
+	}
 	
-	lstTarget = columns0.filter(
+	let lstTarget = columns0.filter(
 		tgt => tgt.content.includes(theBall)
 		&& tgt.content.lastIndexOf(theBall) + bigBll < nbMaxBall
 		&& columns0.indexOf(tgt) != cll2
-	).map(x => columns0.indexOf(x)); 
+		&& lstColor2[columns0.indexOf(tgt)].length ==0
+	).sort((a,b) => a.content.lastIndexOf(theBall) - b.content.lastIndexOf(theBall)).map(x => columns0.indexOf(x)); 
 	if(lstTarget.length !=0){return lstTarget}
 	
-	if(lstEmptyCol.length ==0){ return []}
+	if(lstEmptyCol2.length ==0){ return []}
 	
-	lstTarget = [lstEmptyCol[0]];
-	lstEmptyCol.shift();
+	lstTarget = [lstEmptyCol2[0]];
+	lstEmptyCol2.shift();
 	return lstTarget
 }
 
@@ -108,7 +117,7 @@ var makeLstColor = () => Array(columns0.length).fill([]);
 let lstColor = [];	//witch color go to each column
 
 function compose(lstSolution2){
-	console.log("\ncompose",lstSolution2);
+	console.log("__compose",lstSolution2);
 	
 	
 	let lstComposed = []
@@ -127,26 +136,38 @@ function compose(lstSolution2){
 	return lstComposed
 }
 
-function archiveCol(col2,solution2,lstColor2){
-	console.log("__archiveCol, col2",col2,"solution2",solution2);
+function archiveCol(solution2,lstColor2,lstPosition2){
+	console.log("__archiveCol ,solution2",solution2);
 	console.log("lstColor2",lstColor2);
 	
 	//abstract(columns0);
+	let remaining = [];
 	
-	let theCol = columns0[col2];
-	let theColBigBall = [...new Set(theCol.content)]
-	let theLength = theColBigBall.length -1;
-	
-	for(lvl in solution2){
-		let secondCol = solution2[lvl];
-		let theBall = theColBigBall[theLength -lvl];
+	for(i in solution2){
+		let [col,lvl] = lstPosition2[i];
+		let theCol = columns0[col];
+		let theColBigBall = [...new Set(theCol.content)];
+		let theLength = theColBigBall.length -1;
+		console.log("col",col,"lvl",lvl);
+		
+		
+		
+		
+		
+		let secondCol = solution2[i];
+		let theBall = theColBigBall[lvl];
 		console.log("secondCol",secondCol,"theBall",theBall);
+		
 		let sdCol = columns0[secondCol];
 		let freePlace =nbMaxBall -sdCol.content.lastIndexOf(theBall)-1;
 		console.log("sdCol",sdCol.content,"freePlace",freePlace);
+		
+		
 		let bigBll = theCol.lstBigBall[lvl];
 		
 		let thisColor = lstColor2[secondCol];
+		remaining.push([secondCol,theBall]);
+		
 		if(thisColor.length == 0){
 			lstColor2[secondCol] = [theBall,freePlace,bigBll];	
 			continue;		
@@ -164,50 +185,112 @@ function archiveCol(col2,solution2,lstColor2){
 		thisColor[1] += bigBll;
 	}
 	console.log("lstColor2",lstColor2);
+	return [remaining,lstColor2]
 }
 
 
-function tryToEmpty(lstCol2){
-	console.log("tryToEmpty",lstCol2);
+function merge(solus2,lstPosition2){
+	let output = [];
 	
-	it: for(cll of lstCol2){
-		lstEmptyCol = getEmpty();
-		let lstColor = makeLstColor();
+	for(i in solus2){
+		let from = lstPosition2[i][0];
+		let to = solus2[i];
+		output.push([from,to]);
+	}
+	return output
+}
+
+
+function nextStep(remaining2,lstColor2,lstEmptyCol2,lstOfMove2){
+	console.log("\nnextStep","lstColor2",lstColor2);
+	console.log("remaining2",remaining2);
+	abstract(columns0);
+	let lstSolution = [];
+	let lstPosition = [];
+	
+	it: for(element of remaining2){
+		let [cll,theBall] = element;
 		let thisCol = columns0[cll];
-		thisCol.lstBigBall = [];
-		let lstSolution = [];
-		let bigBll =1;
-		for(let bll =thisCol.content.length -1; bll >=0; bll--){
+		
+		if(thisCol.isEmpty()){continue}
+		console.log("cll",cll);
+		
+		let theLevel = thisCol.content.lastIndexOf(theBall);
+		if(theLevel == thisCol.content.length -1){continue}
+		
+		let bigBll = 1;
+		for(let bll =thisCol.content.length -1; bll >theLevel; bll--){
 			let thisBall = thisCol.content[bll];
-			let previousBall = thisCol.content[bll -1];
-			if(thisBall == previousBall){bigBll++; continue;}
+			let previousBall = thisCol.content[bll-1];
+			if(thisBall == previousBall){bigBll++;continue;}
 			
-			let lstTarget =getTarget(cll,bll,bigBll);
-			console.log("lstTarget",lstTarget);
-			if(lstTarget.length ==0){continue it}//it's imposible
-			
+			let lstTarget = getTarget(cll,bll,bigBll,lstColor2,lstEmptyCol);
+			if(lstTarget.length ==0){continue it}
+			console.log("lstTarget",lstTarget)
 			lstSolution.push(lstTarget);
-			thisCol.lstBigBall.push(bigBll);
+			lstPosition.push([cll,bll]);
+			
 			bigBll =1;
 		}
-		console.log("lstSolution",lstSolution);
-		
-		//lstSolution = [[1,2,3],[3,4,5]];//test
-		
-		let composedSolution = compose(lstSolution);
-		
-		for(solus of composedSolution){
-			let lstColor2 = [...lstColor];
-			archiveCol(cll,solus,lstColor2);
-		
-		}
+	}
+	console.log("lstSolution",lstSolution);
+	
+	if(lstSolution.length ==0){
+		console.log("\n\nlstOfMove2",lstOfMove2);
+		console.log("we finish");
+		//throw Error("we finish");
 	}
 	
+	let composedSolution = compose(lstSolution);
+	
+	for(solus of composedSolution){
+		let lstEmptyCol3 = [...lstEmptyCol2];
+		let theMove = merge(solus,lstPosition)
+		let lstOfMove3 = [...lstOfMove2].concat(theMove)
+		let lstColor3 = [...lstColor2];
+		let remaining3 = [];
+		[remaining3,lstColor3] = archiveCol(solus,lstColor3,lstPosition);
+			
+		nextStep(remaining3,lstColor3,lstEmptyCol3,lstOfMove3);
+	}
+}
+
+
+function tryToEmpty(lstCol2,lstOfMove2){
+	console.log("tryToEmpty",lstCol2);
+	
+	let lstColor = makeLstColor();
+	
+	for(posibility of lstCol2){
+		lstEmptyCol = getEmpty();
+		let remaining = [[posibility,-1]];
+		nextStep(remaining,lstColor,lstEmptyCol,[]);
+		
+		
+	}
+}
+
+
+function makeLstBigBall(){
+	
+	for(col of columns0){
+		col.lstBigBall = [];
+		let bigBall = 1
+		for(bll in col.content){
+			let theBall = col.content[bll];
+			let nextBall = col.content[parseInt(bll) +1];
+			if(theBall == nextBall){bigBall++;continue;}
+			col.lstBigBall.push(bigBall);
+			
+			bigBall =1;
+		}
+	}
 }
 
 function reset(nbMaxBall2){
 	nbMaxBall = nbMaxBall2;
 	history = [];
+	makeLstBigBall();
 }
 
 let colUsed = [];
@@ -228,10 +311,11 @@ function main(state2){
 	console.log("coloredCols",coloredCols);
 	
 	let lstFragileCol = fragile(coloredCols);
-	tryToEmpty(lstFragileCol);
+	tryToEmpty(lstFragileCol,[]);
 	
 }
 
+makeLstBigBall();
 main(state);
 
 
