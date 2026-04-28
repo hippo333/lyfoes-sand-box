@@ -146,19 +146,20 @@ function makeColFrom(col2,lvl2){
 
 function archiveCol(solution2,lstColor2,lstPosition2,lstEmptyCol2){
 	console.log("__archiveCol ,solution2",solution2);
+	console.log("lstPosition2",lstPosition2);
 	//console.log("lstColor2",lstColor2);
 	
 	//abstract(columns0);
 	let remaining = [];
 	
-	for(i in solution2){
-		let [col,lvl] = lstPosition2[i];
+	for(mv in solution2){
+		let [col,lvl] = lstPosition2[mv];
 		
 		let [colFrom,colFromBigBall,theBall,bigBll] = makeColFrom(col,lvl);
 		console.log("col",col,"lvl",lvl);
 		
 				
-		let colTo = solution2[i];
+		let colTo = solution2[mv];
 		console.log("colTo",colTo,"theBall",theBall);
 		
 		
@@ -172,6 +173,7 @@ function archiveCol(solution2,lstColor2,lstPosition2,lstEmptyCol2){
 		//let bigBll = colFrom.lstBigBall[lvl];
 		
 		let colorTo = lstColor2[colTo];
+		if(colorTo[0] == theBall){continue;}
 		remaining.push([colTo,theBall]);
 		
 		if(colorTo.length == 0){
@@ -184,7 +186,7 @@ function archiveCol(solution2,lstColor2,lstPosition2,lstEmptyCol2){
 			throw Error("theBall is different")
 		}
 		if(colorTo[2] + bigBll > colorTo[1]){
-			console.log("theBall",theBall,"bigBll",bigBll);
+			console.log("\ntheBall",theBall,"bigBll",bigBll);
 			console.log("colorTo",colorTo);
 			throw Error("Error: to many ball in the col");
 		}
@@ -211,6 +213,7 @@ function merge(solus2,lstPosition2){
 function nextStep(remaining2,lstColor2,lstEmptyCol2,lstMv2){
 	console.log("\nnextStep","lstColor2",lstColor2);
 	console.log("remaining2",remaining2);
+	console.log("lstMv2",lstMv2);
 	abstract(columns0);
 	let lstSolution = [];
 	let lstPosition = [];
@@ -318,7 +321,7 @@ function main(state2){
 }
 
 //set up
-columns0 = getTheLevel("blowUp0.2");
+columns0 = getTheLevel("blowUp1");
 state = [columns0,lstOfMove];
 abstract(columns0);
 makeLstBigBall();
