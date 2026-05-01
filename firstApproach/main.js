@@ -8,7 +8,7 @@ var [raining,resetRaining] = require('./raining');
 var [crissCross,resetCrissCross] = require('./crissCross');
 var [capillarity,resetCapilarity] = require('./capillarity');
 var [removeMidle,resetRemoveMidle] = require('./removeMidle');
-var [tryOtherOne,resetTryOtherOne] = require('./tryOtherOne');
+var [backInHistory,resetBackInHistory] = require('./backInHistory');
 var [whatIsBrocken,resetWhatIsBrocken] = require('./whatIsBrocken');
 
 
@@ -64,7 +64,7 @@ function resetAll(){
 	resetRemoveMidle(nbMaxBall);
 	resetCrissCross(nbMaxBall);
 	resetRaining(nbMaxBall);
-	resetTryOtherOne(nbMaxBall);
+	resetBackInHistory(nbMaxBall);
 	resetWhatIsBrocken(nbMaxBall);
 	
 	columns0.map(x => x.nbMaxBall = nbMaxBall);
@@ -115,24 +115,19 @@ function main(theLevel){
 				abstract(columns0);
 				
 				lastFaill = history[history.length -1][0];
-				tryOtherOne(state,history);
+				backInHistory(state,history);
 				countOfTry++;
 				cycle -=2;
 				console.log("countOfTry",countOfTry);
 				console.log("history",history);
 				
-				if(countOfTry >5){
-<<<<<<< HEAD
+				if(countOfTry >5){//5
 					if(countOfFix >0){
 						throw Error("to many fix");
 					}
-					whatIsBrocken(state,history);
-=======
-					if(countOfFix >3){
-						throw Error("to many fix");
-					}
 					history = whatIsBrocken(state,history);
->>>>>>> 9dc7c66fa4692dd6e223d3ac8643889020187c28
+					console.log("history",history);
+					//throw Error("debug");
 					countOfTry =2;
 					countOfFix++;
 					//throw Error("to many try")
@@ -151,7 +146,7 @@ function main(theLevel){
 
 //test one level
 //2.1 -2.12, 2.14 -2.17,; 
-//main(4.01);
+main(4.01);
 
 
 var end = new Date().getTime();	//timer

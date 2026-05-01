@@ -1,9 +1,10 @@
-
+var startTime = new Date().getTime();
 var column = require('../tools/column');
 var getTheLevel = require('../level');
 var abstract = require('../tools/abstract');
 var move = require('../tools/move');
 var [newVcolumn, Vupdate, Vcoppy] = require('../tools/Vcolumn');
+
 
 
 function emptyBotle(){
@@ -32,12 +33,13 @@ let columns0 = [];
 let state = [columns0,lstOfMove];
 let nbMaxBall = 4; //default
 let history = [];
+let theSolution = [];
 
 
 
 //make lst
 function lstEmpty(){
-	console.log("lstEmpty");
+	//console.log("lstEmpty");
 	
 	let lstEmpty = columns0.filter(
 		mpt => mpt.isEmpty()
@@ -69,11 +71,11 @@ function fragile(lstCol2){
 }
 
 function getTarget(cll2,lvl2,bigBll,lstColor2,lstEmptyCol3){
-	console.log("  getTarget, cll2",cll2,"lvl2",lvl2);
+	//console.log("  getTarget, cll2",cll2,"lvl2",lvl2);
 	
 	let theCol = columns0[cll2];
 	let theBall = theCol.content[lvl2];
-	console.log("theBall",theBall,"bigBll",bigBll);
+	//console.log("theBall",theBall,"bigBll",bigBll);
 	
 	let target = columns0.findIndex(
 		tgt => tgt.content[0] == theBall
@@ -85,7 +87,7 @@ function getTarget(cll2,lvl2,bigBll,lstColor2,lstEmptyCol3){
 		tgt => tgt[0] == theBall	
 	);
 	if(target != undefined){
-		console.log("target",target);
+		//console.log("target",target);
 		if(target[2] +bigBll <= target[1]){
 			return[lstColor2.indexOf(target)]
 		}
@@ -114,13 +116,13 @@ function removeImpossible(lst){
 var makeLstColor = () => Array(columns0.length).fill([]);
 let lstColor = [];	//witch color go to each column
 
-function compose(lstSolution2){
-	console.log("__compose",lstSolution2);
+function compose(lstPossible2){
+	//console.log("__compose",lstPossible2);
 	
 	
 	let lstComposed = []
-	for(id in lstSolution2){
-		let level = lstSolution2[id];
+	for(id in lstPossible2){
+		let level = lstPossible2[id];
 		if(id ==0){lstComposed = level.map(x => [x]);continue}
 		
 		let lstComposed2 = [];
@@ -144,23 +146,23 @@ function makeColFrom(col2,lvl2){
 	return [colFrom,colFromBigBall,theBall,bigBll]
 }
 
-function archiveCol(solution2,lstColor2,lstPosition2,lstEmptyCol2){
-	console.log("__archiveCol ,solution2",solution2);
-	console.log("lstPosition2",lstPosition2);
+function archiveCol(thisPossible,lstColor2,lstPosition2,lstEmptyCol2){
+	//console.log("__archiveCol ,lstPossible2",lstPossible2);
+	//console.log("lstPosition2",lstPosition2);
 	//console.log("lstColor2",lstColor2);
 	
 	//abstract(columns0);
 	let remaining = [];
 	
-	for(mv in solution2){
+	for(mv in thisPossible){
 		let [col,lvl] = lstPosition2[mv];
 		
 		let [colFrom,colFromBigBall,theBall,bigBll] = makeColFrom(col,lvl);
-		console.log("col",col,"lvl",lvl);
+		//console.log("col",col,"lvl",lvl);
 		
 				
-		let colTo = solution2[mv];
-		console.log("colTo",colTo,"theBall",theBall);
+		let colTo = thisPossible[mv];
+		//console.log("colTo",colTo,"theBall",theBall);
 		
 		
 		let sdCol = columns0[colTo];
@@ -168,7 +170,7 @@ function archiveCol(solution2,lstColor2,lstPosition2,lstEmptyCol2){
 		//if(sdCol.isEmpty()){lstEmptyCol2.shift()}
 		
 		let freePlace =nbMaxBall -sdCol.content.lastIndexOf(theBall)-1;
-		console.log("sdCol",sdCol.content,"freePlace",freePlace);
+		//console.log("sdCol",sdCol.content,"freePlace",freePlace);
 		
 		//let bigBll = colFrom.lstBigBall[lvl];
 		
@@ -211,11 +213,11 @@ function merge(solus2,lstPosition2){
 
 
 function nextStep(remaining2,lstColor2,lstEmptyCol2,lstMv2){
-	console.log("\nnextStep","lstColor2",lstColor2);
-	console.log("remaining2",remaining2);
-	console.log("lstMv2",lstMv2);
-	abstract(columns0);
-	let lstSolution = [];
+	console.log("nextStep","lstMv2",lstMv2.length);
+	//console.log("lstColor2",lstColor2);
+	//console.log("remaining2",remaining2);
+	//abstract(columns0);
+	let lstPossible = [];
 	let lstPosition = [];
 	
 	it: for(element of remaining2){
@@ -223,7 +225,7 @@ function nextStep(remaining2,lstColor2,lstEmptyCol2,lstMv2){
 		let thisCol = columns0[cll];
 		
 		if(thisCol.isEmpty()){continue}
-		console.log("cll",cll);
+		//console.log("cll",cll);
 		
 		let theLevel = thisCol.content.lastIndexOf(theBall);
 		if(theLevel == thisCol.content.length -1){continue}
@@ -236,24 +238,30 @@ function nextStep(remaining2,lstColor2,lstEmptyCol2,lstMv2){
 			
 			let lstTarget = getTarget(cll,bll,bigBll,lstColor2,lstEmptyCol2);
 			if(lstTarget.length ==0){return}
-			console.log("lstTarget",lstTarget)
-			lstSolution.push(lstTarget);
+			//console.log("lstTarget",lstTarget)
+			lstPossible.push(lstTarget);
 			lstPosition.push([cll,bll]);
 			
 			bigBll =1;
 		}
 	}
-	console.log("lstSolution",lstSolution);
+	//console.log("lstPossible",lstPossible);
 	
-	if(lstSolution.length ==0){
+	if(lstPossible.length ==0){
+		lstMv2.reverse();
 		console.log("\n\nwe finish");
-		console.log("lstMv2",lstMv2.reverse());
-		throw Error("we finish");
+		console.log("lstMv2",lstMv2);/*
+		var end = new Date().getTime();	//timer
+		var time = end - startTime;
+		console.log(time/1000,"s");//*/
+		theSolution = lstMv2;
+		return
+		//throw Error("we finish");
 	}
 	
-	let composedSolution = compose(lstSolution);
+	let composedPossible = compose(lstPossible);
 	
-	for(solus of composedSolution){
+	for(solus of composedPossible){
 		let lstEmptyCol3 = [...lstEmptyCol2];
 		let theMove = merge(solus,lstPosition).reverse();
 		let lstMv3 = [...lstMv2].concat(theMove);
@@ -279,6 +287,17 @@ function tryToEmpty(lstCol2){
 	}
 }
 
+function doTheMove(theSolution2){
+	console.log("doTheMove, theSolution2",theSolution2);
+	
+	for(mv of theSolution2){
+		let [from,to] = mv;
+		move(state,from,to);
+	}
+	abstract(columns0);
+	
+}
+
 //reset
 function makeLstBigBall(){
 	
@@ -299,7 +318,6 @@ function makeLstBigBall(){
 function reset(nbMaxBall2){
 	nbMaxBall = nbMaxBall2;
 	history = [];
-	makeLstBigBall();
 }
 
 
@@ -308,6 +326,7 @@ function main(state2){
 	[columns0,lstOfMove] = state2;
 	state = state2;
 	abstract(columns0);
+	makeLstBigBall();
 	
 	let coloredCols = columns0.filter(
 		cll => cll.isMonochrome()
@@ -318,15 +337,18 @@ function main(state2){
 	let lstFragileCol = fragile(coloredCols);
 	tryToEmpty(lstFragileCol);
 	
+	if(theSolution.length ==0){return false}
+	
+	doTheMove(theSolution);
+	return "blowUp"
 }
 
 //set up
+/*
 columns0 = getTheLevel("blowUp1");
 state = [columns0,lstOfMove];
 abstract(columns0);
-makeLstBigBall();
-
-main(state);
+main(state);//*/
 
 
 module.exports = [main,reset]

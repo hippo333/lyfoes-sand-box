@@ -3,8 +3,8 @@ var column = require('../tools/column');
 //var columns999 = require('../level');
 var abstract = require('../tools/abstract');
 var move = require('../tools/move');
-var [price,resetPrice] = require('./price');
 var [newVcolumn, Vupdate, Vcoppy] = require('../tools/Vcolumn');
+var [blowUp,resetBlowUp] = require('./blowUp');
 
 
 
@@ -98,7 +98,8 @@ function wayBack(col2){
 
 function reset(nbMaxBall2){
 	nbMaxBall = nbMaxBall2;
-	resetPrice(nbMaxBall2);
+	resetBlowUp(nbMaxBall2);
+	//resetPrice(nbMaxBall2);
 }
 
 function main(state2,history2){
@@ -112,11 +113,12 @@ function main(state2,history2){
 	let theProblem = findProblem();
 	wayBack(theProblem);
 	
-<<<<<<< HEAD
+	succes = blowUp(state2);
+	if(succes == "blowUp"){history.push(["blowUp",lstOfMove.length]);}
 	
-=======
+	history2 = history;
+	
 	return history;
->>>>>>> 9dc7c66fa4692dd6e223d3ac8643889020187c28
 	//throw Error("debug");
 }
 
