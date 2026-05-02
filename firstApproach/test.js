@@ -9,7 +9,7 @@ let levelToTest4 = [4.01,4.58,4.326,4.347,4.364,4.422,4.492];
 
 //2.1 -2.12, 2.14 -2.17,; 
 
-for(level of levelToTest3){
+for(level of levelToTest4){
 	try{
 		main(level);
 	}

@@ -117,7 +117,7 @@ var makeLstColor = () => Array(columns0.length).fill([]);
 let lstColor = [];	//witch color go to each column
 
 function compose(lstPossible2){
-	//console.log("__compose",lstPossible2);
+	console.log("__compose",lstPossible2);
 	
 	
 	let lstComposed = []
@@ -140,14 +140,15 @@ function compose(lstPossible2){
 function makeColFrom(col2,lvl2){
 	let colFrom = columns0[col2];
 	let colFromBigBall = [...new Set(colFrom.content)];
-	let theBall = colFromBigBall[lvl2];
-	let bigBll = colFrom.lstBigBall[lvl2];
+	let theBall = colFrom.content[lvl2];
+	let theBbLevel = colFromBigBall.lastIndexOf(theBall);
+	let bigBll = colFrom.lstBigBall[theBbLevel];
 	
 	return [colFrom,colFromBigBall,theBall,bigBll]
 }
 
 function archiveCol(thisPossible,lstColor2,lstPosition2,lstEmptyCol2){
-	//console.log("__archiveCol ,lstPossible2",lstPossible2);
+	//console.log("__archiveCol ,thisPossible",thisPossible);
 	//console.log("lstPosition2",lstPosition2);
 	//console.log("lstColor2",lstColor2);
 	
@@ -159,7 +160,9 @@ function archiveCol(thisPossible,lstColor2,lstPosition2,lstEmptyCol2){
 		
 		let [colFrom,colFromBigBall,theBall,bigBll] = makeColFrom(col,lvl);
 		//console.log("col",col,"lvl",lvl);
-		
+		//console.log("col",col,"theBall",theBall,"theBigBall");
+		//console.log("colFromBigBall",colFromBigBall);
+		//console.log("lstBigBall",colFrom.lstBigBall);
 				
 		let colTo = thisPossible[mv];
 		//console.log("colTo",colTo,"theBall",theBall);
@@ -184,7 +187,7 @@ function archiveCol(thisPossible,lstColor2,lstPosition2,lstEmptyCol2){
 		}
 		
 		if(colorTo[0] != theBall){
-			console.log("\ncolorTo",colorTo,"theBall",theBall);
+			console.log("\ncolorTo",colTo,colorTo,"theBall",theBall);
 			throw Error("theBall is different")
 		}
 		if(colorTo[2] + bigBll > colorTo[1]){
@@ -318,6 +321,7 @@ function makeLstBigBall(){
 function reset(nbMaxBall2){
 	nbMaxBall = nbMaxBall2;
 	history = [];
+	theSolution = [];
 }
 
 

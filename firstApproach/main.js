@@ -145,9 +145,9 @@ function main(theLevel){
 
 
 //test one level
-//2.1 -2.12, 2.14 -2.17,; 
-main(4.01);
-
+//4.01; 
+//main(4.326);
+//main(4.01);
 
 var end = new Date().getTime();	//timer
 var time = end - startTime;
