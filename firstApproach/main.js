@@ -10,6 +10,7 @@ var [capillarity,resetCapilarity] = require('./capillarity');
 var [removeMidle,resetRemoveMidle] = require('./removeMidle');
 var [backInHistory,resetBackInHistory] = require('./backInHistory');
 var [whatIsBrocken,resetWhatIsBrocken] = require('./whatIsBrocken');
+var [blowUp, resetBlowUp] = require('./blowUp');
 
 
 let lstOfMove = [];
@@ -66,6 +67,7 @@ function resetAll(){
 	resetRaining(nbMaxBall);
 	resetBackInHistory(nbMaxBall);
 	resetWhatIsBrocken(nbMaxBall);
+	resetBlowUp(nbMaxBall);
 	
 	columns0.map(x => x.nbMaxBall = nbMaxBall);
 }
@@ -98,6 +100,7 @@ function main(theLevel){
 		let succes = false;
 		if(!succes){succes= capillarity(state, lastFaill)}
 		if(!succes){succes= removeMidle(state, lastFaill)}
+		if(!succes){succes= blowUp(state, lastFaill)}
 		if(!succes){succes= crissCross(state, lastFaill)};
 		if(!succes){succes= raining(state, lastFaill)}
 		
@@ -145,8 +148,7 @@ function main(theLevel){
 
 
 //test one level
-//4.01; 
-//main(4.326);
+//main(4.582);
 //main(4.01);
 
 var end = new Date().getTime();	//timer

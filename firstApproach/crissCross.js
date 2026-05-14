@@ -134,7 +134,7 @@ function nextCol(lstOfCol,Vcolumn2){
 let lstOfCrissCross = [];
 let previousLst = [];
 function crissCross(columns2,lstOfCol2,Vcolumn2){
-	console.log("crissCross",lstOfCol2);
+	//console.log("crissCross",lstOfCol2);
 	
 	
 	let lstNextCol = nextCol(lstOfCol2,Vcolumn2);
@@ -164,7 +164,7 @@ function crissCross(columns2,lstOfCol2,Vcolumn2){
 			lstOfCrissCross.push(thisList);
 			
 		}else{
-			console.log("thisList",thisList);
+			//console.log("thisList",thisList);
 			//thisList.push(from);
 			
 			let Vcolumn3 = Vcoppy(Vcolumn2);
@@ -283,6 +283,7 @@ function main(state2, lastFaill){
 		console.log("no crissCross");
 		return false
 	}else{
+		console.log("lstOfCrissCross",lstOfCrissCross);
 		doCrissCross(lstOfCrissCross[0]);
 		//return true
 		return "crisscross"

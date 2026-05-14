@@ -85,6 +85,7 @@ function wayBack(col2){
 	let theCount = historyRevers.find(
 		cnt => cnt[1] <= lstOfMove.length -theCut -1
 	);
+	console.log("theCount",theCount);
 	theCut = lstOfMove.length -theCount[1]
 	//go to last history befor
 	
@@ -111,6 +112,7 @@ function main(state2,history2){
 	abstract(columns0);
 	
 	let theProblem = findProblem();
+	if(theProblem ==0){throw Error}//can't do anything
 	wayBack(theProblem);
 	
 	succes = blowUp(state2);
