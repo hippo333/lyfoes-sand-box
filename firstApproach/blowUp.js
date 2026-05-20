@@ -33,6 +33,7 @@ let columns0 = [];
 let state = [columns0,lstOfMove];
 let nbMaxBall = 4; //default
 let history = [];
+let lstSolution = [];
 
 
 
@@ -135,7 +136,7 @@ function compose(lstPossible2){
 	return lstComposed
 }
 
-
+//archiveCol
 function makeColFrom(col2,lvl2){
 	let colFrom = columns0[col2];
 	let colFromBigBall = [...new Set(colFrom.content)];
@@ -146,10 +147,9 @@ function makeColFrom(col2,lvl2){
 	return [colFrom,colFromBigBall,theBall,bigBll]
 }
 
-
 function archiveCol(thisPossible,lstColor2,lstPosition2,lstEmptyCol2){
 	console.log("__archiveCol ,thisPossible",thisPossible);
-	//console.log("lstPosition2",lstPosition2);
+	console.log("lstPosition2",lstPosition2);
 	//console.log("lstColor2",lstColor2);
 	let needToRecalCul = [];
 	
@@ -160,41 +160,42 @@ function archiveCol(thisPossible,lstColor2,lstPosition2,lstEmptyCol2){
 		let [col,lvl] = lstPosition2[mv];
 		
 		let [colFrom,colFromBigBall,theBall,bigBll] = makeColFrom(col,lvl);
-		//console.log("col",col,"lvl",lvl);
-		//console.log("col",col,"theBall",theBall,"theBigBall");
+		console.log("col",col,"lvl",lvl);
+		console.log("colFrom",colFrom.content);
+		console.log("col",col,"theBall",theBall,"BibigBll",bigBll);
 		//console.log("colFromBigBall",colFromBigBall);
 		//console.log("lstBigBall",colFrom.lstBigBall);
 				
-		let colTo = thisPossible[mv];
-		//console.log("colTo",colTo,"theBall",theBall);
+		let to = thisPossible[mv];
+		//console.log("to",to,"theBall",theBall);
 		
 		
-		let sdCol = columns0[colTo];
+		let colTo = columns0[to];
 		
-		//if(sdCol.isEmpty()){lstEmptyCol2.shift()}
+		//if(colTo.isEmpty()){lstEmptyCol2.shift()}
 		
-		let freePlace =nbMaxBall -sdCol.content.lastIndexOf(theBall)-1;
-		//console.log("sdCol",sdCol.content,"freePlace",freePlace);
+		let freePlace =nbMaxBall -colTo.content.lastIndexOf(theBall)-1;
+		//console.log("colTo",colTo.content,"freePlace",freePlace);
 		
 		//let bigBll = colFrom.lstBigBall[lvl];
-		
-		let colorTo = lstColor2[colTo];
+		let colorTo = lstColor2[to];
 		if(colorTo[0] == theBall){
-			needToRecalCul.push(colTo);
+			needToRecalCul.push([to,lvl]);
 			colorTo[2] += bigBll;
 			continue;
 		}
-		remaining.push([colTo,theBall]);
+		remaining.push([to,theBall]);
 		
 		if(colorTo.length == 0){
-			lstColor2[colTo] = [theBall,freePlace,bigBll];	
+			lstColor2[to] = [theBall,freePlace,bigBll];	
 			continue;		
 		}
 		
-		throw Error("debug");
+		//throw Error//debug archiveCol
 		
 		if(colorTo[0] != theBall){
-			console.log("\ncolorTo",colTo,colorTo,"theBall",theBall);
+			console.log("\ncolorTo",colorTo,"theBall",theBall);
+			console.log("from",col,"to",to);
 			throw Error("theBall is different")
 		}
 		if(colorTo[2] + bigBll > colorTo[1]){
@@ -211,67 +212,154 @@ function archiveCol(thisPossible,lstColor2,lstPosition2,lstEmptyCol2){
 	return [remaining,lstColor2,needToRecalCul]
 }
 
+//merge
+function nbBBAbove(col2,theBall2){
+	//console.log("nbBBAbove, col2",col2,"theBall2",theBall2);
+	
+	let theCol = columns0[col2];
+	//console.log("theCol",theCol);
+	if(theCol.lstBigBall.length <2){return 0}
+	
+	let lstBall = [...new Set([...theCol.content].reverse())].reverse();
+	let idBall = lstBall.indexOf(theBall2);
+	console.log("lstBall",lstBall);
+	
+	let nbBigBallAbove = lstBall.length -1 - idBall;
+	//console.log("nbBigBallAbove",nbBigBallAbove);
+	
+	return nbBigBallAbove
+}
+
 //nextStep
 function merge(solus2,lstPosition2){
 	let output = [];
 	
 	for(i in solus2){
-		let from = lstPosition2[i][0];
+		let [from,lvl] = lstPosition2[i];
+		let colFrom = columns0[from];
+		let theBall = colFrom.content[lvl];
 		let to = solus2[i];
-		output.push([from,to]);
+		let nbBBAboveFrom = nbBBAbove(from,theBall);
+		let nbBBAboveTo = nbBBAbove(to,theBall);
+		
+		output.push([from,to,nbBBAboveFrom,nbBBAboveTo]);
 	}
 	return output
 }
 
-function changeOrder(lstMv2,needToRecalculate2,alreadyMoved2){
-	//console.log("\nchangeOrder",[...lstMv2].reverse());
-	console.log("needToRecalculate2",needToRecalculate2);
+//addOtherMove
+function miniCrissCross(lstMv2,suspectCol2,lstFree2){
+	//console.log("miniCrissCross",lstMv2,"suspectCol2",suspectCol2);
+	//console.log("lstFree2",lstFree2);
 	
-	if(needToRecalculate2.length ==0 ) {return true}
-	if(alreadyMoved2 == undefined){alreadyMoved2 = []}
-	needToRecalculate = [];
+	let emptyCol = emptyBotle();
+	if(emptyBotle ==-1){throw Error}//no EmptyBotle
 	
-	for(col of needToRecalculate2){
-		if(alreadyMoved2.includes(col)){return false}
-		
-		console.log("col",col);
-		let lstMvt = lstMv2.filter(
-			mvt => mvt[0] == col
-		).map(x => lstMv2.indexOf(x));
-		//console.log("col",col,"lstMvt",lstMvt);
-		
-		for(mv in lstMvt){
-			let movement = lstMvt[mv] - mv//each move make a gap
-			let theMv = lstMv2.splice(movement,1);
-			lstMv2.push(...theMv);
-			needToRecalculate.push(theMv[0][1]);
+	let suspectCol3 = [...suspectCol2];
+	let lstId = [0];
+	let lastMv = lstMv2[0];
+	let branch = 0; //0from 1to
+	for(let boop =0; boop< 2* lstMv2.length; boop++){//loopKille
+		let previousMv =  lstMv2.find(
+			prv => prv[0] == lastMv[branch]
+			&& prv[2] < lastMv[branch +2]
+		);
+		if(previousMv == undefined){
+			if(branch ==1){throw Error}//dont Loop miniCC
+			branch =1;//to
+			continue;
 		}
-		alreadyMoved2.push(col);
-	}/*
+		lastMv = previousMv;
+		let id = lstMv2.indexOf(previousMv);
+		if(lstId.includes(id)){
+			let begening = lstId.indexOf(id);
+			let theLoop = lstId.slice(id -1);
+			
+			let ending = lstMv2[theLoop.pop()];
+			let intermediate =[...ending];
+			intermediate[0] = ending[1] = emptyCol;
+			intermediate[2] = ending[3] = 0;
+			lstMv2.push(intermediate);
+			
+			break;
+		}
+		lstId.push(id);
+		branch = 0;//from
+		continue;
+		
+	}
+	
+	return true
+}
+
+
+let lastLstMv = [];
+//changeOrder
+function addOtherMove(lstMv2,nextOrder2,lstFree2){
+	//console.log("moveWhoCanPass");
+	
+	let lstMvPossible = lstMv2.filter(
+		nxt => lstFree2[nxt[0]] >= nxt[2]
+		&& lstFree2[nxt[1]] >= nxt[3]
+	).reverse()//simplify the delete
+	//console.log("lstMvPossible",lstMvPossible);
+	
+	if(lstMvPossible.length ==0){
+		let miniCC = miniCrissCross(lstMv2,lastLstMv,lstFree2);
+		
+		if(miniCC){return true}
+		return false
+	}
+	
+	for(mv of lstMvPossible){
+		nextOrder2.push(mv);
+		let [from,to] = mv;
+		lstFree2[from]++;
+		let idMv = lstMv2.indexOf(mv);
+		//console.log("isMv",idMv);
+		lstMv2.splice(idMv,1);
+	}
+	lastLstMv = lstMvPossible.map(x=> x[0]);
+	
+	//throw Error//debug addOtherMove
+	return true
+}
+
+
+function changeOrder(lstMv2){
+	console.log("\nchangeOrder",[...lstMv2].reverse());
+	
+	let lstFree = Array(columns0.length).fill(0);
+	let nextOrder = [];
+	lastLstMv = [];
+	//console.log("lstFree",lstFree);
+	
+	let nbMv = lstMv2.length;
+	for(let bip =0; bip <=nbMv; bip++){//loopKiller
+		let canAddMv = addOtherMove(lstMv2,nextOrder,lstFree);
+		if(!canAddMv){nextOrder = [];break;}
+		if(lstMv2.length ==0){break}
+	}
+	
 	console.log("lstMv2",lstMv2);
-	console.log("alreadyMoved2",alreadyMoved2);
-	console.log("needToRecalculate",needToRecalculate);
-	abstract(columns0);//*/
+	console.log("nextOrder",nextOrder);
+	lstMv2 = nextOrder;
+	//throw Error//debug changeOrder
 	
-	if(needToRecalculate.length ==0){return true}
-	
-	let nextOrder =changeOrder(lstMv2,needToRecalculate,alreadyMoved2);
-	
-	//throw Error("holy shit");
-	
-	
-	return nextOrder
+	return lstMv2
 }
 
 
 function nextStep(remaining2,lstColor2,lstEmptyCol2,lstMv2){
-	//console.log("  nextStep","lstMv2",lstMv2.length);
+	console.log("\n  nextStep","lstMv2",lstMv2.length);
 	//console.log("lstColor2",lstColor2);
-	//console.log("remaining2",remaining2);
+	console.log("remaining2",remaining2);
 	//abstract(columns0);
 	let lstPossible = [];
 	let lstPosition = [];
+	let stopLater = false;
 	
+
 	it: for(element of remaining2){
 		let [cll,theBall] = element;
 		let thisCol = columns0[cll];
@@ -282,17 +370,27 @@ function nextStep(remaining2,lstColor2,lstEmptyCol2,lstMv2){
 		let theLevel = thisCol.content.lastIndexOf(theBall);
 		if(theLevel == thisCol.content.length -1){continue}
 		
+		//test
+		let previousCall = lstMv2.filter(
+			pv => pv[0] == cll			
+		);
+		if(previousCall.length >0){continue}
+		
+		
+		
+				
 		let bigBll = 1;
-		for(let bll =thisCol.content.length -1; bll >theLevel; bll--){
-			let thisBall = thisCol.content[bll];
-			let previousBall = thisCol.content[bll-1];
+		for(let bll7 =thisCol.content.length -1;bll7 >theLevel;bll7--){
+			let thisBall = thisCol.content[bll7];
+			console.log("cll",cll,"thisBall",thisBall);
+			let previousBall = thisCol.content[bll7-1];
 			if(thisBall == previousBall){bigBll++;continue;}
 			
-			let lstTarget = getTarget(cll,bll,bigBll,lstColor2,lstEmptyCol2);
+			let lstTarget = getTarget(cll,bll7,bigBll,lstColor2,lstEmptyCol2);
 			if(lstTarget.length ==0){return}
-			//console.log("lstTarget",lstTarget)
+			console.log("lstTarget",lstTarget)
 			lstPossible.push(lstTarget);
-			lstPosition.push([cll,bll]);
+			lstPosition.push([cll,bll7]);
 			
 			bigBll =1;
 		}
@@ -302,15 +400,21 @@ function nextStep(remaining2,lstColor2,lstEmptyCol2,lstMv2){
 	
 	if(lstPossible.length ==0){
 		lstMv2.reverse();
-		console.log("\n\nwe blowUp");
-		console.log("lstMv2",lstMv2);/*
+		console.log("\nwe blowUp");
+		console.log("lstMv2",lstMv2,"\n\n");/*
 		var end = new Date().getTime();	//timer
 		var time = end - startTime;
 		console.log(time/1000,"s");//*/
-		lstSolution.push(lstMv2);
+		let lstMv3 = changeOrder(lstMv2);
+		if(lstMv3.length ==0){throw Error}//nextStep
+		
+		console.log("lstMv2",lstMv3);
+		//throw Error//debug nextStep
+		lstSolution.push(lstMv3);
 		return
 		//throw Error("we finish");
 	}
+	
 	
 	let composedPossible = compose(lstPossible);
 	
@@ -321,17 +425,6 @@ function nextStep(remaining2,lstColor2,lstEmptyCol2,lstMv2){
 		let lstColor3 = [...lstColor2];
 		let remaining3 = [];
 		[remaining3,lstColor3,needToRecalcul3] = archiveCol(solus,lstColor3,lstPosition,lstEmptyCol3);
-		
-		/*//test		
-		lstMv3 = [["c","e"],["b","c"],["a","b"]].reverse();
-		lstMv3.push(["d","b"]);
-		needToRecalcul3 = ["b"];//*/
-			
-		let itsPosible = changeOrder(lstMv3,needToRecalcul3);
-		console.log("lstMv3",[...lstMv3].reverse());
-		console.log("itsPosible",itsPosible);
-		
-		if(!itsPosible){continue};
 		
 		nextStep(remaining3,lstColor3,lstEmptyCol3,lstMv3);
 		//throw Error("debug");
@@ -401,13 +494,8 @@ function reset(nbMaxBall2){
 
 var shortest = (a,b) => a.length - b.length;
 
-function main(state2){
-	console.log("\nblowUp");
-	[columns0,lstOfMove] = state2;
-	state = state2;
-	abstract(columns0);
-	makeLstBigBall();
-	lstSolution = [];
+function blowItUp(){
+	console.log("blowUp");	
 	
 	let coloredCols = columns0.filter(
 		cll => cll.isMonochrome()
@@ -420,10 +508,45 @@ function main(state2){
 	
 	if(lstSolution.length ==0){return false}
 	lstSolution.sort(shortest);
-	//console.log("lstSolution",lstSolution);
+	console.log("lstSolution",lstSolution);
+}
+
+
+function main(state2){
+	console.log("\nblowUp");
+	[columns0,lstOfMove] = state2;
+	state = state2;
+	abstract(columns0);
+	makeLstBigBall();
+	lstSolution = [];
+	
+	for(let bloc =history.length -1; bloc >=0; bloc--){
+		let thisElement = history[bloc];
+		
+		if(thisElement[0] > lstOfMove.length){history.pop()}
+		else if(thisElement[0] == lstOfMove.length){
+			thisElement[1].shift();
+			lstSolution = thisElement[1];
+			
+			if(lstSolution.length ==0){return false;}
+			break;
+			
+		}else{
+			blowItUp();
+			history.push([lstOfMove.length, lstSolution]);
+			break;
+		}
+	}
+	
+	if(history.length ==0){
+		blowItUp();	
+		if(lstSolution.length ==0){return false}
+		history.push([lstOfMove.length, lstSolution]);
+	}
+		
 	
 	doTheMove(lstSolution[0]);
-	//throw Error("debug");
+	//throw Error; //debug blowUp
 	return "blowUp"
 }
 
