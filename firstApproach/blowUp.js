@@ -341,12 +341,38 @@ function changeOrder(lstMv2){
 		if(lstMv2.length ==0){break}
 	}
 	
-	console.log("lstMv2",lstMv2);
 	console.log("nextOrder",nextOrder);
 	lstMv2 = nextOrder;
-	//throw Error//debug changeOrder
+	
 	
 	return lstMv2
+}
+
+function dosItFit(lstMv2){
+	console.log("itFit");
+	
+	let lstBall = columns0.map(x => [...x.content]);
+	let lstBigBll = columns0.map(x => [...x.lstBigBall]);	
+	abstract(columns0);
+	
+	for(mv of lstMv2){
+		let [from,to] = mv;
+		let ballFrom = lstBall[from][lstBall[from].length -1];
+		let ballTo = lstBall[to][lstBall[to].length -1];
+		if(ballFrom != ballTo && ballTo != undefined){return false}
+		lstBall[from].pop()
+		if(ballTo == undefined){lstBall.push(ballFrom)}
+		
+		let bigBll = lstBigBll[from].pop();
+		if(lstBigBll[to].length ==0){lstBigBll[to].push(0)}
+		lstBigBll[to][lstBigBll[to].length -1] += bigBll;
+		
+		let lengthTo = [...lstBigBll[to]].reduce((a,b) => a+b,0);
+		if(lengthTo > nbMaxBall){return false}
+	}
+	console.log("yes");
+	return true
+	//throw Error//debug itFit
 }
 
 
@@ -407,6 +433,8 @@ function nextStep(remaining2,lstColor2,lstEmptyCol2,lstMv2){
 		console.log(time/1000,"s");//*/
 		let lstMv3 = changeOrder(lstMv2);
 		if(lstMv3.length ==0){throw Error}//nextStep
+		let itFit = dosItFit(lstMv3);
+		if(!itFit){return}//*/
 		
 		console.log("lstMv2",lstMv3);
 		//throw Error//debug nextStep
@@ -457,10 +485,10 @@ function tryToFree(col2){
 }
 
 
-function doTheMove(theSolution2){
-	console.log("\ndoTheMove, theSolution2",theSolution2);
+function doTheMove(thisSolution2){
+	console.log("\ndoTheMove, thisSolution2",thisSolution2);
 	
-	for(mv of theSolution2){
+	for(mv of thisSolution2){
 		let [from,to] = mv;
 		move(state,from,to);
 	}
@@ -533,7 +561,9 @@ function main(state2){
 			
 		}else{
 			blowItUp();
+			if(lstSolution.length ==0){return false}
 			history.push([lstOfMove.length, lstSolution]);
+			console.log("a");
 			break;
 		}
 	}
@@ -542,6 +572,7 @@ function main(state2){
 		blowItUp();	
 		if(lstSolution.length ==0){return false}
 		history.push([lstOfMove.length, lstSolution]);
+		console.log("b");
 	}
 		
 	
