@@ -265,7 +265,7 @@ function miniCrissCross(lstMv2,suspectCol2,lstFree2){
 			&& prv[2] < lastMv[branch +2]
 		);
 		if(previousMv == undefined){
-			if(branch ==1){throw Error}//dont Loop miniCC
+			if(branch ==1){return false}//dont Loop miniCC
 			branch =1;//to
 			continue;
 		}
@@ -274,8 +274,10 @@ function miniCrissCross(lstMv2,suspectCol2,lstFree2){
 		if(lstId.includes(id)){
 			let begening = lstId.indexOf(id);
 			let theLoop = lstId.slice(id -1);
+			if(theLoop.length ==0){return false}
 			
 			let ending = lstMv2[theLoop.pop()];
+			console.log("ending",ending);
 			let intermediate =[...ending];
 			intermediate[0] = ending[1] = emptyCol;
 			intermediate[2] = ending[3] = 0;
@@ -432,7 +434,7 @@ function nextStep(remaining2,lstColor2,lstEmptyCol2,lstMv2){
 		var time = end - startTime;
 		console.log(time/1000,"s");//*/
 		let lstMv3 = changeOrder(lstMv2);
-		if(lstMv3.length ==0){throw Error}//nextStep
+		if(lstMv3.length ==0){return}//nextStep
 		let itFit = dosItFit(lstMv3);
 		if(!itFit){return}//*/
 		
