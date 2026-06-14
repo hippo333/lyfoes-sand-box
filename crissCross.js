@@ -1,0 +1,294 @@
+
+var column = require('./tools/column');
+//var columns999 = require('./level');
+var abstract = require('./tools/abstract');
+var move = require('./tools/move');
+var [newVcolumn, Vupdate, Vcoppy] = require('./tools/Vcolumn');
+
+
+function emptyBotle(){
+	return columns0.findIndex(x => x.isEmpty0)
+}
+
+function otherColumn(col2){
+	let theBigBll = columns0[col2].bigBall;
+	let theBll = columns0[col2].top0;
+	
+	let otherCol = columns0.findIndex(
+		cll => cll.top0 == theBll
+		&& columns0.indexOf(cll) != col2
+		&& cll.length0 + theBigBll <= nbMaxBall
+	);
+	
+	if(otherCol == -1){
+		otherCol = emptyBotle()
+	}
+	return otherCol
+}
+
+
+let columns0 = [];
+let lstOfMove = [];
+let Vcolumn0 = [];
+let state = [columns0,lstOfMove];
+let nbMaxBall = 4; //default
+let history = [];
+
+
+//set up
+
+
+//nextCol
+function removeLastTop(lstOfCol2,Vcolumn2){
+	//console.log("  -removeTop");
+	
+	let lastCol = lstOfCol2[lstOfCol2.length -1];
+	if(typeof(lastCol) == "object"){lastCol = lastCol[0]};
+	//console.log("  -lastCol",lastCol,"ball",Vcolumn2[lastCol][0]);
+	//console.log("  Vcolumn2",Vcolumn2);
+	
+	let lstTarget = Vcolumn2.filter(
+		tgt => tgt[0] == Vcolumn2[lastCol][0]
+		&& Vcolumn2.indexOf(tgt) != lastCol
+		&& tgt[2] + Vcolumn2[lastCol][1] <= nbMaxBall
+	);
+	//console.log("  -lstTarget",lstTarget)
+	
+	if(lstTarget.length ==0){
+		lstTarget = Vcolumn2.filter(
+			tgt => tgt[2] == 0
+			&& Vcolumn2.indexOf(tgt) != lastCol	
+		)		
+		//console.log("  -Vcolumn2",Vcolumn2);
+		//console.log("  -emptyBrl",lstTarget);
+	}
+	
+	if(lstTarget.length ==0){return []}
+	
+	let target = Vcolumn2.indexOf(lstTarget.find(//color
+		clr => clr[1] == clr[2] //monochrome
+	));
+	if(target ==-1){
+		console.log("  -no Color");
+		target = Vcolumn2.indexOf(lstTarget[0]); 
+	}
+	if(target == -1){return []}
+	
+	//console.log("  -target",target);
+	let thisMove = [lastCol,target];
+	return [thisMove]
+}
+
+
+function nextCol(lstOfCol,Vcolumn2){
+	//console.log("  nextCol");
+	
+	let lastCol = lstOfCol[lstOfCol.length -1];
+	if(typeof(lastCol) == "object"){lastCol = lastCol[0]}
+	
+	let secondBll = Vcolumn2[lastCol][0];
+	//console.log("  lastCol",lastCol,"secondBll",secondBll);
+	
+	//try to finish thisCol
+	if(Vcolumn2[lastCol][1] == Vcolumn2[lastCol][2]){
+		//console.log("  lastCol isMono");
+		
+		//throw Error("debug");
+		
+		let toFinish = Vcolumn2.findIndex(
+			cll => cll[0] == secondBll
+			&& cll[2] + Vcolumn2[lastCol][1] <= nbMaxBall
+			&& Vcolumn2.indexOf(cll) != lastCol
+		);
+		
+		if(toFinish != -1){
+			let thisMove = [lastCol,toFinish];
+			//console.log("for finish",thisMove,"\n");
+			return [thisMove]
+		}
+		console.log("  can't finish");
+	}
+	
+	
+	let placeToFeed = nbMaxBall-Vcolumn2[lastCol][2];
+	
+	let lstNextCol = Vcolumn2.filter(
+		nxt => nxt[0] == secondBll
+		&& nxt[1] + Vcolumn2[lastCol][2] <=nbMaxBall
+		&& Vcolumn2.indexOf(nxt) != lastCol		
+	).map(x => Vcolumn2.indexOf(x));
+	
+	let lstRevers = Vcolumn2.filter(
+		rv => rv[0] == secondBll
+		&& rv[2] + Vcolumn2[lastCol][1] <= nbMaxBall
+		&& Vcolumn2.indexOf(rv) != lastCol
+	).map(x => [lastCol, Vcolumn2.indexOf(x)]);	
+	lstNextCol = lstNextCol.concat(lstRevers);
+	//console.log("lstRevers",lstRevers);
+	
+	
+	return lstNextCol
+}
+
+let lstOfCrissCross = [];
+let previousLst = [];
+function crissCross(columns2,lstOfCol2,Vcolumn2){
+	//console.log("crissCross",lstOfCol2);
+	
+	
+	let lstNextCol = nextCol(lstOfCol2,Vcolumn2);
+	if(lstNextCol.length ==0){
+		lstNextCol = removeLastTop(lstOfCol2,Vcolumn2);
+	}
+	
+	for(col of lstNextCol){
+		let thisList = [...lstOfCol2];
+		//console.log("col",col);
+		let from = col;
+		let to = thisList[thisList.length-1];
+		//console.log("from0",from,"to",to);
+		
+		if(typeof(from) == "object"){ [from,to] = from}
+		if(typeof(to) == "object"){ to = to[0]}
+		//console.log("from1",from,"to",to);
+		
+		thisList.push(col);
+		
+		if(Vcolumn2[from][1] == Vcolumn2[from][2]){//we free a botle
+			//console.log("from is monochrome");
+			//console.log("Vcolumn2[from]",Vcolumn2[from]);
+			//console.log("from2",from,columns0[from].content);
+			//thisList.push(from);
+			//console.log("thisList",thisList);
+			lstOfCrissCross.push(thisList);
+			
+		}else{
+			//console.log("thisList",thisList);
+			//thisList.push(from);
+			
+			let Vcolumn3 = Vcoppy(Vcolumn2);
+			/*
+			abstract(columns0)
+			console.log("thisList",thisList);/*
+			console.log("Vcolumn3",Vcolumn3);
+			console.log("from2",from,"to",to);*/
+			//throw Error("debug");
+			Vupdate(columns0,Vcolumn3,[from,to]);
+			
+			crissCross(columns2,thisList,Vcolumn3);
+		}
+	}
+}
+
+function findCrissCross(){
+	console.log("findCrissCross");
+	
+	let firstEmpty = emptyBotle();
+	
+	
+	for(let i=0; i<columns0.length; i++){
+		if(columns0[i].isEmpty0){continue}
+		if(columns0[i].isMonochrome0){continue}
+		
+		let target = otherColumn(i);
+		if(target ==-1){
+			target = firstEmpty
+			if(target ==-1){continue}
+		}
+		
+		
+		let Vcolumn2 = Vcoppy(Vcolumn0);
+		Vupdate(columns0,Vcolumn2,[i,target])
+		crissCross(columns0,[target,i],Vcolumn2);
+	}	
+}
+
+function doCrissCross(lstOfCol2){
+	console.log("doCrissCross",lstOfCol2);
+	
+	let firstTarget = lstOfCol2.shift();
+	let target = firstTarget;
+	
+	for(i in lstOfCol2){
+		let col = lstOfCol2[i];
+		if(i>0){
+			target = lstOfCol2[i-1];
+			if(typeof(target) == "object"){
+				console.log("target",target);
+				target = target[0];
+			}
+		}if(typeof(col) == "object"){
+			[col,target] = col;
+		}
+		console.log("move",col,target);
+		move(state,col,target);
+	}
+	let lastColFrom = lstOfCol2[lstOfCol2.length -1];
+	if(typeof(lastColFrom) == "object"){lastColFrom = lastColFrom[0]}
+	
+	let lastFrom = columns0[lastColFrom];
+	if(!lastFrom.isEmpty0){
+		move(state,firstTarget,lastColFrom);
+	}
+	abstract(columns0);
+}
+
+function reset(nbMaxBall2){
+	nbMaxBall = nbMaxBall2;
+	history = [];
+}
+
+
+function main(state2, lastFaill){
+	console.log("\ncrissCross");
+	[columns0,lstOfMove] = state2;
+	state = state2;
+	lstOfCrissCross = []
+	Vcolumn0 = newVcolumn(columns0);
+	
+	//console.log("history0",history);
+	//console.log("lstOfMove.length",lstOfMove.length);
+	
+	for(let bloc =history.length -1; bloc >=0; bloc--){
+		let thisElement = history[bloc];
+		
+		if(thisElement[0] > lstOfMove.length){history.pop()}
+		else if(thisElement[0] == lstOfMove.length){
+			thisElement[1].shift();
+			lstOfCrissCross = thisElement[1];
+			
+			if(lstOfCrissCross.length ==0){return false;}
+			break;
+			
+		}else{
+			findCrissCross();
+			history.push([lstOfMove.length, lstOfCrissCross]);
+			break;
+		}
+	}
+	
+	if(history.length ==0){
+		findCrissCross();	
+		history.push([lstOfMove.length, lstOfCrissCross]);
+	}
+	//console.log("history1",history);
+	//*/
+	
+	
+	
+	let firstCrissCross = lstOfCrissCross[0];
+	
+	if(firstCrissCross == undefined){
+		console.log("no crissCross");
+		return false
+	}else{
+		console.log("lstOfCrissCross",lstOfCrissCross);
+		doCrissCross(lstOfCrissCross[0]);
+		//return true
+		return "crisscross"
+	}
+}
+
+module.exports = [main,reset]
+
+

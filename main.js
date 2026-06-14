@@ -1,8 +1,9 @@
 var startTime = new Date().getTime();
-var column = require('../tools/column');
-var getTheLevel = require('../level');
-var abstract = require('../tools/abstract');
-var move = require('../tools/move');
+var column = require('./tools/column');
+var getTheLevel = require('./level');
+var abstract = require('./tools/abstract');
+var move = require('./tools/move');
+var coppy = require('./tools/coppy');
 
 var [raining,resetRaining] = require('./raining');
 var [crissCross,resetCrissCross] = require('./crissCross');
@@ -11,8 +12,6 @@ var [removeMidle,resetRemoveMidle] = require('./removeMidle');
 var [backInHistory,resetBackInHistory] = require('./backInHistory');
 var [whatIsBrocken,resetWhatIsBrocken] = require('./whatIsBrocken');
 var [blowUp, resetBlowUp] = require('./blowUp');
-var fs = require('fs').promises;
-
 
 let lstOfMove = [];
 let columns0 = [];
@@ -78,8 +77,10 @@ let maxCycle = 16;
 function main(theLevel){
 	console.log("main");
 	
-	let columns = getTheLevel(theLevel);
-	columns0 = getTheLevel(theLevel);
+	if(theLevel != -1){
+		columns0 = getTheLevel(theLevel);
+	}
+	let [columns,[]] = coppy([columns0,[]]);
 	
 	lstOfMove = [];
 	state = [columns0,lstOfMove];
@@ -153,10 +154,10 @@ function main(theLevel){
 
 
 
+
 //test one level
-//main(4.582);
-//main(4.01);
-main(3.01);
+
+main(3.06);
 
 var end = new Date().getTime();	//timer
 var time = end - startTime;

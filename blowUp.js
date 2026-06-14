@@ -1,9 +1,9 @@
 var startTime = new Date().getTime();
-var column = require('../tools/column');
-var getTheLevel = require('../level');
-var abstract = require('../tools/abstract');
-var move = require('../tools/move');
-var [newVcolumn, Vupdate, Vcoppy] = require('../tools/Vcolumn');
+var column = require('./tools/column');
+var getTheLevel = require('./level');
+var abstract = require('./tools/abstract');
+var move = require('./tools/move');
+var [newVcolumn, Vupdate, Vcoppy] = require('./tools/Vcolumn');
 
 
 function emptyBotle(){
@@ -12,12 +12,12 @@ function emptyBotle(){
 
 function otherColumn(col2){
 	let theBigBll = columns0[col2].bigBall;
-	let theBll = columns0[col2].top();
+	let theBll = columns0[col2].top0;
 	
 	let otherCol = columns0.findIndex(
 		cll => cll.top() == theBll
 		&& columns0.indexOf(cll) != col2
-		&& cll.content.length + theBigBll <= nbMaxBall
+		&& cll.length0 + theBigBll <= nbMaxBall
 	);
 	
 	if(otherCol == -1){
@@ -42,7 +42,7 @@ function lstEmpty(){
 	//console.log("lstEmpty");
 	
 	let lstEmpty = columns0.filter(
-		mpt => mpt.isEmpty()
+		mpt => mpt.isEmpty0
 	).map(x => columns0.indexOf(x));
 	return lstEmpty
 }
@@ -79,7 +79,7 @@ function getTarget(cll2,lvl2,bigBll,lstColor2,lstEmptyCol3){
 	
 	let target = columns0.findIndex(
 		tgt => tgt.content[0] == theBall
-		&& tgt.isMonochrome()
+		&& tgt.isMonochrome0
 	);
 	if(target != -1){return [target]}
 	
@@ -410,7 +410,7 @@ function nextStep(remaining2,lstColor2,lstEmptyCol2,lstMv2){
 		//console.log("cll",cll);
 		
 		let theLevel = thisCol.content.lastIndexOf(theBall);
-		if(theLevel == thisCol.content.length -1){continue}
+		if(theLevel == thisCol.length0 -1){continue}
 		
 		//test
 		let previousCall = lstMv2.filter(
@@ -422,7 +422,7 @@ function nextStep(remaining2,lstColor2,lstEmptyCol2,lstMv2){
 		
 				
 		let bigBll = 1;
-		for(let bll7 =thisCol.content.length -1;bll7 >theLevel;bll7--){
+		for(let bll7 =thisCol.length0 -1;bll7 >theLevel;bll7--){
 			let thisBall = thisCol.content[bll7];
 			//console.log("cll",cll,"thisBall",thisBall);
 			let previousBall = thisCol.content[bll7-1];
@@ -544,10 +544,10 @@ function reset(nbMaxBall2){
 var shortest = (a,b) => a.length - b.length;
 
 function blowItUp(){
-	console.log("blowUp");	
+	console.log("blowItUp");	
 	
 	let coloredCols = columns0.filter(
-		cll => cll.isMonochrome()
+		cll => cll.isMonochrome0
 	
 	).map(x => columns0.indexOf(x));
 	console.log("coloredCols",coloredCols);

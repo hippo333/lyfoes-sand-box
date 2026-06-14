@@ -9,7 +9,7 @@ function move(state,from,to){
 	let [columns2,lstOfMove2] = state;
 	
 	if(lstOfMove2.length ==0){	//at begening
-		nbMaxBall = columns2[0].content.length;	
+		nbMaxBall = columns2[0].length0;
 	}
 	
 	
@@ -22,8 +22,8 @@ function move(state,from,to){
 	let colFrom = columns2[from].content;
 	let colTo = columns2[to].content;
 	
-	let ballFrom = columns2[from].top();
-	let ballTo = columns2[to].top();
+	let ballFrom = columns2[from].top0;
+	let ballTo = columns2[to].top0;
 	
 	let bigBallFrom = columns2[from].bigBall;
 	
@@ -40,7 +40,7 @@ function move(state,from,to){
 		console.log(from,to);
 		throw Error("the ball are different");
 		
-	}else if(columns2[to].isFull()){
+	}else if(columns2[to].isFull0){
 		abstract(columns2);
 		console.log("\nlstOfMove",lstOfMove2);
 		console.log("from",from,"to",to);
@@ -51,6 +51,7 @@ function move(state,from,to){
 		if(ballFrom != ballTo){
 			console.log("\nfrom",from,"col from",colFrom);
 			console.log("to",to,"col to",colTo);
+			console.log("ballFrom",ballFrom,"ballTo",ballTo);
 			throw Error("error Move, the ball are diferent");
 		}
 	}
@@ -82,8 +83,11 @@ function move(state,from,to){
 	columns2[to].bigBall += bigBallFrom;
 	columns2[from].newBigBall();
 	
-	columns2[from].nbMaxBall = nbMaxBall
-	columns2[to].nbMaxBall = nbMaxBall
+	columns2[from].nbMaxBall = nbMaxBall;
+	columns2[to].nbMaxBall = nbMaxBall;
+	
+	columns2[from].update();
+	columns2[to].update();
 	
 	lstOfMove2.push([from,to,bigBallFrom]);//add the move into the history
 }

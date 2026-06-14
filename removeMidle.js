@@ -1,0 +1,155 @@
+
+var column = require('./tools/column');
+//var columns999 = require('./level');
+var abstract = require('./tools/abstract');
+var move = require('./tools/move');
+
+
+
+function emptyBotle(){
+	return columns0.findIndex(x => x.isEmpty0)
+}
+
+function otherBotle(col2){
+	let botle = emptyBotle();
+	
+	if(botle ==-1){
+		let thisCol = columns0[col2];
+		let placeToFeed = thisCol.content.length - thisCol.secondBigBall0;
+		botle = columns0.findIndex(
+			btl => btl.top0 == thisCol.top0
+			&& columns0.indexOf(btl) != col2
+			&& btl.length0 + thisCol.bigBall <=nbMaxBall	//first step
+			&& placeToFeed + btl.bigBall <=nbMaxBall //last step
+		);
+	
+	}
+	
+	return botle
+}
+
+
+let columns0 = [];
+let lstOfMove = [];
+let state = [columns0,lstOfMove];
+let theEmptyBotle = -1;
+let nbMaxBall = 4;
+let suspects = []
+let previousLst = [];
+
+
+function isSuspect(thisCol2){
+	let col = columns0.indexOf(thisCol2);
+	//console.log(col,"isSuspect?");
+	
+	if(thisCol2.length0 <3){return false}
+	let secondBigBll = columns0[col].secondBigBall0;
+	if( secondBigBll == 0){return false}
+	
+	let thirdLevel= thisCol2.length0-1 -thisCol2.bigBall- secondBigBll;
+	
+	if(thirdLevel < 0){return false}
+	if(thisCol2.content[thirdLevel] != thisCol2.top0){return false};
+	
+	//console.log("	",col,"is suspect");
+	return true
+}
+
+function findSuspect(){
+	//console.log("findSuspect");
+	
+	let theSuspect = columns0.filter(
+		cll => isSuspect(cll)		
+	).map(x => columns0.indexOf(x));
+	
+	return theSuspect
+}
+
+function getTarget(col2,emptyBtl2){
+	console.log("getTarget",col2,emptyBtl2);
+	
+	let thisCol = columns0[col2];
+	let secondBll = thisCol.secondBall0;
+	let secondBigBll = thisCol.secondBigBall0;	
+	
+	
+	
+	let target = columns0.findIndex(
+		tgt => tgt.top0 == secondBll
+		&& tgt.length0 + secondBigBll <= nbMaxBall
+	);
+	console.log("target ",target);
+	if(target !=-1){return target}
+	
+	let secondEmpty = columns0.findIndex(
+		tgt => tgt.isEmpty0
+		&& columns0.indexOf(tgt) != emptyBtl2	
+	);	
+	//console.log("secondEmpty",secondEmpty);
+	return secondEmpty
+}
+
+function doTheThing(col2,emptyBtl2,target2){
+	console.log("doTheThing",col2,emptyBtl2,target2);
+	
+	move(state,col2,emptyBtl2);
+	move(state,col2,target2);
+	move(state,emptyBtl2,col2);
+	
+}
+
+function reset(nbMaxBall2){
+	nbMaxBall = nbMaxBall2;
+}
+
+function main(state2, lastFaill){
+	console.log("\nremoveMidle");
+	state = state2;
+	[columns0,lstOfMove]= state
+	//abstract(columns0);
+	
+	switch (lastFaill){
+		case "raining": return false;
+		case "crisscross": return false;
+		case "removeMiddle":
+			if(suspects.length == 0){return false}
+				suspects = previousLst;
+				suspects.shift()
+				break;
+		default: 
+			previousLst = suspects;
+			suspects = findSuspect(); 
+			break;
+	}
+	
+	
+	console.log("suspects",suspects);
+	let suspect = suspects[0];
+	if(suspect == undefined){ return false}
+	console.log("suspect",suspect);
+	
+	let otherBtl = otherBotle(suspect);
+	if(otherBtl ==-1){return false}
+	console.log("otherBtl",otherBtl);
+	
+	let target = getTarget(suspect,otherBtl);
+	if(target ==-1){return false}
+	console.log("target",target);
+	
+	doTheThing(suspect,otherBtl,target)
+	abstract(columns0);
+	//throw Error("debug");
+	
+	console.log("removeMidle",true);
+	//return true;
+	return "removeMidle"
+}
+
+
+
+
+
+
+module.exports = [main,reset]
+
+

@@ -7,7 +7,15 @@ var Column = function(contents) {
   		content : [],
   		bigBall : 0,
   		color : 0,
-  		nbMaxBall : 4
+  		nbMaxBall : 4,
+  		top0 : -1,
+  		secondBall0 : -1,
+  		secondBigBall0 : 0,
+  		length0 : 0,
+  		isFull0 : false,
+  		isEmpty0 : false,
+  		isFinish0 : false,
+  		isMonochrome0 : false,
   	}
 
   
@@ -16,8 +24,8 @@ var Column = function(contents) {
   }
   
   obj.secondBall = function (){
-  	if(this.content.length == this.bigBall){return -1}
-  	return this.content[this.content.length-this.bigBall -1];
+  	if(this.length0 == this.bigBall){return -1}
+  	return this.content[this.length0-this.bigBall -1];
   }
   
   obj.secondBigBall = function(){
@@ -84,10 +92,24 @@ var Column = function(contents) {
   	if(this.bigBall >1){this.color = lastball}
   	//if column contain one ball
   }
+  
+  obj.update = function(){
+	  this.top0 = this.top();
+	  this.secondBall0 = this.secondBall();
+	  this.secondBigBall0 = this.secondBigBall();
+	  this.length0 = this.content.length;
+	  this.isFull0 = this.isFull();
+	  this.isEmpty0 = this.isEmpty();
+	  this.isFinish0 = this.isFinish();
+	  this.isMonochrome0 = this.isMonochrome();
+  
+  }
    
   for (var i in contents) {//constructor
     obj.content.push(contents[i]);
   }
+  
+  obj.update();
   
   obj.newBigBall();	//make it for the begining
   return obj;

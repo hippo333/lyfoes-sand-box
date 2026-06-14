@@ -6,10 +6,10 @@ function newVcolumn(columns2){
 	VColumn2 = [];
 	
 	for(i in columns2){
-		let color = columns2[i].top();
+		let color = columns2[i].top0;
 		let bigBall = columns2[i].bigBall;
 		
-		let sizeCol = columns2[i].content.length ;
+		let sizeCol = columns2[i].length0 ;
 		if (sizeCol ==0){
 			color = 0;
 			bigBall = 0;
