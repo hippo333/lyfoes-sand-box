@@ -9,8 +9,6 @@ var Column = function(contents) {
   		color : 0,
   		nbMaxBall : 4,
   		top0 : -1,
-  		secondBall0 : -1,
-  		secondBigBall0 : 0,
   		length0 : 0,
   		isFull0 : false,
   		isEmpty0 : false,
@@ -95,14 +93,33 @@ var Column = function(contents) {
   
   obj.update = function(){
 	  this.top0 = this.top();
-	  this.secondBall0 = this.secondBall();
-	  this.secondBigBall0 = this.secondBigBall();
 	  this.length0 = this.content.length;
+	  this.newBigBall();
 	  this.isFull0 = this.isFull();
 	  this.isEmpty0 = this.isEmpty();
 	  this.isFinish0 = this.isFinish();
 	  this.isMonochrome0 = this.isMonochrome();
   
+  }
+  
+  obj.updateFrom = function(){
+  	this.top0 = this.top();
+  	this.length0 -= this.bigBall;	
+  	this.newBigBall();
+  	if(this.length0 ==0){this.isEmpty0 = true}
+  	if(this.bigBall == this.length0){this.isMonochrome0 = true}
+  	this.isFull0 = false;
+  	
+  }
+  
+  obj.updateTo = function(bll2,bigBll2){
+  	this.top0 = bll2;
+  	this.length0 += bigBll2;	
+  	this.bigBall += bigBll2;
+  	if(this.length0 == this.bigBall ){this.isMonochrome0 =true}
+  	this.isEmpty0 = false;
+  	if(this.bigBall == 4){this.isFinis0 = true}
+  	
   }
    
   for (var i in contents) {//constructor
@@ -111,7 +128,7 @@ var Column = function(contents) {
   
   obj.update();
   
-  obj.newBigBall();	//make it for the begining
+ // obj.newBigBall();	//make it for the begining
   return obj;
 }
 
