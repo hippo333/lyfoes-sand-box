@@ -5,6 +5,8 @@ var abstract = require('./tools/abstract');
 var move = require('./tools/move');
 var [newVcolumn, Vupdate, Vcoppy] = require('./tools/Vcolumn');
 
+var fs = require('fs').promises;
+
 
 function emptyBotle(){
 	return columns0.findIndex(x => x.isEmpty())
@@ -270,11 +272,14 @@ function miniCrissCross(lstMv2,suspectCol2,lstFree2){
 			continue;
 		}
 		lastMv = previousMv;
+		
+		
 		let id = lstMv2.indexOf(previousMv);
 		if(lstId.includes(id)){
 			let begening = lstId.indexOf(id);
 			let theLoop = lstId.slice(id -1);
 			if(theLoop.length ==0){return false}
+			if(emptyCol ==-1){return false}
 			
 			let ending = lstMv2[theLoop.pop()];
 			//console.log("ending",ending);
@@ -294,11 +299,10 @@ function miniCrissCross(lstMv2,suspectCol2,lstFree2){
 	return true
 }
 
-
 let lastLstMv = [];
 //changeOrder
 function addOtherMove(lstMv2,nextOrder2,lstFree2){
-	//console.log("moveWhoCanPass");
+	//console.log("  moveWhoCanPass");
 	
 	let lstMvPossible = lstMv2.filter(
 		nxt => lstFree2[nxt[0]] >= nxt[2]
@@ -313,7 +317,8 @@ function addOtherMove(lstMv2,nextOrder2,lstFree2){
 		
 			var end = new Date().getTime();	//timer
 			var time = end - startTime;
-			console.log("no miniCC",time/1000,"s");
+			console.log("  no miniCC",time/1000,"s");
+					
 		return false
 	}
 	
@@ -355,11 +360,11 @@ function changeOrder(lstMv2){
 }
 
 function dosItFit(lstMv2){
-	//console.log("itFit");
+	console.log("dosItFit");
 	
 	let lstBall = columns0.map(x => [...x.content]);
 	let lstBigBll = columns0.map(x => [...x.lstBigBall]);	
-	//abstract(columns0);
+	abstract(columns0);
 	
 	for(mv of lstMv2){
 		let [from,to] = mv;
@@ -369,12 +374,19 @@ function dosItFit(lstMv2){
 		
 			var end = new Date().getTime();	//timer
 			var time = end - startTime;
+			console.log("from",from,"to",to);
+			console.log("ballFrom",ballFrom);
+			console.log("ballTo",ballTo);
 			console.log("different ball",time/1000,"s");
 		return false}
-		lstBall[from].pop()
-		if(ballTo == undefined){lstBall.push(ballFrom)}
-		
+		//lstBall[from].pop();
 		let bigBll = lstBigBll[from].pop();
+		console.log("bigBll",bigBll);
+		lstBall[from] = lstBall[from].slice(0,-bigBll);
+		
+		if(ballTo == undefined){lstBall[from].push(ballFrom)}
+		
+		
 		if(lstBigBll[to].length ==0){lstBigBll[to].push(0)}
 		lstBigBll[to][lstBigBll[to].length -1] += bigBll;
 		
@@ -394,6 +406,7 @@ function dosItFit(lstMv2){
 
 function nextStep(remaining2,lstColor2,lstEmptyCol2,lstMv2){
 	console.log("\n  nextStep","lstMv2",lstMv2.length);
+	//console.log(lstMv2.map(x => [x[0],x[1]]));
 	//console.log("lstColor2",lstColor2);
 	//console.log("remaining2",remaining2);
 	//abstract(columns0);
@@ -452,7 +465,7 @@ function nextStep(remaining2,lstColor2,lstEmptyCol2,lstMv2){
 		let itFit = dosItFit(lstMv3);
 		if(!itFit){return}//*/
 			
-		console.log("lstMv2",lstMv3);
+		console.log("lstMv3",lstMv3);
 		
 		var end = new Date().getTime();	//timer
 		var time = end - startTime;
@@ -460,6 +473,7 @@ function nextStep(remaining2,lstColor2,lstEmptyCol2,lstMv2){
 		
 		//throw Error//debug nextStep
 		lstSolution.push(lstMv3);
+		console.log("lstSolution",lstSolution);
 		return
 		//throw Error("we finish");
 	}
@@ -579,23 +593,24 @@ function main(state2){
 			thisElement[1].shift();
 			lstSolution = thisElement[1];
 			
+			console.log("a");
 			if(lstSolution.length ==0){return false;}
 			break;
 			
 		}else{
 			blowItUp();
+			console.log("b");
 			if(lstSolution.length ==0){return false}
 			history.push([lstOfMove.length, lstSolution]);
-			console.log("a");
 			break;
 		}
 	}
 	
 	if(history.length ==0){
 		blowItUp();	
+		console.log("c");
 		if(lstSolution.length ==0){return false}
 		history.push([lstOfMove.length, lstSolution]);
-		console.log("b");
 	}
 		
 	

@@ -27,9 +27,12 @@ let nbMaxBall = 4;
 function findProblem(){
 	console.log("findProblem");
 	
+	let lstColTo = lstOfMove.map(x =>  x[1]);
+	console.log("lstColTo",lstColTo);
 	let theTriple = Vcolumn.findIndex(
 		tr => tr[1] ==nbMaxBall-1
 		&& tr[2] == nbMaxBall
+		&& lstColTo.includes(Vcolumn.indexOf(tr))
 	);
 	console.log("theTriple",theTriple);
 	
@@ -56,9 +59,6 @@ function removeLastMv(){
 	colTo.update();
 	
 	//if(to ==6){
-		console.log("to",to);
-		console.log("colTo",colTo);
-		throw Error//debug
 	//}
 	//abstract(columns0);
 }
@@ -69,7 +69,6 @@ function removeNbMove(nb){
 	for(let i=0; i<nb; i++){
 		removeLastMv();
 	}
-	throw Error//debug
 }
 
 function cutHistory(theCut2){
@@ -88,12 +87,12 @@ function wayBack(col2){
 	let theCut = 1+ lstOfMoveRevers.findIndex(
 		ct => ct[1] == col2		
 	);
+	console.log("theCut",theCut);
 	
 	let historyRevers = [...history].reverse();
 	let theCount = historyRevers.find(
-		cnt => cnt[1] <= lstOfMove.length -theCut -1
+		cnt => cnt[1] <= lstOfMove.length -theCut +1
 	);
-	console.log("theCount",theCount);
 	theCut = lstOfMove.length -theCount[1]
 	//go to last history befor
 	
@@ -120,12 +119,11 @@ function main(state2,history2){
 	let theProblem = findProblem();
 	if(theProblem ==0){throw Error}//can't do anything
 	wayBack(theProblem);
-	throw Error//debug
 	
 	history2 = history;
 	
-	return history;
 	//throw Error("debug");
+	return history;
 }
 
 module.exports = [main,reset]

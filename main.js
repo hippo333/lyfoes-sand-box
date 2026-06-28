@@ -157,7 +157,7 @@ function main(theLevel){
 
 //test one level
 
-main(3.06);
+main(4.01);
 
 var end = new Date().getTime();	//timer
 var time = end - startTime;

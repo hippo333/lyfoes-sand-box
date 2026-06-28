@@ -19,6 +19,10 @@ function move(state,from,to){
 		throw Error("error invalid argument, from");
 	}
 	
+	//debug
+	//console.log("from",columns2[from].top0);
+	//console.log("to",columns2[to].top0);
+			
 	let colFrom = columns2[from].content;
 	let colTo = columns2[to].content;
 	
@@ -52,6 +56,8 @@ function move(state,from,to){
 			console.log("\nfrom",from,"col from",colFrom);
 			console.log("to",to,"col to",colTo);
 			console.log("ballFrom",ballFrom,"ballTo",ballTo);
+			//console.log("from",columns0[from].top0);
+			//console.log("to",columns0[to].top0);
 			throw Error("error Move, the ball are diferent");
 		}
 	}
@@ -80,14 +86,13 @@ function move(state,from,to){
 	}//*/
 	//console.log("__move: from:",from,columns2[from].content);	
 	
-	columns2[to].bigBall += bigBallFrom;
-	columns2[from].newBigBall();
+	//columns2[to].bigBall += bigBallFrom;
 	
 	columns2[from].nbMaxBall = nbMaxBall;
 	columns2[to].nbMaxBall = nbMaxBall;
 	
-	columns2[from].update();
-	columns2[to].update();
+	columns2[from].updateFrom();
+	columns2[to].updateTo(ballFrom,bigBallFrom);
 	
 	lstOfMove2.push([from,to,bigBallFrom]);//add the move into the history
 }

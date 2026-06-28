@@ -15,7 +15,7 @@ function otherBotle(col2){
 	
 	if(botle ==-1){
 		let thisCol = columns0[col2];
-		let placeToFeed = thisCol.content.length - thisCol.secondBigBall0;
+		let placeToFeed = thisCol.content.length - thisCol.secondBigBall();
 		botle = columns0.findIndex(
 			btl => btl.top0 == thisCol.top0
 			&& columns0.indexOf(btl) != col2
@@ -43,7 +43,7 @@ function isSuspect(thisCol2){
 	//console.log(col,"isSuspect?");
 	
 	if(thisCol2.length0 <3){return false}
-	let secondBigBll = columns0[col].secondBigBall0;
+	let secondBigBll = columns0[col].secondBigBall();
 	if( secondBigBll == 0){return false}
 	
 	let thirdLevel= thisCol2.length0-1 -thisCol2.bigBall- secondBigBll;
@@ -69,8 +69,8 @@ function getTarget(col2,emptyBtl2){
 	console.log("getTarget",col2,emptyBtl2);
 	
 	let thisCol = columns0[col2];
-	let secondBll = thisCol.secondBall0;
-	let secondBigBll = thisCol.secondBigBall0;	
+	let secondBll = thisCol.secondBall();
+	let secondBigBll = thisCol.secondBigBall();	
 	
 	
 	
