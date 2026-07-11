@@ -19,7 +19,7 @@ let nbMaxBall =4;
 
 //set up
 
-function basic(){
+function float(){
 	console.log("basic");
 	
 	let lstParticle = columns0.filter(
@@ -40,7 +40,33 @@ function basic(){
 	if(secondCol == -1){return}
 	console.log("secondCol",secondCol);
 	move(state,col,secondCol);
+	console.log("float");
+	succes0 = "capilarity";
+}
+
+function flow(){
+	console.log("basic");
+	
+	let lstParticle = columns0.filter(
+		ptc => ptc.isMonochrome()
+		&& ptc.content.length <nbMaxBall		
+	).map(x => columns0.indexOf(x));
+	
+	console.log("lstParticle",lstParticle);
+	if(lstParticle ==0){return}
+	
+	let col =lstParticle[0];
+	let theCol = columns0[col];
+	let secondCol = columns0.findIndex(
+		cll => cll.top() == theCol.top0
+		&& theCol.content.length + cll.bigBall <= nbMaxBall
+		&& columns0.indexOf(cll) != col
+	);
+	if(secondCol == -1){return}
+	console.log("secondCol",secondCol);
+	move(state,secondCol,col);
 	//succes0 = true;
+	console.log("flow");
 	succes0 = "capilarity";
 }
 
@@ -55,7 +81,8 @@ function main(state2, newOne){
 	succes0 = false;
 	
 	
-	basic();
+	float();
+	flow();
 	
 	console.log("capilarity",succes0);
 	return succes0;
